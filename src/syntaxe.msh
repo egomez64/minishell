@@ -1,0 +1,9 @@
+pipe_sentence	:	command
+			|		pipe_sentence '|' command
+
+command		:	word
+			|	command redirect
+			|	redirect command
+
+redirect	:	'<' || '>' filename
+			|	redirect '<' || '>' filename
