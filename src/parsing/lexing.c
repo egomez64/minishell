@@ -12,6 +12,13 @@
 
 #include <parsing.h>
 
+const static char * arg_to_string[] = {
+	[WORD] = "Word",
+	[PIPE] = "Pipe",
+	[L_REDIRECT] = "L_Redirect",
+	[R_REDIRECT] = "R_Redirect",
+};
+
 void	skip(char *s, int *i)
 {
     while (s[*i] != 0 && (s[*i] == ' ' || s[*i] == '\t'))
@@ -27,7 +34,9 @@ void	tokenize_word(t_token **tok_lst, char *val, int *i)
 {
 	int		quote;
 	char	*tmp;
+	int		old;
 
+	old = *i;
 	while (val[*i] != 0)
 	{
 		if ((val[*i] == ' ' || val[*i] == '\t' || val[*i] == '|' ||
@@ -37,21 +46,25 @@ void	tokenize_word(t_token **tok_lst, char *val, int *i)
 			quote = 1;
 		else if ((val[*i] == '"' || val[*i] == '\'') && quote == 1)
 			quote = 0;
-		*i++;
+		(*i)++;
 	}
-	tmp = ft_substr(val, 0, *i);
+	tmp = ft_substr(val, old, *i - old);
 	token_add_back(tok_lst, token_new(tmp, WORD));
 }
 
 void	tokenize_symbol(t_token **tok_lst, char *val, int *i)
 {
 	char	*tmp;
+	int		old;
 
+	old = *i;
 	if (val[*i] == '<' && val[*i + 1] == '<')
-		*i += 2;
+		(*i) += 2;
 	else if (val[*i] == '>' && val[*i + 1] == '>')
-		*i += 2;
-	tmp = ft_substr(val, 0, *i);
+		(*i) += 2;
+	else
+		(*i) ++;
+	tmp = ft_substr(val, old, *i - old);
 	if (tmp[0] == '<')
 		token_add_back(tok_lst, token_new(tmp, L_REDIRECT));
 	else if (tmp[0] == '>')
@@ -77,13 +90,6 @@ t_token	*lexer(char *arg)
 	}
 	return (token);
 }
-
-const static char * arg_to_string[] = {
-	[WORD] = "Word",
-	[PIPE] = "Pipe",
-	[L_REDIRECT] = "L_Redirect",
-	[R_REDIRECT] = "R_Redirect",
-};
 
 int	main(int ac, char **av)
 {

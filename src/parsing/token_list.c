@@ -12,29 +12,15 @@
 
 #include <parsing.h>
 
-t_token	*token_new(char	*val)
+t_token	*token_new(char	*val, t_arg type)
 {
 	t_token	*new;
-	int		i;
 
-	i = 0;
 	new = ft_calloc(sizeof(t_token), 1);
 	if (!new)
 		return (NULL);
-	while(val[i] != 0 && val[i] != '|' && val[i] != '<' && val[i] != '>')
-		i++;
-	if (val[i] == '|' || val[i] == '>' || val[i] == '<')
-	{
-		new->val = &val[i];
-		if (new->val[i] == '|')
-			new->type = PIPE;
-		if (new->val[i] == '<')
-			new->type = L_REDIRECT;
-		if (new->val[i] == '>')
-			new->type = R_REDIRECT;
-	}
-	else
-		new->type = WORD;
+	new->val = val;
+	new->type = type;
 	return (new);
 }
 
