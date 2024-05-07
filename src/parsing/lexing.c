@@ -10,14 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <parsing.h>
-
-const static char * arg_to_string[] = {
-	[WORD] = "Word",
-	[PIPE] = "Pipe",
-	[L_REDIRECT] = "L_Redirect",
-	[R_REDIRECT] = "R_Redirect",
-};
+#include <minishell.h>
 
 void	skip(char *s, int *i)
 {
@@ -25,27 +18,29 @@ void	skip(char *s, int *i)
         (*i)++;
 }
 
-// cat|dc
-// "acb"ab'xd'
-// aaabccc'd | d'
-// "echo abc"
-// 'xddd "dsada    '
 void	tokenize_word(t_token **tok_lst, char *val, int *i)
 {
-	int		quote;
+	int		dquote;
+	int		squote;
 	char	*tmp;
 	int		old;
 
 	old = *i;
+	dquote = 0;
+	squote = 0;
 	while (val[*i] != 0)
 	{
 		if ((val[*i] == ' ' || val[*i] == '\t' || val[*i] == '|' ||
-				val[*i] == '>' || val[*i] == '<') && quote == 0)
+				val[*i] == '>' || val[*i] == '<') && (dquote == 0 && squote == 0))
 			break;
-		if ((val[*i] == '"' || val[*i] == '\'') && quote == 0)
-			quote = 1;
-		else if ((val[*i] == '"' || val[*i] == '\'') && quote == 1)
-			quote = 0;
+		if (val[*i] == '"' && (dquote == 0 && squote == 0))
+			dquote = 1;
+		else if (val[*i] == '\'' && (dquote == 0 && squote == 0))
+			squote = 1;
+		else if (val[*i] == '"' && dquote == 1)
+			dquote = 0;
+		else if (val[*i] == '\'' && squote == 1)
+			squote = 0;
 		(*i)++;
 	}
 	tmp = ft_substr(val, old, *i - old);
@@ -56,19 +51,36 @@ void	tokenize_symbol(t_token **tok_lst, char *val, int *i)
 {
 	char	*tmp;
 	int		old;
+	int		double_redirect;
 
 	old = *i;
 	if (val[*i] == '<' && val[*i + 1] == '<')
+	{
+		double_redirect = 1;
 		(*i) += 2;
+	}
 	else if (val[*i] == '>' && val[*i + 1] == '>')
+	{
+		double_redirect = 1;
 		(*i) += 2;
+	}
 	else
 		(*i) ++;
 	tmp = ft_substr(val, old, *i - old);
 	if (tmp[0] == '<')
-		token_add_back(tok_lst, token_new(tmp, L_REDIRECT));
+	{
+		if (double_redirect == 1)
+			token_add_back(tok_lst, token_new(tmp, HEREDOC));
+		else
+			token_add_back(tok_lst, token_new(tmp, INPUT));
+	}
 	else if (tmp[0] == '>')
-		token_add_back(tok_lst, token_new(tmp, R_REDIRECT));
+	{
+		if (double_redirect == 1)
+			token_add_back(tok_lst, token_new(tmp, APPEND));
+		else
+			token_add_back(tok_lst, token_new(tmp, OUTPUT));
+	}
 	else
 		token_add_back(tok_lst, token_new(tmp, PIPE));
 }
@@ -85,22 +97,8 @@ t_token	*lexer(char *arg)
 		skip(arg, &i);
 		if(arg[i] == '<' || arg[i] == '>' || arg[i] == '|')
 			tokenize_symbol(&token, arg, &i);
-		else
+		else if (arg[i] != 0)
 			tokenize_word(&token, arg, &i);
 	}
 	return (token);
-}
-
-int	main(int ac, char **av)
-{
-	t_token *test;
-	(void)ac;
-
-	test = lexer(av[1]);
-	while(test->next != 0)
-	{
-		printf("(%s) : (%s)\n", arg_to_string[test->type], test->val);
-		test = test->next;
-	}
-	printf("(%s) : (%s)\n", arg_to_string[test->type], test->val);
 }

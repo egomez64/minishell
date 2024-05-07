@@ -12,6 +12,21 @@
 
 #include "libft.h"
 
+void	free_split(char **tmp)
+{
+	int	i;
+
+	i = 0;
+	if (!tmp)
+		return ;
+	while (tmp[i])
+	{
+		free (tmp[i]);
+		i++;
+	}
+	free (tmp);
+}
+
 static int	ft_countwords(const char *s, char c)
 {
 	int	i;

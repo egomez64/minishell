@@ -1,55 +1,57 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_list.c                                       :+:      :+:    :+:   */
+/*   lst.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/19 14:47:38 by egomez            #+#    #+#             */
-/*   Updated: 2024/04/19 14:47:41 by egomez           ###   ########.fr       */
+/*   Created: 2024/01/25 13:10:36 by egomez            #+#    #+#             */
+/*   Updated: 2024/01/25 13:50:39 by egomez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_token	*token_new(char	*val, t_arg type)
+t_list	*lstnew(char *val)
 {
-	t_token	*new;
+	t_list	*new;
 
-	new = ft_calloc(sizeof(t_token), 1);
-	if (!new)
-		return (NULL);
-	new->val = val;
-	new->type = type;
+	new = malloc(sizeof(t_list));
+	new->content = val;
+	new->next = NULL;
 	return (new);
 }
 
-t_token	*token_last(t_token *lst)
+t_list	*lstlast(t_list *lst)
 {
 	while (lst && lst->next)
 		lst = lst->next;
 	return (lst);
 }
 
-void	token_add_back(t_token **lst, t_token *new)
+void	lstadd_back(t_list **lst, t_list *new)
 {
 	if (!lst || !new)
 		return ;
 	if (*lst)
-		token_last(*lst)->next = new;
+		lstlast(*lst)->next = new;
 	else
 		*lst = new;
 }
 
-void	token_clear(t_token	*token)
+void	lstdelone(t_list *lst)
 {
-	if (token && token->next != NULL)
-		token_clear(token->next);
-	if (token)
-	{
-		free(token->val);
-		token->type = 0;
-		token->val = NULL;
-		free(token);
-	}
+	if (!lst)
+		return ;
+	free(lst);
+}
+
+void	lstclear(t_list **lst)
+{
+	if (!lst && !(*lst))
+		return ;
+	if (*lst && (*lst)->next)
+		lstclear(&(*lst)->next);
+	lstdelone(*lst);
+	*lst = NULL;
 }

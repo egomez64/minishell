@@ -1,55 +1,53 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_list.c                                       :+:      :+:    :+:   */
+/*   env_lst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/19 14:47:38 by egomez            #+#    #+#             */
-/*   Updated: 2024/04/19 14:47:41 by egomez           ###   ########.fr       */
+/*   Created: 2024/04/29 16:54:02 by egomez            #+#    #+#             */
+/*   Updated: 2024/04/29 16:54:07 by egomez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_token	*token_new(char	*val, t_arg type)
+t_env	*env_new(char	*var_name, char *var_val)
 {
-	t_token	*new;
+	t_env	*new;
 
-	new = ft_calloc(sizeof(t_token), 1);
+	new = ft_calloc(sizeof(t_env), 1);
 	if (!new)
 		return (NULL);
-	new->val = val;
-	new->type = type;
+	new->name = var_name;
+	new->val = var_val;
 	return (new);
 }
 
-t_token	*token_last(t_token *lst)
+t_env	*env_last(t_env *lst)
 {
 	while (lst && lst->next)
 		lst = lst->next;
 	return (lst);
 }
 
-void	token_add_back(t_token **lst, t_token *new)
+void	env_add_back(t_env **lst, t_env *new)
 {
 	if (!lst || !new)
 		return ;
 	if (*lst)
-		token_last(*lst)->next = new;
+		env_last(*lst)->next = new;
 	else
 		*lst = new;
 }
 
-void	token_clear(t_token	*token)
+void	env_clear(t_env	*lst)
 {
-	if (token && token->next != NULL)
-		token_clear(token->next);
-	if (token)
-	{
-		free(token->val);
-		token->type = 0;
-		token->val = NULL;
-		free(token);
-	}
+	if (lst->next != NULL)
+		env_clear(lst->next);
+	free(lst->name);
+	free(lst->val);
+	lst->name = NULL;
+	lst->val = NULL;
+	free(lst);
 }
