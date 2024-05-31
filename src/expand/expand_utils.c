@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <minishell.h>
+#include <stdbool.h>
 
 t_list	*ft_lstnew_empty()
 {
@@ -37,72 +38,104 @@ int	is_env(char *s)
     return (0);
 }
 
-t_list  *split_in_lst(char *s)
-{
-    t_list  *result;
-    t_list  *tmp;
-    int     i;
-    int     dollar;
+//while (s[i] != 0)
+//{
+//if (!tmp)
+//tmp = ft_lstnew_empty();
+//if (s[i] == '$')
+//{
+//dollar = 1;
+//ft_lstadd_back(&tmp, ft_lstnew_empty());
+//tmp = tmp->next;
+//}
+//if (s[i] == ' ' && dollar == 1)
+//{
+//dollar = 0;
+//ft_lstadd_back(&tmp, ft_lstnew_empty());
+//tmp = tmp->next;
+//}
+//tmp->content = ft_strjoin(tmp->content, &s[i]);
+//i++;
+//}
 
-    result = ft_lstnew_empty();
-    tmp = result;
+bool    is_delimiter(char c)
+{
+    if (ft_isalnum(c))
+        return false;
+    if (c == '_')
+        return false;
+    return true;
+}
+
+char	*ft_strjoin_char(char const *s1, char c)
+{
+    int		tot_size;
+    char	*newchain;
+    int i;
+
+    if (!s1)
+        return (NULL);
+    tot_size = ft_strlen(s1) + 2;
+    if (tot_size == 0)
+        return (NULL);
+    newchain = ft_calloc((size_t)tot_size, sizeof(char));
+    if (newchain == NULL)
+        return (NULL);
     i = 0;
-    dollar = 0;
-    while (s[i] != 0)
-    {
-        if (s[i] == '$')
-        {
-            dollar = 1;
-            ft_lstadd_back(&tmp, ft_lstnew_empty());
-            tmp = tmp->next;
-        }
-        if (s[i] == ' ' && dollar == 1)
-        {
-            dollar = 0;
-            ft_lstadd_back(&tmp, ft_lstnew_empty());
-            tmp = tmp->next;
-        }
-        tmp->content = ft_strjoin(tmp->content, &s[i]);
+    while (s1[i]) {
+        newchain[i] = s1[i];
         i++;
     }
-   
-    return (result);
+    newchain[i++] = c;
+    newchain[i] = 0;
+    return (newchain);
+}
+
+t_list  *split_in_lst(char *s)
+{
+    t_list  *first;
+    t_list  *tmp;
+    int     i;
+
+    i = 0;
+    first = ft_lstnew_empty();
+    tmp = first;
+    while (s[i])
+    {
+        if (i && is_delimiter(s[i]))
+        {
+            ft_lstadd_back(&tmp, ft_lstnew_empty());
+            tmp = tmp->next;
+        }
+        tmp->content = ft_strjoin_char(tmp->content, s[i]);
+        i++;
+    }
+    return (first);
 }
 
 void    changes(t_list *lst, t_env *envi)
 {
-	t_env	*tmp_envi;
-    t_list *tmp_lst;
-
-    tmp_lst = lst;
-    while (tmp_lst)
-    {
-        printf("content:%s\n", tmp_lst->content);
-        tmp_lst = tmp_lst->next;
-    }
-    tmp_envi = envi;
-    while (tmp_envi)
-    {
-        printf("name: %s value: %s\n", tmp_envi->name, tmp_envi->val);
-        tmp_envi = tmp_envi->next;
-    }
+	t_env	*copy_envi;
+    char *env_to_find;
 
 	while (lst)
     {
-        tmp_envi = envi;
+        copy_envi = envi;
         if (is_env(lst->content))
         {
             // while (tmp_envi && ft_strcmp(tmp_lst->content, tmp_envi->name))
             //     tmp_envi = tmp_envi->next;
-            while (tmp_envi)
+            env_to_find = lst->content + 1;
+            while (copy_envi)
             {
-                if (ft_strcmp(lst->content, tmp_envi->name))
+                if (ft_strcmp(env_to_find, copy_envi->name))
                 {
-                    tmp_envi = tmp_envi->next;
+                    copy_envi = copy_envi->next;
                     continue;
                 }
                 free(lst->content);
-                lst->content = ft_strdup(tmp_envi->val);
+                lst->content = NULL;
+                lst->content = ft_strdup(copy_envi->val);
                 break;
             }
             // if (ft_strcmp(tmp_lst->content, tmp_envi->name))
@@ -117,15 +150,13 @@ void    changes(t_list *lst, t_env *envi)
 
 char    *join_lst(t_list *lst)
 {
-    t_list  *tmp_lst;
     char    *result;
 
-    tmp_lst = lst;
-    result = NULL;
-    while (tmp_lst)
+    result = ft_calloc(1, sizeof(char));
+    while (lst)
     {
-        ft_strjoin(result, tmp_lst->content);
-        tmp_lst = tmp_lst->next;
+        result = ft_strjoin(result, lst->content);
+        lst = lst->next;
     }
     return (result);
 }

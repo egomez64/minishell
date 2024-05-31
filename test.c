@@ -67,9 +67,7 @@ int	main(int ac, char **av, char **ep)
 		}
 		printf("\n");
 		token_clear(tmp);
-		if (test)
-			cmd_clear(test);
-		env_clear(env_var);
 	}
+    env_clear(env_var);
 	return (0);
 }

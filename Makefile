@@ -13,7 +13,7 @@ OBJS = $(SRCS:.c=.o)
 
 LDFLAGS = -lreadline
 
-CFLAGS = -Wall -Wextra -Werror -Iincludes -Ilibft
+CFLAGS = -Wall -Wextra -Werror -g -Iincludes -Ilibft
 
 ifdef DEBUG
 CFLAGS = -Wall -Wextra -Iincludes -Ilibft -g
