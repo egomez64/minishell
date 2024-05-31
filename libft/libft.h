@@ -67,5 +67,6 @@ t_list			*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 t_list			*ft_lstnew(void *content);
 int				ft_lstsize(t_list *lst);
 void			free_split(char **tmp);
+int				ft_strcmp(const char *s1, const char *s2);
 
 #endif

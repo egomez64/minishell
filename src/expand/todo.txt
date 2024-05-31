@@ -1,0 +1,17 @@
+I - expand les variables d'environnements
+
+    1 - idd les potentielles variables d'environnements
+
+    2 - trouver la valeur de la variable
+
+    3 - remplacer la variables par sa valeur
+        - potentiellement realloc
+
+II - supprimer les quotes
+
+    1 - idd les quotes
+
+    2 - definir les quotes parents
+
+    3 - supprimer les quotes non parents
+        -potentiellement realloc

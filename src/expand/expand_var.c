@@ -12,78 +12,27 @@
 
 #include <minishell.h>
 
-t_list    *divide_lst(char *str)
+void	expand_var(t_cmd **commands, t_env **env_var)
 {
-	int		i;
-	int		dollar;
-	t_list	*lst;
-	t_list	*current;
+    t_cmd   *tmp_cmd;
+    t_list  *tmp_arg;
+    t_token *tmp_red;
 
-	dollar = 0;
-	i = 0;
-	current = NULL;
-	lstadd_back(&current, lstnew(NULL));
-	lst = current;
-	while (str[i] != 0)
-	{
-		if (i > 0 && str[i] == '$' && dollar == 0)
-		{
-			dollar = 1;
-			lstadd_back(&current, lstnew("$"));
-		}
-		else if (str[i] == ' ' && dollar == 1)
-		{
-			dollar = 0;
-			lstadd_back(&current, lstnew(" "));
-		}
-		current->content = ft_strjoin(current->content, &str[i]);
-		i++;
-	}
-	return (lst);
-}
-
-void	handle_cmd(t_cmd *node, t_env *table)
-{
-	t_list	*tmp_arg;
-	t_token	*tmp_redirect;
-	char	*transform;
-
-	tmp_arg = NULL;
-	tmp_redirect = NULL;
-	if (node->arguments)
-		tmp_arg = node->arguments;
-	if (node->redirections)
-		tmp_redirect = node->redirections;
-	while (tmp_arg)
-	{
-		transform = node_treatment((char *)tmp_arg->content, table);
-		if (transform)
-		{
-			free(tmp_arg->content);
-			tmp_arg->content = transform;
-		}
-		tmp_arg = tmp_arg->next;
-	}
-	while (tmp_redirect)
-	{
-		transform = node_treatment((char *)tmp_redirect->val, table);
-		if (transform)
-		{
-			free(tmp_redirect->val);
-			tmp_redirect->val = transform;
-		}
-		tmp_redirect = tmp_redirect->next;
-	}
-}
-
-void    expand_var(t_cmd *commands, t_env *env_var)
-{
-	t_cmd	*tmp;
-
-	tmp = commands;
-	while (tmp)
-	{
-		handle_cmd(tmp, env_var);
-		tmp = tmp->next;
-	}
+    tmp_cmd = *commands;
+    while(tmp_cmd)
+    {
+        tmp_arg = tmp_cmd->arguments;
+        tmp_red = tmp_cmd->redirections;
+        while(tmp_arg)
+        {
+            tmp_arg->content = handle_var(tmp_arg->content, *env_var);
+            tmp_arg = tmp_arg->next;
+        }
+        while(tmp_red)
+        {
+            tmp_red->val = handle_var(tmp_red->val, *env_var);
+            tmp_red = tmp_red->next;
+        }
+        tmp_cmd = tmp_cmd->next;
+    }
 }

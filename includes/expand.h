@@ -25,11 +25,11 @@ t_env	*env_last(t_env *lst);
 void	env_add_back(t_env **lst, t_env *new);
 void	env_clear(t_env	*lst);
 t_env   *get_env(char **env_var);
-t_list	*divide_lst(char *str);
-void	handle_cmd(t_cmd *node, t_env *table);
-void    expand_var(t_cmd *commands, t_env *env_var);
-int		needed(char	*str, char *parent);
-char    *valof(t_env    *lst, char  *name);
-char    *node_treatment(char *str, t_env *lst);
+int	is_env(char *s);
+t_list  *split_in_lst(char *s);
+void    changes(t_list *lst, t_env *envi);
+char    *join_lst(t_list *lst);
+char    *handle_var(char *s, t_env *envi);
+void	expand_var(t_cmd **commands, t_env **env_var);
 
 # endif

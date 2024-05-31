@@ -25,7 +25,7 @@ int	main(int ac, char **av, char **ep)
 		}
 		printf("good syntax\n");
 		tmp2 = cmd(&tmp);
-		test = tmp2;
+		test = cmd(&tmp);
 		while (test)
 		{
 			printf("arguments commande %d : ", i);
@@ -46,7 +46,7 @@ int	main(int ac, char **av, char **ep)
 
 
 
-		expand_var(tmp2, env_var);
+		expand_var(&tmp2, &env_var);
 		test = tmp2;
 		while (test)
 		{
@@ -67,7 +67,8 @@ int	main(int ac, char **av, char **ep)
 		}
 		printf("\n");
 		token_clear(tmp);
-		cmd_clear(test);
+		if (test)
+			cmd_clear(test);
 		env_clear(env_var);
 	}
 	return (0);

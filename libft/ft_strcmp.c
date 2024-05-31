@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/25 12:26:35 by egomez            #+#    #+#             */
-/*   Updated: 2024/01/25 12:52:59 by egomez           ###   ########.fr       */
+/*   Created: 2023/11/06 17:16:45 by egomez            #+#    #+#             */
+/*   Updated: 2023/11/06 17:25:08 by egomez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	t_list	*start;
-	t_list	*current;
+    int				i;
+	unsigned char	*chain1;
+	unsigned char	*chain2;
 
-	if (!lst || !f || !del)
-		return (NULL);
-	start = ft_lstnew(f(lst->content));
-	current = start;
-	while (lst && lst->next)
+	i = 0;
+	chain1 = (unsigned char *)s1;
+	chain2 = (unsigned char *)s2;
+	if (!s1 && !s2)
+		return (0);
+	while (s1[i] != 0 && s2[i] != 0)
 	{
-		lst = lst->next;
-		ft_lstadd_front(&current, ft_lstnew(f(lst->content)));
+		if (chain1[i] != chain2[i])
+			return (chain1[i] - chain2[i]);
+		i++;
 	}
-	return (start);
+	return (chain1[i] - chain2[i]);
 }

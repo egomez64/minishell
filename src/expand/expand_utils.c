@@ -12,81 +12,131 @@
 
 #include <minishell.h>
 
-int		needed(char	*str, char *parent)
+t_list	*ft_lstnew_empty()
 {
-	int	i;
-	int	count;
+	t_list	*new;
 
-	i = 0;
-	count = 0;
-	while (str[i] != 0)
-	{
-		if (str[i] == '$')
-			count++;
-		i++;
-	}
-	if (count > 0)
-	{
-		i = 0;
-		while (str[i] != 0 && (str[i] != '"' || str[i] != '\''))
-			i++;
-		*parent = str[i];
-	}
-	return (count);
-}
-
-char    *valof(t_env    *lst, char  *name)
-{
-	t_env   *tmp;
-
-	tmp = lst;
-	while (ft_strncmp(tmp->name, name, ft_strlen(name)) && tmp->next)
-		tmp = tmp->next;
-	if (ft_strncmp(tmp->name, name, ft_strlen(name)))
+	new = malloc(sizeof(t_list));
+	if (!new)
 		return (NULL);
-	return (tmp->val);
+	new->content = malloc(sizeof(char));
+	new->content[0] = 0;
+	new->next = NULL;
+	return (new);
 }
 
-char	*get_name(char *str)
+int	is_env(char *s)
 {
-	int		i;
-	int		y;
+    int i;
+
+    i = 0;
+    while (s[i] != 0 && s[i] != '$')
+        i++;
+    if (s[i] != 0)
+        return (1);
+    return (0);
+}
+
+t_list  *split_in_lst(char *s)
+{
+    t_list  *result;
+    t_list  *tmp;
+    int     i;
+    int     dollar;
+
+    result = ft_lstnew_empty();
+    tmp = result;
+    i = 0;
+    dollar = 0;
+    while (s[i] != 0)
+    {
+        if (s[i] == '$')
+        {
+            dollar = 1;
+            ft_lstadd_back(&tmp, ft_lstnew_empty());
+            tmp = tmp->next;
+        }
+        if (s[i] == ' ' && dollar == 1)
+        {
+            dollar = 0;
+            ft_lstadd_back(&tmp, ft_lstnew_empty());
+            tmp = tmp->next;
+        }
+        tmp->content = ft_strjoin(tmp->content, &s[i]);
+        i++;
+    }
+   
+    return (result);
+}
+
+void    changes(t_list *lst, t_env *envi)
+{
+	t_env	*tmp_envi;
+    t_list *tmp_lst;
+
+    tmp_lst = lst;
+    while (tmp_lst)
+    {
+        printf("content:%s\n", tmp_lst->content);
+        tmp_lst = tmp_lst->next;
+    }
+    tmp_envi = envi;
+    while (tmp_envi)
+    {
+        printf("name: %s value: %s\n", tmp_envi->name, tmp_envi->val);
+        tmp_envi = tmp_envi->next;
+    }
+
+	while (lst)
+    {
+        tmp_envi = envi;
+        if (is_env(lst->content))
+        {
+            // while (tmp_envi && ft_strcmp(tmp_lst->content, tmp_envi->name))
+            //     tmp_envi = tmp_envi->next;
+            while (tmp_envi)
+            {
+                if (ft_strcmp(lst->content, tmp_envi->name))
+                {
+                    tmp_envi = tmp_envi->next;
+                    continue;
+                }
+                free(lst->content);
+                lst->content = ft_strdup(tmp_envi->val);
+                break;
+            }
+            // if (ft_strcmp(tmp_lst->content, tmp_envi->name))
+            // {
+            //     free(tmp_lst->content);
+            //     tmp_lst->content = tmp_envi->val;
+            // }
+        }
+        lst = lst->next;
+    }
+}
+
+char    *join_lst(t_list *lst)
+{
+    t_list  *tmp_lst;
+    char    *result;
+
+    tmp_lst = lst;
+    result = NULL;
+    while (tmp_lst)
+    {
+        ft_strjoin(result, tmp_lst->content);
+        tmp_lst = tmp_lst->next;
+    }
+    return (result);
+}
+
+char    *handle_var(char *s, t_env *envi)
+{
+	t_list	*splitted;
 	char	*result;
 
-	i = 1;
-	y = 0;
-	result = NULL;
-	while (str[i] != 0)
-	{
-		result[y] = str[i];
-		i++;
-		y++;
-	}
-	result[y] = 0;
+	splitted = split_in_lst(s);
+	changes(splitted, envi);
+	result = join_lst(splitted);
 	return (result);
-}
-
-char    *node_treatment(char *str, t_env *lst)
-{
-    char    *result;
-    t_list  *divide;
-    t_list  *tmp;
-    char    parent;
-
-    result = NULL;
-    parent = 0;
-    if (needed(str, &parent))
-	{
-		divide = divide_lst(str);
-        tmp = divide;
-		while (divide->next)
-		{
-			if (tmp->content[0] == '$' && parent != '\'')
-				result = ft_strjoin(result, valof(lst, get_name((char *)tmp->content)));
-			result = ft_strjoin(result, tmp->content);
-			tmp = tmp->next;
-		}
-	}
-    lstclear(&divide);
-    return (result);
 }

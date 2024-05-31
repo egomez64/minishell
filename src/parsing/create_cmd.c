@@ -46,7 +46,5 @@ t_cmd   *cmd(t_token **token)
         }
         tmp = tmp->next;
     }
-    /*if (last == WORD && tmp->type == WORD)
-         lstadd_back(&current->arguments, lstnew(tmp->val));*/
     return (commands);
 }
