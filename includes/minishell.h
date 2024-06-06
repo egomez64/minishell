@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:40:26 by egomez            #+#    #+#             */
-/*   Updated: 2024/04/29 16:40:28 by egomez           ###   ########.fr       */
+/*   Updated: 2024/06/06 13:22:09 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <libft.h>
 #include <parsing.h>
 #include <expand.h>
+#include <exec.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
