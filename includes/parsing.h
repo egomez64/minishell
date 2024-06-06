@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexing.h                                           :+:      :+:    :+:   */
+/*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:43:07 by egomez            #+#    #+#             */
-/*   Updated: 2024/04/18 18:43:10 by egomez           ###   ########.fr       */
+/*   Updated: 2024/06/06 15:24:16 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,17 @@ const static char * arg_to_string[] = {
 
 typedef struct s_token
 {
-    t_arg        type;
+    t_arg           type;
     char            *val;
-    struct s_token         *next;
-}   t_token;
+    struct s_token  *next;
+}                   t_token;
 
 typedef struct s_cmd
 {
-    t_list *arguments;
-    t_token *redirections;
-    struct s_cmd *next;
-}   t_cmd;
+    t_list          *arguments;
+    t_token         *redirections;
+    struct s_cmd    *next;
+}                   t_cmd;
 
 t_token	*token_new(char	*val, t_arg type);
 t_token	*token_last(t_token *lst);
