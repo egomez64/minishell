@@ -15,3 +15,7 @@ II - supprimer les quotes
 
     3 - supprimer les quotes non parents
         -potentiellement realloc
+
+    STRUCT AVEC INT QUOTE = 0 OU 1 OU 2
+
+    modifier mon handle_var pour remplir une nouvelle liste de cmds avec les argument split sur les espaces puis free l'ancienne

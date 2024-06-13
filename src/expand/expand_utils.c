@@ -40,10 +40,17 @@ int	is_env(char *s)
 bool    is_delimiter(char c)
 {
     if (ft_isalnum(c))
-        return false;
+        return (false);
     if (c == '_')
-        return false;
-    return true;
+        return (false);
+    return (true);
+}
+
+bool    is_whitespace(char c)
+{
+    if ((c >= 7 && c <= 13) || c == 32)
+        return (true);
+    return (false);
 }
 
 char	*ft_strjoin_char(char const *s1, char c)
@@ -68,26 +75,4 @@ char	*ft_strjoin_char(char const *s1, char c)
     newchain[i++] = c;
     newchain[i] = 0;
     return (newchain);
-}
-
-char    *supp_quotes(char *join)
-{
-	char	*result;
-	int		i;
-	int		y;
-	int		join_size;
-
-	join_size = ft_strlen(join);
-	result = ft_calloc(1, sizeof(char) * (join_size - 2));
-	i = 1;
-	y = 0;
-	while (i < join_size - 1)
-	{
-		result[y] = join[i];
-		y++;
-		i++;
-	}
-	join = NULL;
-	free(join);
-	return (result);
 }

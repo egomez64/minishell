@@ -34,6 +34,50 @@ t_list  *split_in_lst(char *s)
     return (first);
 }
 
+t_list  *split_on_whitespace(char *s)
+{
+    t_list  *first;
+    t_list  *tmp;
+    int     i;
+    char quote;
+    i = 0;
+    first = ft_lstnew_empty();
+    tmp = first;
+    quote = 0;
+    if (s[0] == '\'' || s[0] == '"')
+        quote = s[0];
+    while (s[i])
+    {
+        if ((s[i] == '\'' || s[i] == '"') && (i > 0 && s[i - 1] != '\\'))
+        {
+            if (quote && quote == s[i])
+                quote = 0;
+            else if (!quote)
+                quote = s[i];
+        }
+        if (quote)
+            tmp->content = ft_strjoin_char(tmp->content, s[i]);
+        else
+        {
+            while (s[i] && !is_whitespace(s[i]))
+            {
+                tmp->content = ft_strjoin_char(tmp->content, s[i]);
+                i++;
+            }
+            if (s[i])
+            {
+                lstadd_back(&tmp, ft_lstnew_empty());
+                tmp = tmp->next;
+            }
+            while (s[i] && is_whitespace(s[i]))
+                i++;
+            continue;
+        }
+        i++;
+    }
+    return (first);
+}
+
 void    changes(t_list *lst, t_env *envi)
 {
 	t_env	*copy_envi;
@@ -55,7 +99,14 @@ void    changes(t_list *lst, t_env *envi)
                 free(lst->content);
                 lst->content = NULL;
                 lst->content = ft_strdup(copy_envi->val);
+                lst->content = slash_quotes(lst->content);
                 break;
+            }
+            if (!copy_envi)
+            {
+                free(lst->content);
+                lst->content = NULL;
+                lst->content = ft_strdup("");
             }
         }
         lst = lst->next;
@@ -75,23 +126,48 @@ char    *join_lst(t_list *lst)
     return (result);
 }
 
-char    *handle_var(char *s, t_env *envi)
+int expand_red(t_token *red, t_env *env)
+{
+    t_token *tmp;
+    t_list *new_word;
+    while (red)
+    {
+        tmp = red;
+        new_word = NULL;
+        handle_word(tmp->val, env, &new_word);
+        if (ft_lstsize(new_word) != 1)
+            return (0); //ambigous redirect
+        tmp->val = new_word->content;
+        red = red->next;
+    }
+    return (1);
+}
+
+
+void    handle_word(char *s, t_env *envi, t_list **new)
 {
 	t_list	*splitted;
 	char	*result;
+    t_list  *node;
 
-    result = NULL;
-    if (s[0] != '\'')
+    splitted = split_in_lst(s);
+	changes(splitted, envi);
+	result = join_lst(splitted);
+    splitted = split_on_whitespace(result);
+    node = splitted;
+    while (node)
     {
-        splitted = split_in_lst(s);
-	    changes(splitted, envi);
-	    result = join_lst(splitted);
+        node->content = supp_quotes(node->content);
+        node = node->next;
     }
-    if (result && (result[0] == '\'' || result[0] == '"'))
-        result = supp_quotes(result);
-    else if (!result && (s[0] == '\'' || s[0] == '"'))
-        result = supp_quotes(s);
-    return (result);
+    while (splitted)
+    {
+        node = lstnew(splitted->content);
+        lstadd_back(new, node);
+        node = splitted;
+        splitted = splitted->next;
+        lstdelone(node);
+    }
 }
 
 void	expand_var(t_cmd **commands, t_env **env_var)
@@ -99,20 +175,24 @@ void	expand_var(t_cmd **commands, t_env **env_var)
     t_cmd   *tmp_cmd;
     t_list  *tmp_arg;
     t_token *tmp_red;
+    t_list  *new_arg;
 
     tmp_cmd = *commands;
+    new_arg = NULL;
     while(tmp_cmd)
     {
         tmp_arg = tmp_cmd->arguments;
         tmp_red = tmp_cmd->redirections;
         while(tmp_arg)
         {
-            tmp_arg->content = handle_var(tmp_arg->content, *env_var);
+            handle_word(tmp_arg->content, *env_var, &new_arg);
             tmp_arg = tmp_arg->next;
         }
+        lstclear(&tmp_cmd->arguments);
+        tmp_cmd->arguments = new_arg;
         while(tmp_red)
         {
-            tmp_red->val = handle_var(tmp_red->val, *env_var);
+            expand_red(tmp_red, *env_var);
             tmp_red = tmp_red->next;
         }
         tmp_cmd = tmp_cmd->next;
