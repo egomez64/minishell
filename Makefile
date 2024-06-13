@@ -5,7 +5,8 @@ LIBFT = libft/libft.a
 CC = cc
 
 SRCS = src/parsing/lexing.c src/parsing/token_list.c src/parsing/parsing.c src/parsing/commands_lst.c src/parsing/create_cmd.c \
-		src/parsing/lst.c src/expand/env_lst.c src/expand/get_env.c src/expand/expand_utils.c src/expand/expand_var.c test.c
+		src/parsing/lst.c src/expand/env_lst.c src/expand/get_env.c src/expand/expand_utils.c src/expand/expand_var.c test.c \
+		src/expand/expand_quote.c
 
 HEADERS = minishell.h
 

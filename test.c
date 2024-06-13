@@ -1,4 +1,4 @@
-#include <minishell.h>
+ #include <minishell.h>
 
 int	main(int ac, char **av, char **ep)
 {
@@ -6,16 +6,20 @@ int	main(int ac, char **av, char **ep)
 	t_token *tmp;
 	char    *line;
 	int     i;
+	int		y;
 	t_cmd	*tmp2;
 	t_env	*env_var;
 	(void)ac;
 	(void)av;
 
 	i = 1;
+	y = 1;
 	env_var = get_env(ep);
 	while(1)
 	{
 		line = readline( "minishell>");
+		if (line == 0)
+			return (0);
 		add_history(line);
 		tmp = lexer(line);
 		if (!parsing(&tmp))
@@ -31,13 +35,13 @@ int	main(int ac, char **av, char **ep)
 			printf("arguments commande %d : ", i);
 			while (test->arguments)
 			{
-				printf("%s ", (char *)test->arguments->content);
+				printf("%s, ", (char *)test->arguments->content);
 				test->arguments = test->arguments->next;
 			}
 			printf("\nredirections commande %d : ", i);
 			while (test->redirections)
 			{
-				printf("%s ", (char *)test->redirections->val);
+				printf("%s, ", (char *)test->redirections->val);
 				test->redirections = test->redirections->next;
 			}
 			test = test->next;
@@ -50,20 +54,20 @@ int	main(int ac, char **av, char **ep)
 		test = tmp2;
 		while (test)
 		{
-			printf("\nexpand arguments commande %d : ", i);
+			printf("\nexpand arguments commande %d : ", y);
 			while (test->arguments)
 			{
-				printf("%s ", (char *)test->arguments->content);
+				printf("%s, ", (char *)test->arguments->content);
 				test->arguments = test->arguments->next;
 			}
-			printf("\nexpand redirections commande %d : ", i);
+			printf("\nexpand redirections commande %d : ", y);
 			while (test->redirections)
 			{
-				printf("%s ", (char *)test->redirections->val);
+				printf("%s, ", (char *)test->redirections->val);
 				test->redirections = test->redirections->next;
 			}
 			test = test->next;
-			i++;
+			y++;
 		}
 		printf("\n");
 		token_clear(tmp);
