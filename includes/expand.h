@@ -31,11 +31,16 @@ int		is_env(char *s);
 t_list  *split_in_lst(char *s);
 void    changes(t_list *lst, t_env *envi);
 char    *join_lst(t_list *lst);
-char    *handle_var(char *s, t_env *envi);
+void    handle_word(char *s, t_env *envi, t_list **new);
 void	expand_var(t_cmd **commands, t_env **env_var);
 char	*ft_strjoin_char(char const *s1, char c);
 bool    is_delimiter(char c);
 t_list	*ft_lstnew_empty();
 char    *supp_quotes(char *join);
+char    *slash_quotes(char *arg);
+int		how_many_q(char *arg);
+bool    is_whitespace(char c);
+t_list  *split_on_whitespace(char *s);
+int		expand_red(t_token *red, t_env *env);
 
 # endif
