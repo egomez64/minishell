@@ -6,11 +6,17 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:56:26 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/10 11:47:27 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/13 16:39:59 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static void	error_open(char *path)	// 
+{
+	write(2, "error open:", 11);
+	write(2, path, ft_strlen(path));
+}
 
 static int	open_input(t_exec *exec, t_token *redir)
 {
@@ -91,7 +97,11 @@ int	open_pipe(t_exec *exec)
 	pipefd[1] = -1;
 	err = pipe(pipefd);
 	if (err == -1)
+	{
 		perror("pipe");
+		return (err);
+	}
 	exec->out_fd = pipefd[1];
 	exec->next->in_fd = pipefd[0];
+	return (err);
 }

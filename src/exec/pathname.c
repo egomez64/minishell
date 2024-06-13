@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:11:19 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/06 16:16:44 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/13 16:42:09 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static int	init_pathname(t_string *pathname, t_string *exec, char *exec_name)
 // 		that can be executed.
 /// @param exec Name of the executable to find.
 /// @return `1` if found, `0` if not, `-1` if an error occured.
-static int	look_through_envlst(t_string *pathname, t_string *exec,
+static int	look_through_envp(t_string *pathname, t_string *exec,
 	char *envp_path)
 {
 	int			jump;

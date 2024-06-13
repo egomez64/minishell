@@ -70,6 +70,12 @@ int	main(int ac, char **av, char **ep)
 			y++;
 		}
 		printf("\n");
+
+
+		printf("Exec:\n");
+		execution(tmp2, env_var);
+
+
 		token_clear(tmp);
 	}
     env_clear(env_var);

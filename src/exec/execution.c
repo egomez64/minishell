@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/10 11:31:50 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/13 16:36:13 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ static int	wait_for_everyone(t_exec **exec)
 int execution(t_cmd *cmd, t_env	*env)
 {
 	t_exec	*exec;
+	t_exec	*current;
 	char	**envp;
 	int		exit_status;
 
@@ -78,13 +79,14 @@ int execution(t_cmd *cmd, t_env	*env)
 		clear_exec(&exec);
 		return (1);
 	}
-	while (exec->next)
+	current = exec;
+	while (current->next)
 	{
-		open_pipe(exec);
-		exec_cmd(exec, env, envp);
-		exec = exec->next;
+		open_pipe(current);
+		exec_cmd(current, envp, &exec);
+		current = current->next;
 	}
-	exec_cmd(exec, env, envp);
-	exit_status = wait_for_everyone(exec);
+	exec_cmd(current, envp, &exec);
+	exit_status = wait_for_everyone(&exec);
 	return (exit_status);
 }

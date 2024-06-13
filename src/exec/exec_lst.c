@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:25:14 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/10 11:31:06 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/13 16:17:39 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ t_exec	*exec_lstlast(t_exec *exec)
 void	clear_exec(t_exec **lst)
 {
 	t_exec	*current;
-	t_exec	*next;
 
 	current = *lst;
 	while (current)

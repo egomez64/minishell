@@ -1,2 +1,6 @@
 minishell
+
+libft.a
 *.o
+
+settings.json
