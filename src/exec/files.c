@@ -6,11 +6,53 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:56:26 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/06 15:31:15 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/10 11:47:27 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static int	open_input(t_exec *exec, t_token *redir)
+{
+	close_and_set(&exec->in_fd);
+	if (redir->val && redir->val[0] != '\0')
+		exec->in_fd = open(redir->val, O_RDONLY);
+	if (exec->in_fd == -1)
+		error_open(redir->val);
+	return (exec->in_fd);
+}
+
+
+static int	open_output(t_exec *exec, t_token *redir)
+{
+	close_and_set(&exec->out_fd);
+	if (redir->val && redir->val[0] != '\0')
+		exec->out_fd = open(redir->val, O_RDWR | O_CREAT | O_TRUNC,
+			S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	if (exec->out_fd == -1)
+		error_open(redir->val);
+	return (exec->out_fd);
+}
+
+/// @brief Redirects an `oldfd` to a `newfd`,
+// 		closing and reopenning it if necessary.
+/// @param oldfd To be closed. The `int` will be set to `-1` once closed.
+/// @param newfd Will point to the same file as `oldfd`.
+// 		If open, will be closed and reopenned.
+/// @return On success, these system calls return the new file descriptor.
+// 		On error, -1 is returned
+static int	redirect(int *oldfd, int newfd)
+{
+	int	fd;
+
+	if (*oldfd == -1)
+		return (-1);
+	fd = dup2(*oldfd, newfd);
+	if (fd == -1)
+		perror("dup2");
+	close_and_set(oldfd);
+	return (fd);
+}
 
 int	make_redirections(t_exec *exec)
 {
@@ -22,20 +64,20 @@ int	make_redirections(t_exec *exec)
 	while (!err && redir)
 	{
 		if (redir->type == INPUT)
-			err = redir_input(exec, redir);
+			err = open_input(exec, redir);
 		else if (redir->type == OUTPUT)
-			err = redir_output(exec, redir);
-		else if (redir->type == HEREDOC)
-			err = redir_heredoc(exec, redir);
+			err = open_output(exec, redir);
+		// else if (redir->type == HEREDOC)
+		// 	err = open_heredoc(exec, redir);
 		redir = redir->next;
 	}
 	if (err)
 		return (err);
 	err = redirect(&exec->in_fd, 0);
-	if (err)
+	if (err == -1)
 		return (err);
 	err = redirect(&exec->out_fd, 1);
-	if (err)
+	if (err == -1)
 		return (err);
 	return (0);
 }
