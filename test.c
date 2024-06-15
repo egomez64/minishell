@@ -1,5 +1,25 @@
  #include <minishell.h>
 
+
+static int	open_debug(int newfd)
+{
+	int	fd;
+
+	fd = open("debug", O_RDWR | O_CREAT | O_TRUNC,
+		S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	if (fd == -1)
+		return (-1);
+	if (fd == newfd)
+		return (0);
+	if (dup2(fd, newfd) != newfd)
+	{
+		close(fd);
+		return (-1);
+	}
+	close(fd);
+	return (0);
+}
+
 int	main(int ac, char **av, char **ep)
 {
 	t_cmd *test;
@@ -12,6 +32,11 @@ int	main(int ac, char **av, char **ep)
 	(void)ac;
 	(void)av;
 
+	if (open_debug(3) == -1);
+	{
+		dprintf(2, "Debug error\n");
+		return (1);
+	}
 	i = 1;
 	y = 1;
 	env_var = get_env(ep);
@@ -24,24 +49,24 @@ int	main(int ac, char **av, char **ep)
 		tmp = lexer(line);
 		if (!parsing(&tmp))
 		{
-			printf("syntax error !\n");
+			dprintf(3, "syntax error !\n");
 			return (1);
 		}
-		printf("good syntax\n");
+		dprintf(3, "good syntax\n");
 		tmp2 = cmd(&tmp);
 		test = cmd(&tmp);
 		while (test)
 		{
-			printf("arguments commande %d : ", i);
+			dprintf(3, "arguments commande %d : ", i);
 			while (test->arguments)
 			{
-				printf("%s, ", (char *)test->arguments->content);
+				dprintf(3, "%s, ", (char *)test->arguments->content);
 				test->arguments = test->arguments->next;
 			}
-			printf("\nredirections commande %d : ", i);
+			dprintf(3, "\nredirections commande %d : ", i);
 			while (test->redirections)
 			{
-				printf("%s, ", (char *)test->redirections->val);
+				dprintf(3, "%s, ", (char *)test->redirections->val);
 				test->redirections = test->redirections->next;
 			}
 			test = test->next;
@@ -54,25 +79,25 @@ int	main(int ac, char **av, char **ep)
 		test = tmp2;
 		while (test)
 		{
-			printf("\nexpand arguments commande %d : ", y);
+			dprintf(3, "\nexpand arguments commande %d : ", y);
 			while (test->arguments)
 			{
-				printf("%s, ", (char *)test->arguments->content);
+				dprintf(3, "%s, ", (char *)test->arguments->content);
 				test->arguments = test->arguments->next;
 			}
-			printf("\nexpand redirections commande %d : ", y);
+			dprintf(3, "\nexpand redirections commande %d : ", y);
 			while (test->redirections)
 			{
-				printf("%s, ", (char *)test->redirections->val);
+				dprintf(3, "%s, ", (char *)test->redirections->val);
 				test->redirections = test->redirections->next;
 			}
 			test = test->next;
 			y++;
 		}
-		printf("\n");
+		dprintf(3, "\n");
 
 
-		printf("Exec:\n");
+		dprintf(3, "Exec:\n");
 		execution(tmp2, env_var);
 
 

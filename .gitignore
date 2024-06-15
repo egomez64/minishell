@@ -3,4 +3,6 @@ minishell
 libft.a
 *.o
 
+debug
+
 settings.json
