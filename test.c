@@ -32,7 +32,7 @@ int	main(int ac, char **av, char **ep)
 	(void)ac;
 	(void)av;
 
-	if (open_debug(3) == -1);
+	if (open_debug(3) == -1)
 	{
 		dprintf(2, "Debug error\n");
 		return (1);
