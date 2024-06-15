@@ -99,6 +99,7 @@ int	main(int ac, char **av, char **ep)
 
 		dprintf(3, "Exec:\n");
 		execution(tmp2, env_var);
+		dprintf(3, "exec over.\n\n");
 
 
 		token_clear(tmp);

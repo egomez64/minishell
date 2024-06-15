@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/13 16:36:13 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/15 16:31:45 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,21 @@ static int	wait_for_everyone(t_exec **exec)
 	pid = 0;
 	wstatus = 0;
 	exit_status = 0;
+	dprintf(3, "exec_lstlast\n");
 	last_pid = exec_lstlast(*exec)->cpid;
 	while (pid != -1)
 	{
+		dprintf(3, "wait ");
 		pid = wait(&wstatus);
+		dprintf(3, "%d", pid);
 		if (pid == last_pid)
+		{
 			exit_status = WEXITSTATUS(wstatus);
+			dprintf(3, ", exit_status: %d", exit_status);
+		}
+		dprintf(3, "\n");
 	}
+	dprintf(3, "clear_exec\n");
 	clear_exec(exec);
 	return (exit_status);
 }
@@ -70,9 +78,11 @@ int execution(t_cmd *cmd, t_env	*env)
 
 	if (!cmd)
 		return (0);
+	dprintf(3, "cmd_to_exec\n");
 	exec = cmd_to_exec(cmd);
 	if (!exec)
 		return (1);
+	dprintf(3, "envlst_to_envp\n");
 	envp = envlst_to_envp(env);
 	if (!envp)
 	{
@@ -80,13 +90,18 @@ int execution(t_cmd *cmd, t_env	*env)
 		return (1);
 	}
 	current = exec;
+	dprintf(3, "while (current->next) {\n");
 	while (current->next)
 	{
+		dprintf(3, "open_pipe\n");
 		open_pipe(current);
+		dprintf(3, "exec_cmd\n");
 		exec_cmd(current, envp, &exec);
 		current = current->next;
 	}
+	dprintf(3, "}\nexec_cmd\n");
 	exec_cmd(current, envp, &exec);
+	dprintf(3, "wait_for_everyone\n");
 	exit_status = wait_for_everyone(&exec);
 	return (exit_status);
 }
