@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/17 15:31:13 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/17 17:48:36 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static int	wait_for_everyone(t_exec **exec)
 	pid = 0;
 	wstatus = 0;
 	exit_status = 0;
-	dprintf(3, "exec_lstlast\n");
 	last_pid = exec_lstlast(*exec)->cpid;
 	while (pid != -1)
 	{
@@ -95,41 +94,59 @@ static void	print_cmd(t_cmd *cmd)
 	}
 }
 
+static int	simple_exec(t_exec **exec, t_env *env, char **envp)
+{
+	int		exit_status;
+
+	if ((*exec)->cmd->arguments
+		&& is_builtins((char *) (*exec)->cmd->arguments->content))
+		exit_status = handle_builtins((*exec)->cmd);
+	else
+	{
+		exec_cmd(*exec, env, envp, exec);
+		exit_status = wait_for_everyone(exec);
+	}
+	return (exit_status);
+}
+
+static int	pipes_exec(t_exec **exec, t_env *env, char **envp)
+{
+	t_exec	*current;
+	int		exit_status;
+
+	current = *exec;
+	while (current->next)
+	{
+		open_pipe(current);
+		exec_cmd(current, env, envp, exec);
+		current = current->next;
+	}
+	exec_cmd(current, env, envp, exec);
+	exit_status = wait_for_everyone(exec);
+	return (exit_status);
+}
+
 int execution(t_cmd *cmd, t_env	*env)
 {
 	t_exec	*exec;
-	t_exec	*current;
 	char	**envp;
 	int		exit_status;
 
 	if (!cmd)
 		return (0);
-	dprintf(3, "cmd_lst:\n");
-	print_cmd(cmd);
-	dprintf(3, "cmd_to_exec\n");
+	print_cmd(cmd);	// 
 	exec = cmd_to_exec(cmd);
 	if (!exec)
 		return (1);
-	dprintf(3, "envlst_to_envp\n");
 	envp = envlst_to_envp(env);
 	if (!envp)
 	{
 		clear_exec(&exec);
 		return (1);
 	}
-	current = exec;
-	dprintf(3, "while (current->next) {\n");
-	while (current->next)
-	{
-		dprintf(3, "open_pipe\n");
-		open_pipe(current);
-		dprintf(3, "exec_cmd\n");
-		exec_cmd(current, env, envp, &exec);
-		current = current->next;
-	}
-	dprintf(3, "}\nexec_cmd\n");
-	exec_cmd(current, env, envp, &exec);
-	dprintf(3, "wait_for_everyone\n");
-	exit_status = wait_for_everyone(&exec);
+	if (!exec->next)
+		exit_status = simple_exec(&exec, env, envp);
+	else
+		exit_status = pipes_exec(&exec, env, envp);
 	return (exit_status);
 }

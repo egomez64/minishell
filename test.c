@@ -50,11 +50,9 @@ int	main(int ac, char **av, char **ep)
 		expand_var(&commands, &env_var/*, exit_status*/);
 		red_treatment(&commands);
 		dprintf(3, "\n exit status : %d\n", cmd_last(commands)->exit_s);
-		dprintf(3, "Exec:\n");
 		execution(commands, env_var);
-		dprintf(3, "exec over.\n\n");
-		if (commands->arguments && is_builtins(commands->arguments->content))
-			handle_builtins(commands);
+		// if (commands->arguments && is_builtins(commands->arguments->content))
+		// 	handle_builtins(commands);
 		token_clear(tmp);
 		cmd_clear(commands);
 	}

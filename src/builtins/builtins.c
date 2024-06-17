@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 15:25:14 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/17 15:25:16 by egomez           ###   ########.fr       */
+/*   Updated: 2024/06/17 17:46:07 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@ bool	is_builtins(const char	*s)
 	return (false);
 }
 
-void	handle_builtins(t_cmd	*cmd)
+int	handle_builtins(t_cmd	*cmd)
 {
+	int	exit_status;
+
 	if (cmd->arguments->content && !ft_strcmp(cmd->arguments->content, "pwd"))
-		pwd();
+		exit_status = pwd();
+	return (exit_status);
 }
