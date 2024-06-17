@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 12:33:14 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/13 14:50:23 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/17 18:11:17 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,35 @@ static size_t	lst_len(t_list *lst)
 {
 	size_t	len;
 
-	len = 0;
+	if (!lst)
+		return (0);
+	len = ft_strlen((char *) lst->content);
+	lst = lst->next;
 	while (lst)
 	{
 		if (lst->content)
-			len += ft_strlen((char *) lst->content);
+			len += ft_strlen((char *) lst->content) + 1;
 		lst = lst->next;
 	}
 	return (len);
+}
+
+static size_t	lst_str_join(char *dest, t_list *lst, size_t len)
+{
+	size_t	i;
+
+	if (!lst)
+		return (0);
+	i = ft_strlcpy(dest, (char *) lst->content, len + 1);
+	lst = lst->next;
+	while (lst)
+	{
+		dest[i] = ' ';
+		i++;
+		i += ft_strlcpy(dest + i, (char *) lst->content, len + 1);
+		lst = lst->next;
+	}
+	return (i);
 }
 
 static char	*lst_to_str(t_list *lst, int no_newline)
@@ -52,12 +73,7 @@ static char	*lst_to_str(t_list *lst, int no_newline)
 	str = malloc((len + !no_newline + 1) * sizeof (char));
 	if (!str)
 		return (NULL);
-	i = 0;
-	while (lst)
-	{
-		i += ft_strlcpy(str + i, (char *) lst->content, len + 1);
-		lst = lst->next;
-	}
+	i = lst_str_join(str, lst, len);
 	if (!no_newline)
 	{
 		str[i] = '\n';
@@ -72,7 +88,6 @@ int	echo(t_cmd *cmd)
 	int		no_newline;
 	t_list	*arg;
 	char	*str;
-	int		len;
 
 	arg = cmd->arguments->next;
 	if (!arg)
@@ -89,5 +104,6 @@ int	echo(t_cmd *cmd)
 		return (1);	// 
 	}
 	printf("%s", str);
+	free(str);
 	return (0);
 }

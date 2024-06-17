@@ -6,17 +6,17 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:35:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/13 13:24:43 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/17 18:09:06 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../includes/minishell.h"
-#include "../../includes/builtins.h"
-#include <unistd.h>
-#include <errno.h>
-#include <stdio.h>
+#include "../../includes/minishell.h"
+// #include "../../includes/builtins.h"
+// #include <unistd.h>
+// #include <errno.h>
+// #include <stdio.h>
 
-static int	cd_home(t_env *env, int *exit_s	)
+static int	cd_home(t_env *env)
 {
 	int		ret;
 	char	*home;
@@ -33,20 +33,22 @@ static int	cd_home(t_env *env, int *exit_s	)
 	return (ret);
 }
 
-int	cd(int argc, char **argv, char **envp)
+int	cd(t_cmd *cmd, t_env *env)
 {
 	int ret;
 	int	err;
+	int	argc;
 
+	argc = ft_lstsize(cmd->arguments);
 	if (argc > 2)
 	{
 		write(2, "minishell: cd: too many arguments\n", 35);
 		return (1);
 	}
 	if (argc == 1)
-		ret = cd_home(envp);
+		ret = cd_home(env);
 	else
-		ret = chdir(argv[1]);
+		ret = chdir((char *) cmd->arguments->content);
 	if (ret == -1)
 	{
 		err = errno;
