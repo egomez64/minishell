@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 15:32:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/13 16:17:09 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/17 15:23:16 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,14 @@ static char	**arglst_to_argv(t_list *arguments)
 	int		i;
 
 	size = ft_lstsize(arguments);
+	dprintf(3, "size: %d\n", size);
 	argv = malloc((size + 1) * sizeof (char *));
 	if (!argv)
 		return (NULL);
 	i = 0;
 	while (i < size)
 	{
+		dprintf(3, "\t%s\n", (char *) arguments->content);
 		argv[i] = arguments->content;
 		arguments = arguments->next;
 		i++;
@@ -76,11 +78,12 @@ void	free_attributes(t_attributes attributes)
 	free_achar(attributes.envp);
 }
 
-t_attributes	fill_attributes(t_exec *exec, char **envp)
+t_attributes	fill_attributes(t_exec *exec, t_env *env, char **envp)
 {
 	t_attributes	attributes;
 	char			*envp_path;
 
+	(void) env;
 	attributes.envp = envp;
 	if (!attributes.envp)
 	{
@@ -88,6 +91,7 @@ t_attributes	fill_attributes(t_exec *exec, char **envp)
 		attributes.pathname = NULL;
 		return (attributes);
 	}
+	dprintf(3, "%d argv:\n", getpid());
 	attributes.argv = arglst_to_argv(exec->cmd->arguments);
 	if (!attributes.argv)
 	{
@@ -102,5 +106,6 @@ t_attributes	fill_attributes(t_exec *exec, char **envp)
 		free_achar(attributes.envp);
 		free(attributes.argv);
 	}
+	dprintf(3, "%d pathname: %s\n", getpid(), attributes.pathname);
 	return (attributes);
 }

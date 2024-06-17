@@ -76,25 +76,25 @@ int	main(int ac, char **av, char **ep)
 
 
 		expand_var(&tmp2, &env_var);
-		test = tmp2;
-		while (test)
-		{
-			dprintf(3, "\nexpand arguments commande %d : ", y);
-			while (test->arguments)
-			{
-				dprintf(3, "%s, ", (char *)test->arguments->content);
-				test->arguments = test->arguments->next;
-			}
-			dprintf(3, "\nexpand redirections commande %d : ", y);
-			while (test->redirections)
-			{
-				dprintf(3, "%s, ", (char *)test->redirections->val);
-				test->redirections = test->redirections->next;
-			}
-			test = test->next;
-			y++;
-		}
-		dprintf(3, "\n");
+		// test = tmp2;
+		// while (test)
+		// {
+		// 	dprintf(3, "\nexpand arguments commande %d : ", y);
+		// 	while (test->arguments)
+		// 	{
+		// 		dprintf(3, "%s, ", (char *)test->arguments->content);
+		// 		test->arguments = test->arguments->next;
+		// 	}
+		// 	dprintf(3, "\nexpand redirections commande %d : ", y);
+		// 	while (test->redirections)
+		// 	{
+		// 		dprintf(3, "%s, ", (char *)test->redirections->val);
+		// 		test->redirections = test->redirections->next;
+		// 	}
+		// 	test = test->next;
+		// 	y++;
+		// }
+		// dprintf(3, "\n");
 
 
 		dprintf(3, "Exec:\n");

@@ -6,19 +6,19 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/10 11:42:56 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/17 15:14:05 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	child(t_exec *exec, char **envp, t_exec **lst)
+static int	child(t_exec *exec, t_env *env, char **envp, t_exec **lst)
 {
 	int				err;
 	t_attributes	attributes;
 
 	close_and_set(&exec->next->in_fd);
-	attributes = fill_attributes(exec, envp);
+	attributes = fill_attributes(exec, env, envp);
 	if (!attributes.pathname)
 		return (1);
 	err = make_redirections(exec);
@@ -41,7 +41,7 @@ static void	parent(t_exec *exec)
 	close_and_set(&exec->out_fd);
 }
 
-void	exec_cmd(t_exec *exec, char **envp, t_exec **lst)
+void	exec_cmd(t_exec *exec, t_env *env, char **envp, t_exec **lst)
 {
 	int	err;
 
@@ -50,7 +50,7 @@ void	exec_cmd(t_exec *exec, char **envp, t_exec **lst)
 		perror("fork");
 	if (exec->cpid == 0)
 	{
-		err = child(exec, envp, lst);
+		err = child(exec, env, envp, lst);
 		exit(err);
 	}
 	parent(exec);

@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/15 16:31:45 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/17 15:31:13 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,35 @@ static int	wait_for_everyone(t_exec **exec)
 		}
 		dprintf(3, "\n");
 	}
-	dprintf(3, "clear_exec\n");
-	clear_exec(exec);
+	// dprintf(3, "clear_exec\n");
+	// clear_exec(exec);
 	return (exit_status);
+}
+
+static void	print_cmd(t_cmd *cmd)
+{
+	t_list	*arg;
+	t_token	*redir;
+
+	while (cmd)
+	{
+		dprintf(3, "arg\n");
+		arg = cmd->arguments;
+		while (arg)
+		{
+			dprintf(3, "\t%s\n", (char *) arg->content);
+			arg = arg->next;
+		}
+		dprintf(3, "redir\n");
+		redir = cmd->redirections;
+		while (redir)
+		{
+			dprintf(3, "\t%s\n", redir->val);
+			redir = redir->next;
+		}
+		dprintf(3, ".\n");
+		cmd = cmd->next;
+	}
 }
 
 int execution(t_cmd *cmd, t_env	*env)
@@ -78,6 +104,8 @@ int execution(t_cmd *cmd, t_env	*env)
 
 	if (!cmd)
 		return (0);
+	dprintf(3, "cmd_lst:\n");
+	print_cmd(cmd);
 	dprintf(3, "cmd_to_exec\n");
 	exec = cmd_to_exec(cmd);
 	if (!exec)
@@ -96,11 +124,11 @@ int execution(t_cmd *cmd, t_env	*env)
 		dprintf(3, "open_pipe\n");
 		open_pipe(current);
 		dprintf(3, "exec_cmd\n");
-		exec_cmd(current, envp, &exec);
+		exec_cmd(current, env, envp, &exec);
 		current = current->next;
 	}
 	dprintf(3, "}\nexec_cmd\n");
-	exec_cmd(current, envp, &exec);
+	exec_cmd(current, env, envp, &exec);
 	dprintf(3, "wait_for_everyone\n");
 	exit_status = wait_for_everyone(&exec);
 	return (exit_status);
