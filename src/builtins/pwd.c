@@ -12,8 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-// No PATH_MAX used.
-int	pwd(int argc, char **argv, char **envp)
+int	pwd(void)
 {
 	char	*wd;
 	int		err;
@@ -26,5 +25,6 @@ int	pwd(int argc, char **argv, char **envp)
 		return (err);
 	}
 	printf("%s\n", wd);
+	free(wd);
 	return (0);
 }

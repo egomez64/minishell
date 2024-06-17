@@ -16,17 +16,19 @@
 #include <errno.h>
 #include <stdio.h>
 
-static int	cd_home(char **envp)
+static int	cd_home(t_env *env, int *exit_s	)
 {
 	int		ret;
 	char	*home;
 
-	home = getenv("HOME");	// To change
-	if (!home)
+	while (env && (ft_strcmp(env->name, "$HOME")))
+		env = env->next;
+	if (!env)
 	{
 		write(2, "minishell: cd: HOME not set\n", 29);
 		return (1);
 	}
+	home = env->val;
 	ret = chdir(home);
 	return (ret);
 }

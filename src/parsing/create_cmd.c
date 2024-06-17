@@ -40,7 +40,7 @@ t_cmd   *cmd(t_token **token)
         }
         else
         {
-            token_add_back(&current->redirections, token_new(ft_strjoin(tmp->val, tmp->next->val), tmp->type));
+            token_add_back(&current->redirections, token_new(tmp->next->val, tmp->type));
 			last = &tmp->type;
             tmp = tmp->next;
         }

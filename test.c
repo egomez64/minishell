@@ -1,6 +1,5 @@
  #include <minishell.h>
 
-
 static int	open_debug(int newfd)
 {
 	int	fd;
@@ -22,27 +21,20 @@ static int	open_debug(int newfd)
 
 int	main(int ac, char **av, char **ep)
 {
-	t_cmd *test;
+	t_cmd *commands;
 	t_token *tmp;
 	char    *line;
-	int     i;
-	int		y;
-	t_cmd	*tmp2;
 	t_env	*env_var;
+	int		exit_status;
 	(void)ac;
 	(void)av;
 
-	if (open_debug(3) == -1)
-	{
-		dprintf(2, "Debug error\n");
-		return (1);
-	}
-	i = 1;
-	y = 1;
+	open_debug(3);
 	env_var = get_env(ep);
+	exit_status = 0;
 	while(1)
 	{
-		line = readline( "minishell>");
+		line = readline("minishell>");
 		if (line == 0)
 			return (0);
 		add_history(line);
@@ -50,59 +42,20 @@ int	main(int ac, char **av, char **ep)
 		if (!parsing(&tmp))
 		{
 			dprintf(3, "syntax error !\n");
-			return (1);
+			return (2);
 		}
 		dprintf(3, "good syntax\n");
-		tmp2 = cmd(&tmp);
-		test = cmd(&tmp);
-		while (test)
-		{
-			dprintf(3, "arguments commande %d : ", i);
-			while (test->arguments)
-			{
-				dprintf(3, "%s, ", (char *)test->arguments->content);
-				test->arguments = test->arguments->next;
-			}
-			dprintf(3, "\nredirections commande %d : ", i);
-			while (test->redirections)
-			{
-				dprintf(3, "%s, ", (char *)test->redirections->val);
-				test->redirections = test->redirections->next;
-			}
-			test = test->next;
-			i++;
-		}
-
-
-
-		expand_var(&tmp2, &env_var);
-		// test = tmp2;
-		// while (test)
-		// {
-		// 	dprintf(3, "\nexpand arguments commande %d : ", y);
-		// 	while (test->arguments)
-		// 	{
-		// 		dprintf(3, "%s, ", (char *)test->arguments->content);
-		// 		test->arguments = test->arguments->next;
-		// 	}
-		// 	dprintf(3, "\nexpand redirections commande %d : ", y);
-		// 	while (test->redirections)
-		// 	{
-		// 		dprintf(3, "%s, ", (char *)test->redirections->val);
-		// 		test->redirections = test->redirections->next;
-		// 	}
-		// 	test = test->next;
-		// 	y++;
-		// }
-		// dprintf(3, "\n");
-
-
+		commands = cmd(&tmp);
+		expand_var(&commands, &env_var/*, exit_status*/);
+		red_treatment(&commands);
+		dprintf(3, "\n exit status : %d\n", cmd_last(commands)->exit_s);
 		dprintf(3, "Exec:\n");
-		execution(tmp2, env_var);
+		execution(commands, env_var);
 		dprintf(3, "exec over.\n\n");
-
-
+		if (commands->arguments && is_builtins(commands->arguments->content))
+			handle_builtins(commands);
 		token_clear(tmp);
+		cmd_clear(commands);
 	}
     env_clear(env_var);
 	return (0);
