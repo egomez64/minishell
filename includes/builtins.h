@@ -15,4 +15,8 @@
 
 # include <linux/limits.h>
 
+bool	is_builtins(const char	*s);
+void	handle_builtins(t_cmd	*cmd);
+int		pwd(void);
+
 #endif

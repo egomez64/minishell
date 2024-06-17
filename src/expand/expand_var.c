@@ -136,13 +136,12 @@ int expand_red(t_token *red, t_env *env)
         new_word = NULL;
         handle_word(tmp->val, env, &new_word);
         if (ft_lstsize(new_word) != 1)
-            return (0); //ambigous redirect
+            return (2); //ambigous redirect
         tmp->val = new_word->content;
         red = red->next;
     }
-    return (1);
+    return (0);
 }
-
 
 void    handle_word(char *s, t_env *envi, t_list **new)
 {
@@ -192,7 +191,7 @@ void	expand_var(t_cmd **commands, t_env **env_var)
         tmp_cmd->arguments = new_arg;
         while(tmp_red)
         {
-            expand_red(tmp_red, *env_var);
+            tmp_cmd->exit_s = expand_red(tmp_red, *env_var);
             tmp_red = tmp_red->next;
         }
         tmp_cmd = tmp_cmd->next;

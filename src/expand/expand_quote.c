@@ -66,7 +66,7 @@ char    *supp_quotes(char *join)
 	int		join_size;
 
 	join_size = ft_strlen(join);
-	result = ft_calloc(1, sizeof(char) * (join_size));
+	result = ft_calloc(1, sizeof(char) * (join_size + 1));
 	i = 0;
 	y = 0;
     quote = 0;
