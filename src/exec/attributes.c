@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 15:32:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/17 15:23:16 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/17 18:51:10 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ static char	**arglst_to_argv(t_list *arguments)
 	int		i;
 
 	size = ft_lstsize(arguments);
-	dprintf(3, "size: %d\n", size);
+	// dprintf(3, "%d: size: %d\n", getpid(), size);
 	argv = malloc((size + 1) * sizeof (char *));
 	if (!argv)
 		return (NULL);
 	i = 0;
 	while (i < size)
 	{
-		dprintf(3, "\t%s\n", (char *) arguments->content);
+		// dprintf(3, "%d: \t%s\n", getpid(), (char *) arguments->content);
 		argv[i] = arguments->content;
 		arguments = arguments->next;
 		i++;
@@ -48,27 +48,36 @@ static char	**arglst_to_argv(t_list *arguments)
 	return (argv);
 }
 
-/// @brief Looks through environment variables
-// 		for the contents of the `var` key.
-/// @param envp Environment variables.
-/// @param var Key.
-/// @return Contents of `var` in `envp`.
-static char	*envp_find(char *envp[], char *var)
-{
-	int	i;
-	int	j;
+// /// @brief Looks through environment variables
+// // 		for the contents of the `var` key.
+// /// @param envp Environment variables.
+// /// @param var Key.
+// /// @return Contents of `var` in `envp`.
+// static char	*envp_find(char *envp[], char *var)
+// {
+// 	int	i;
+// 	int	j;
+// 
+// 	i = 0;
+// 	while (envp[i])
+// 	{
+// 		j = 0;
+// 		while (var[j] && var[j] == envp[i][j])
+// 			j++;
+// 		if (var[j] == '\0' && envp[i][j] == '=')
+// 			return (envp[i] + j + 1);
+// 		i++;
+// 	}
+// 	return (NULL);
+// }
 
-	i = 0;
-	while (envp[i])
-	{
-		j = 0;
-		while (var[j] && var[j] == envp[i][j])
-			j++;
-		if (var[j] == '\0' && envp[i][j] == '=')
-			return (envp[i] + j + 1);
-		i++;
-	}
-	return (NULL);
+static char	*env_find(t_env *env, char *to_find)
+{
+	while (env && (ft_strcmp(env->name, to_find)))
+		env = env->next;
+	if (!env)
+		return (NULL);
+	return (env->val);
 }
 
 void	free_attributes(t_attributes attributes)
@@ -81,9 +90,8 @@ void	free_attributes(t_attributes attributes)
 t_attributes	fill_attributes(t_exec *exec, t_env *env, char **envp)
 {
 	t_attributes	attributes;
-	char			*envp_path;
+	char			*env_path;
 
-	(void) env;
 	attributes.envp = envp;
 	if (!attributes.envp)
 	{
@@ -91,7 +99,7 @@ t_attributes	fill_attributes(t_exec *exec, t_env *env, char **envp)
 		attributes.pathname = NULL;
 		return (attributes);
 	}
-	dprintf(3, "%d argv:\n", getpid());
+	// dprintf(3, "%d: argv:\n", getpid());
 	attributes.argv = arglst_to_argv(exec->cmd->arguments);
 	if (!attributes.argv)
 	{
@@ -99,13 +107,15 @@ t_attributes	fill_attributes(t_exec *exec, t_env *env, char **envp)
 		attributes.pathname = NULL;
 		return (attributes);
 	}
-	envp_path = envp_find(envp, "PATH");
-	attributes.pathname = find_pathname(attributes.argv[0], envp_path);
+	// envp_path = envp_find(envp, "PATH");
+	env_path = env_find(env, "PATH");
+	// dprintf(3, "%d: env_path: %s\n", getpid(), env_path);
+	attributes.pathname = find_pathname(attributes.argv[0], env_path);
 	if (!attributes.pathname)
 	{
 		free_achar(attributes.envp);
 		free(attributes.argv);
 	}
-	dprintf(3, "%d pathname: %s\n", getpid(), attributes.pathname);
+	// dprintf(3, "%d: pathname: %s\n", getpid(), attributes.pathname);
 	return (attributes);
 }

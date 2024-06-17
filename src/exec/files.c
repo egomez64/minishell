@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:56:26 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/13 16:39:59 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/17 18:54:04 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,17 @@ int	make_redirections(t_exec *exec)
 	while (!err && redir)
 	{
 		if (redir->type == INPUT)
+		{
+			dprintf(3, "%d: input\n", getpid());
 			err = open_input(exec, redir);
+			dprintf(3, "%d: err = %d\n", getpid(), err);
+		}
 		else if (redir->type == OUTPUT)
+		{
+			dprintf(3, "%d: output\n", getpid());
 			err = open_output(exec, redir);
+			dprintf(3, "%d: err = %d\n", getpid(), err);
+		}
 		// else if (redir->type == HEREDOC)
 		// 	err = open_heredoc(exec, redir);
 		redir = redir->next;

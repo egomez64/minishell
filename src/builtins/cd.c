@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:35:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/17 18:09:06 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/17 18:42:03 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	cd_home(t_env *env)
 	int		ret;
 	char	*home;
 
-	while (env && (ft_strcmp(env->name, "$HOME")))
+	while (env && (ft_strcmp(env->name, "HOME")))
 		env = env->next;
 	if (!env)
 	{

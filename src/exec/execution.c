@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/17 18:10:35 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/17 18:47:02 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,55 @@ static int	wait_for_everyone(t_exec **exec)
 	last_pid = exec_lstlast(*exec)->cpid;
 	while (pid != -1)
 	{
-		dprintf(3, "wait ");
+		dprintf(3, "waiting...\n");
 		pid = wait(&wstatus);
-		dprintf(3, "%d", pid);
+		dprintf(3, "wait %d\n", pid);
 		if (pid == last_pid)
 		{
 			exit_status = WEXITSTATUS(wstatus);
-			dprintf(3, ", exit_status: %d", exit_status);
+			dprintf(3, "exit_status: %d\n", exit_status);
 		}
-		dprintf(3, "\n");
 	}
 	// dprintf(3, "clear_exec\n");
 	// clear_exec(exec);
+	return (exit_status);
+}
+
+static int	simple_exec(t_exec **exec, t_env *env, char **envp)
+{
+	int		exit_status;
+
+	dprintf(3, "simple_exec\n");
+	if ((*exec)->cmd->arguments
+		&& is_builtins((char *) (*exec)->cmd->arguments->content))
+	{
+		dprintf(3, "builtin\n");
+		exit_status = handle_builtins((*exec)->cmd, env);
+	}
+	else
+	{
+		dprintf(3, "exec_cmd\n");
+		exec_cmd(*exec, env, envp, exec);
+		exit_status = wait_for_everyone(exec);
+	}
+	return (exit_status);
+}
+
+static int	pipes_exec(t_exec **exec, t_env *env, char **envp)
+{
+	t_exec	*current;
+	int		exit_status;
+
+	dprintf(3, "pipes_exec\n");
+	current = *exec;
+	while (current->next)
+	{
+		open_pipe(current);
+		exec_cmd(current, env, envp, exec);
+		current = current->next;
+	}
+	exec_cmd(current, env, envp, exec);
+	exit_status = wait_for_everyone(exec);
 	return (exit_status);
 }
 
@@ -94,37 +131,15 @@ static void	print_cmd(t_cmd *cmd)
 	}
 }
 
-static int	simple_exec(t_exec **exec, t_env *env, char **envp)
-{
-	int		exit_status;
-
-	if ((*exec)->cmd->arguments
-		&& is_builtins((char *) (*exec)->cmd->arguments->content))
-		exit_status = handle_builtins((*exec)->cmd, env);
-	else
-	{
-		exec_cmd(*exec, env, envp, exec);
-		exit_status = wait_for_everyone(exec);
-	}
-	return (exit_status);
-}
-
-static int	pipes_exec(t_exec **exec, t_env *env, char **envp)
-{
-	t_exec	*current;
-	int		exit_status;
-
-	current = *exec;
-	while (current->next)
-	{
-		open_pipe(current);
-		exec_cmd(current, env, envp, exec);
-		current = current->next;
-	}
-	exec_cmd(current, env, envp, exec);
-	exit_status = wait_for_everyone(exec);
-	return (exit_status);
-}
+// static void	print_env(t_env *env)
+// {
+// 	dprintf(3, "env:\n");
+// 	while (env)
+// 	{
+// 		dprintf(3, "\t%s=%s\n", env->name, env->val);
+// 		env = env->next;
+// 	}
+// }
 
 int execution(t_cmd *cmd, t_env	*env)
 {
@@ -135,6 +150,7 @@ int execution(t_cmd *cmd, t_env	*env)
 	if (!cmd)
 		return (0);
 	print_cmd(cmd);	// 
+	// print_env(env);	// 
 	exec = cmd_to_exec(cmd);
 	if (!exec)
 		return (1);
