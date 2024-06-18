@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 16:21:11 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/13 16:32:45 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/18 20:03:49 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ static char	*env_to_str(t_env *env)
 	str = malloc((key_len + val_len + 2) * sizeof (char));
 	if (!str)
 		return (NULL);
-	ft_strlcpy(str, env->name, key_len);
+	ft_strlcpy(str, env->name, key_len + 1);
 	str[key_len] = '=';
-	ft_strlcpy(str + key_len + 1, env->val, key_len + val_len + 1);
+	ft_strlcpy(str + key_len + 1, env->val, key_len + val_len + 2);
 	str[key_len + val_len + 1] = '\0';
 	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/17 18:47:02 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/18 19:05:00 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ static int	pipes_exec(t_exec **exec, t_env *env, char **envp)
 	return (exit_status);
 }
 
-static void	print_cmd(t_cmd *cmd)
+static void	print_cmd(t_cmd *cmd)	// 
 {
 	t_list	*arg;
 	t_token	*redir;
@@ -126,9 +126,10 @@ static void	print_cmd(t_cmd *cmd)
 			dprintf(3, "\t%s\n", redir->val);
 			redir = redir->next;
 		}
-		dprintf(3, ".\n");
+		dprintf(3, "input_fd: %d, output_fd: %d, exit_status: %d\n", cmd->input_fd, cmd->output_fd, cmd->exit_s);
 		cmd = cmd->next;
 	}
+	dprintf(3, "\n");
 }
 
 // static void	print_env(t_env *env)
@@ -141,6 +142,16 @@ static void	print_cmd(t_cmd *cmd)
 // 	}
 // }
 
+static void	set_input_output(t_exec *exec)
+{
+	if (exec->cmd->input_fd == -1)
+		exec->cmd->input_fd = 0;
+	while (exec->next)
+		exec = exec->next;
+	if (exec->cmd->output_fd == -1)
+		exec->cmd->output_fd = 1;
+}
+
 int execution(t_cmd *cmd, t_env	*env)
 {
 	t_exec	*exec;
@@ -149,11 +160,12 @@ int execution(t_cmd *cmd, t_env	*env)
 
 	if (!cmd)
 		return (0);
-	print_cmd(cmd);	// 
 	// print_env(env);	// 
 	exec = cmd_to_exec(cmd);
 	if (!exec)
 		return (1);
+	set_input_output(exec);
+	print_cmd(cmd);	// 
 	envp = envlst_to_envp(env);
 	if (!envp)
 	{

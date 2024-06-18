@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:07:57 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/17 15:16:03 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/18 20:05:43 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ typedef struct s_exec t_exec;
 typedef struct s_exec
 {
 	t_cmd	*cmd;
-	int		in_fd;
-	int		out_fd;
+	// int		in_fd;
+	// int		out_fd;
 	__pid_t	cpid;
 	t_exec	*next;
 }			t_exec;
@@ -53,7 +53,7 @@ int		make_redirections(t_exec *exec);
 void	exec_cmd(t_exec *exec, t_env *env, char **envp, t_exec **lst);
 
 t_attributes
-		fill_attributes(t_exec *exec, t_env *env, char **envp);
+		fill_attributes(t_exec *exec, t_env *env/*, char **envp*/);
 void	free_attributes(t_attributes attributes);
 char	*find_pathname(char *exec_name, char *envp_path);
 char	**envlst_to_envp(t_env *env);
