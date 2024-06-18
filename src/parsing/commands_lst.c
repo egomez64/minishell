@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands_lst.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 19:40:09 by egomez            #+#    #+#             */
-/*   Updated: 2024/04/22 19:40:21 by egomez           ###   ########.fr       */
+/*   Updated: 2024/06/18 17:40:52 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,18 @@ void	cmd_add_back(t_cmd **lst, t_cmd *new)
 
 void	cmd_clear(t_cmd	*cmd)
 {
-	if (cmd->next)
-		cmd_clear(cmd->next);
+	t_cmd	*next;
+
 	if (cmd->arguments)
     	lstclear(&cmd->arguments);
 	if (cmd->redirections)
     	token_clear(cmd->redirections);
+	if (!cmd->next)
+	{
+		free(cmd);
+		return ;
+	}
+	next = cmd->next;
 	free(cmd);
+	cmd_clear(next);
 }
