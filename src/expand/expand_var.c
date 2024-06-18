@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:08:57 by egomez            #+#    #+#             */
-/*   Updated: 2024/04/30 15:09:01 by egomez           ###   ########.fr       */
+/*   Updated: 2024/06/18 17:28:28 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,7 @@ void	expand_var(t_cmd **commands, t_env **env_var)
         }
         lstclear(&tmp_cmd->arguments);
         tmp_cmd->arguments = new_arg;
+        new_arg = NULL;
         while(tmp_red)
         {
             tmp_cmd->exit_s = expand_red(tmp_red, *env_var);

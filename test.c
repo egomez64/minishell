@@ -19,31 +19,31 @@ static int	open_debug(int newfd)
 	return (0);
 }
 
-static void	print_cmd(t_cmd *cmd)
-{
-	t_list	*arg;
-	t_token	*redir;
+// static void	print_cmd(t_cmd *cmd)
+// {
+// 	t_list	*arg;
+// 	t_token	*redir;
 
-	while (cmd)
-	{
-		dprintf(3, "arg\n");
-		arg = cmd->arguments;
-		while (arg)
-		{
-			dprintf(3, "\t%s\n", (char *) arg->content);
-			arg = arg->next;
-		}
-		dprintf(3, "redir\n");
-		redir = cmd->redirections;
-		while (redir)
-		{
-			dprintf(3, "\t%s\n", redir->val);
-			redir = redir->next;
-		}
-		dprintf(3, ".\n");
-		cmd = cmd->next;
-	}
-}
+// 	while (cmd)
+// 	{
+// 		dprintf(3, "arg\n");
+// 		arg = cmd->arguments;
+// 		while (arg)
+// 		{
+// 			dprintf(3, "\t%s\n", (char *) arg->content);
+// 			arg = arg->next;
+// 		}
+// 		dprintf(3, "redir\n");
+// 		redir = cmd->redirections;
+// 		while (redir)
+// 		{
+// 			dprintf(3, "\t%s\n", redir->val);
+// 			redir = redir->next;
+// 		}
+// 		dprintf(3, ".\n");
+// 		cmd = cmd->next;
+// 	}
+// }
 
 int	main(int ac, char **av, char **ep)
 {
@@ -73,11 +73,14 @@ int	main(int ac, char **av, char **ep)
 		}
 		dprintf(3, "good syntax\n");
 		commands = cmd(&tmp);
-		print_cmd(commands);
+		// dprintf(3, "print 1\n");
+		// print_cmd(commands);
 		expand_var(&commands, &env_var/*, exit_status*/);
-		print_cmd(commands);
+		// dprintf(3, "print 2\n");
+		// print_cmd(commands);
 		red_treatment(&commands);
-		print_cmd(commands);
+		// dprintf(3, "print 3\n");
+		// print_cmd(commands);
 		dprintf(3, "exit status : %d\n", cmd_last(commands)->exit_s);
 		execution(commands, env_var);
 		// if (commands->arguments && is_builtins(commands->arguments->content))
