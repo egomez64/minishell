@@ -67,8 +67,8 @@ int	main(int ac, char **av, char **ep)
 		tmp = lexer(line);
 		if (!parsing(&tmp))
 		{
-			dprintf(3, "syntax error !\n");	// ?
-			// write(2, "syntax error !\n", 16);	// ?
+			// dprintf(3, "syntax error !\n");	// ?
+			write(2, "syntax error !\n", 16);	// ?
 			return (2);
 		}
 		dprintf(3, "good syntax\n");

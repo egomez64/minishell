@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/18 19:05:00 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/20 18:13:26 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	wait_for_everyone(t_exec **exec)
 	return (exit_status);
 }
 
-static int	simple_exec(t_exec **exec, t_env *env, char **envp)
+static int	simple_exec(t_exec **exec, t_env *env/*, char **envp*/)
 {
 	int		exit_status;
 
@@ -81,13 +81,14 @@ static int	simple_exec(t_exec **exec, t_env *env, char **envp)
 	else
 	{
 		dprintf(3, "exec_cmd\n");
-		exec_cmd(*exec, env, envp, exec);
+		exec_cmd(*exec, env/*, envp*/, exec);
+		close(0);	// 
 		exit_status = wait_for_everyone(exec);
 	}
 	return (exit_status);
 }
 
-static int	pipes_exec(t_exec **exec, t_env *env, char **envp)
+static int	pipes_exec(t_exec **exec, t_env *env/*, char **envp*/)
 {
 	t_exec	*current;
 	int		exit_status;
@@ -97,10 +98,11 @@ static int	pipes_exec(t_exec **exec, t_env *env, char **envp)
 	while (current->next)
 	{
 		open_pipe(current);
-		exec_cmd(current, env, envp, exec);
+		exec_cmd(current, env/*, envp*/, exec);
 		current = current->next;
 	}
-	exec_cmd(current, env, envp, exec);
+	exec_cmd(current, env/*, envp*/, exec);
+	close(0);	// 
 	exit_status = wait_for_everyone(exec);
 	return (exit_status);
 }
@@ -173,8 +175,8 @@ int execution(t_cmd *cmd, t_env	*env)
 		return (1);
 	}
 	if (!exec->next)
-		exit_status = simple_exec(&exec, env, envp);
+		exit_status = simple_exec(&exec, env/*, envp*/);
 	else
-		exit_status = pipes_exec(&exec, env, envp);
+		exit_status = pipes_exec(&exec, env/*, envp*/);
 	return (exit_status);
 }

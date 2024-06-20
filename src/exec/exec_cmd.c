@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/18 20:08:28 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/20 18:13:23 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,12 @@ static void	print_exec(t_exec *exec, t_attributes *att)	//
 	}
 }
 
-static int	child(t_exec *exec, t_env *env, char **envp, t_exec **lst)
+static int	child(t_exec *exec, t_env *env/*, char **envp*/, t_exec **lst)
 {
 	int				err;
 	t_attributes	attributes;
 
+	// close(0);	// 
 	if (exec->next)
 	{
 		// dprintf(3, "%d: close_and_set %d\n", getpid(), exec->next->in_fd);
@@ -100,7 +101,7 @@ static void	parent(t_exec *exec)
 	close_and_set(&exec->cmd->output_fd);
 }
 
-void	exec_cmd(t_exec *exec, t_env *env, char **envp, t_exec **lst)
+void	exec_cmd(t_exec *exec, t_env *env/*, char **envp*/, t_exec **lst)
 {
 	int	err;
 
@@ -109,7 +110,7 @@ void	exec_cmd(t_exec *exec, t_env *env, char **envp, t_exec **lst)
 		perror("fork");
 	if (exec->cpid == 0)
 	{
-		err = child(exec, env, envp, lst);
+		err = child(exec, env/*, envp*/, lst);
 		exit(err);
 	}
 	parent(exec);

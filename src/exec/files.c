@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:56:26 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/18 19:20:42 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/20 17:29:00 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,16 +105,20 @@ int	make_redirections(t_exec *exec)
 	// // err = redirect(&exec->in_fd, 0);
 	if (exec->cmd->input_fd != 0)
 	{
+		dprintf(3, "%d: redirect %d to 0\n", getpid(), exec->cmd->input_fd);
 		err = redirect(&exec->cmd->input_fd, 0);
 		if (err == -1)
 			return (err);
+		exec->cmd->input_fd = 0;
 	}
 	// // err = redirect(&exec->out_fd, 1);
 	if (exec->cmd->output_fd != 1)
 	{
+		dprintf(3, "%d: redirect %d to 1\n", getpid(), exec->cmd->output_fd);
 		err = redirect(&exec->cmd->output_fd, 1);
 		if (err == -1)
 			return (err);
+		exec->cmd->output_fd = 1;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:07:57 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/18 20:05:43 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/20 18:29:22 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	clear_exec(t_exec **lst);
 int 	execution(t_cmd *cmd, t_env *env);
 int		open_pipe(t_exec *exec);
 int		make_redirections(t_exec *exec);
-void	exec_cmd(t_exec *exec, t_env *env, char **envp, t_exec **lst);
+void	exec_cmd(t_exec *exec, t_env *env/*, char **envp*/, t_exec **lst);
 
 t_attributes
 		fill_attributes(t_exec *exec, t_env *env/*, char **envp*/);
@@ -61,15 +61,3 @@ char	**envlst_to_envp(t_env *env);
 void	close_and_set(int *fd);
 
 #endif
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                  :::      ::::::::         */
-/*                                                 :+:      :+:    :+:        */
-/*                                                +:+ +:+         +:+         */
-/*                                               +#+  +:+       +#+           */
-/*                                              +#+#+#+#+#+   +#+             */
-/*                                                    #+#    #+#              */
-/*                                                    ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */

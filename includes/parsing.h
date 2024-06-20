@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexing.h                                           :+:      :+:    :+:   */
+/*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:43:07 by egomez            #+#    #+#             */
-/*   Updated: 2024/04/18 18:43:10 by egomez           ###   ########.fr       */
+/*   Updated: 2024/06/20 18:30:24 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ typedef enum    arg_type
     APPEND,
 } t_arg ;
 
-const static char * arg_to_string[] = {
+const static char * arg_to_string[] = { // 
 	[WORD] = "Word",
 	[PIPE] = "Pipe",
 	[INPUT] = "INPUT",
