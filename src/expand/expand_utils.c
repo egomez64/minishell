@@ -53,7 +53,7 @@ bool    is_whitespace(char c)
     return (false);
 }
 
-char	*ft_strjoin_char(char const *s1, char c)
+char	*ft_strjoin_char(char *s1, char c, bool free_data)
 {
     int		tot_size;
     char	*newchain;
@@ -74,5 +74,7 @@ char	*ft_strjoin_char(char const *s1, char c)
     }
     newchain[i++] = c;
     newchain[i] = 0;
+    if (free_data)
+        free(s1);
     return (newchain);
 }

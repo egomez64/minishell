@@ -37,7 +37,7 @@ int parsing(t_token **token)
 	{
 		if (tmp->type == PIPE && !pipe_tester(&tmp))
 			return (0);
-		else if (tmp->type != WORD && !redirect_tester(&tmp))
+		else if (tmp->type != WORD && tmp->type != PIPE && !redirect_tester(&tmp))
 			return (0);
 		tmp = tmp->next;
 	}

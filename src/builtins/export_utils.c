@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/13 09:36:04 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/13 15:32:35 by maamine          ###   ########.fr       */
+/*   Created: 2024/06/20 17:27:49 by egomez            #+#    #+#             */
+/*   Updated: 2024/06/20 17:27:51 by egomez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include <minishell.h>
 
-#include "../../includes/minishell.h"
-
-int	env(t_env *envi)
+int	check_arg(char *s)
 {
-	while (envi)
+	int	i;
+
+	i = 0;
+	if (s[0] >= '0' && s[0] <= '9')
+		return (1);
+	while(s[i] && s[i] != '=')
 	{
-		if (envi->val)
-			printf("%s=%s\n", envi->name, envi->val);
-		envi = envi->next;
+		if (is_delimiter(s[i]))
+			return (1);
+		i++;
 	}
+	if (!s[i])
+		return (1);
 	return (0);
 }

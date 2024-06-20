@@ -24,11 +24,11 @@ t_env   *get_env(char **env_var)
     while (env_var[i] != 0)
     {
         secure = 0;
-        current_var = ft_split(env_var[i], '=');
+        current_var = sep_on_equal(env_var[i]);
         while (current_var[secure])
             secure++;
         if (secure > 1)
-            env_add_back(&env_lst, env_new(ft_strdup(current_var[0]), ft_strdup(current_var[1])));
+            env_add_back(&env_lst, env_new(ft_strdup(current_var[0]), ft_strdup(current_var[1]), true));
         i++;
         free_split(current_var);
     }
