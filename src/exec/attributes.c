@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 15:32:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/18 20:06:48 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/24 15:32:34 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,59 +25,52 @@ static void	free_achar(char **array)
 	free(array);
 }
 
-static char	*env_to_str(t_env *env)
-{
-	char	*str;
-	size_t	len_name;
-	size_t	len_val;
+// static char	*env_to_str(t_env *env)
+// {
+// 	char	*str;
+// 	size_t	len_name;
+// 	size_t	len_val;
+// 
+// 	len_name = ft_strlen(env->name);
+// 	if (env->val)
+// 		len_val = ft_strlen(env->val);
+// 	else
+// 		len_val = 0;
+// 	str = malloc((len_name + len_val + 2) * sizeof (char));
+// 	if (!str)
+// 		return (NULL);
+// 	ft_strlcpy(str, env->name, len_name + 1);
+// 	str[len_name] = '=';
+// 	if (env->val)
+// 		ft_strlcpy(str + len_name + 1, env->val, len_val + 1);
+// 	return (str);
+// }
 
-	len_name = ft_strlen(env->name);
-	if (env->val)
-		len_val = ft_strlen(env->val);
-	else
-		len_val = 0;
-	str = malloc((len_name + len_val + 2) * sizeof (char));
-	if (!str)
-		return (NULL);
-	ft_strlcpy(str, env->name, len_name + 1);
-	str[len_name] = '=';
-	if (env->val)
-		ft_strlcpy(str + len_name + 1, env->val, len_val + 1);
-	return (str);
-}
-
-static char	**env_to_envp(t_env *env)
-{
-	char	**envp;
-	t_env	*current;
-	size_t	i;
-
-	i = 0;
-	current = env;
-	while (current)
-	{
-		i++;
-		current = current->next;
-	}
-	envp = malloc((i + 1) * sizeof (char *));
-	if (!envp)
-		return (NULL);
-	i = 0;
-	current = env;
-	while (current)
-	{
-		envp[i] = env_to_str(current);
-		if (!envp[i])
-		{
-			free_achar(envp);
-			return (NULL);
-		}
-		i++;
-		current = current->next;
-	}
-	envp[i] = NULL;
-	return (envp);
-}
+// static char	**env_to_envp(t_env *env)
+// {
+// 	char	**envp;
+// 	t_env	*current;
+// 	size_t	i;
+// 
+// 	envp = malloc((env_size(env) + 1) * sizeof (char *));
+// 	if (!envp)
+// 		return (NULL);
+// 	i = 0;
+// 	current = env;
+// 	while (current)
+// 	{
+// 		envp[i] = env_to_str(current);
+// 		if (!envp[i])
+// 		{
+// 			free_achar(envp);
+// 			return (NULL);
+// 		}
+// 		i++;
+// 		current = current->next;
+// 	}
+// 	envp[i] = NULL;
+// 	return (envp);
+// }
 
 static char	**arglst_to_argv(t_list *arguments)
 {
@@ -141,7 +134,7 @@ void	free_attributes(t_attributes attributes)
 	free_achar(attributes.envp);
 }
 
-t_attributes	fill_attributes(t_exec *exec, t_env *env/*, char **envp*/)
+t_attributes	fill_attributes(t_exec *exec, t_env *env)
 {
 	t_attributes	attributes;
 	char			*env_path;
@@ -149,7 +142,8 @@ t_attributes	fill_attributes(t_exec *exec, t_env *env/*, char **envp*/)
 	// // attributes.envp = envp;
 	// (void) envp;
 	// attributes.envp = NULL;
-	attributes.envp = env_to_envp(env);
+	// attributes.envp = env_to_envp(env);
+	attributes.envp = envlst_to_envp(env);
 	if (!attributes.envp)
 	{
 		attributes.argv = NULL;
