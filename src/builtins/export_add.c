@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_add.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:38:45 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/18 17:38:47 by egomez           ###   ########.fr       */
+/*   Updated: 2024/06/24 17:25:28 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,31 +93,60 @@ int	set_null(t_env *envi, char *s)
 	return (0);
 }
 
-int	export_add(t_env **envi, t_cmd *cmd)
+int	export_add(t_env **envi, t_list *args)
 {
 	int	i;
 	int	exit_s;
 
 	i = 0;
 	exit_s = 0;
-	cmd->arguments = cmd->arguments->next;
-	while (cmd->arguments)
+	args = args->next;
+	while (args)
 	{
-		while (cmd->arguments->content[i] && cmd->arguments->content[i] != '=')
+		while (args->content[i] && args->content[i] != '=')
 			i++;
-		if (cmd->arguments->content[ft_strlen(cmd->arguments->content) - 1] == '=' \
-				|| cmd->arguments->content[i] != '=')
-			set_null(*envi, cmd->arguments->content);
-		else if (cmd->arguments->content[i - 1] == '+')
-			exit_s = export_join(*envi, cmd->arguments->content);
+		if (args->content[ft_strlen(args->content) - 1] == '='
+			|| args->content[i] != '=')
+			set_null(*envi, args->content);
+		else if (args->content[i - 1] == '+')
+			exit_s = export_join(*envi, args->content);
 		else
 		{
-			if (check_arg(cmd->arguments->content))
+			if (check_arg(args->content))
 				exit_s = 1;
 			else
-				exit_s = export_append(*envi, cmd->arguments->content);
+				exit_s = export_append(*envi, args->content);
 		}
-		cmd->arguments = cmd->arguments->next;
+		args = args->next;
 	}
 	return (exit_s);
 }
+
+// int	export_add(t_env **envi, t_cmd *cmd)
+// {
+// 	int	i;
+// 	int	exit_s;
+// 
+// 	i = 0;
+// 	exit_s = 0;
+// 	cmd->arguments = cmd->arguments->next;
+// 	while (cmd->arguments)
+// 	{
+// 		while (cmd->arguments->content[i] && cmd->arguments->content[i] != '=')
+// 			i++;
+// 		if (cmd->arguments->content[ft_strlen(cmd->arguments->content) - 1] == '='
+// 			|| cmd->arguments->content[i] != '=')
+// 			set_null(*envi, cmd->arguments->content);
+// 		else if (cmd->arguments->content[i - 1] == '+')
+// 			exit_s = export_join(*envi, cmd->arguments->content);
+// 		else
+// 		{
+// 			if (check_arg(cmd->arguments->content))
+// 				exit_s = 1;
+// 			else
+// 				exit_s = export_append(*envi, cmd->arguments->content);
+// 		}
+// 		cmd->arguments = cmd->arguments->next;
+// 	}
+// 	return (exit_s);
+// }
