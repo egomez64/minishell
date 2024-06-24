@@ -60,7 +60,7 @@ int	main(int ac, char **av, char **ep)
 	exit_status = 0;
 	while(1)
 	{
-		line = readline("minishell>");
+		line = readline("minishell> ");
 		if (line == 0)
 			return (0);
 		add_history(line);
@@ -75,7 +75,8 @@ int	main(int ac, char **av, char **ep)
 		commands = cmd(&tmp);
 		// dprintf(3, "print 1\n");
 		// print_cmd(commands);
-		expand_var(&commands, &env_var/*, exit_status*/);
+		// expand_var(&commands, &env_var/*, exit_status*/);
+		expand_var(commands, &env_var, exit_status);
 		// dprintf(3, "print 2\n");
 		// print_cmd(commands);
 		red_treatment(&commands);

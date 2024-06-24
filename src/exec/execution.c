@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/20 18:13:26 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/24 14:24:52 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,13 @@ static int	simple_exec(t_exec **exec, t_env *env/*, char **envp*/)
 		&& is_builtins((char *) (*exec)->cmd->arguments->content))
 	{
 		dprintf(3, "builtin\n");
-		exit_status = handle_builtins((*exec)->cmd, env);
+		exit_status = handle_builtins((*exec)->cmd, &env);
 	}
 	else
 	{
 		dprintf(3, "exec_cmd\n");
 		exec_cmd(*exec, env/*, envp*/, exec);
-		close(0);	// 
+		// close(0);	// 
 		exit_status = wait_for_everyone(exec);
 	}
 	return (exit_status);
