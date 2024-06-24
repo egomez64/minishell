@@ -81,8 +81,7 @@ static int	simple_exec(t_exec **exec, t_env *env)
 	else
 	{
 		dprintf(3, "exec_cmd\n");
-		exec_cmd(*exec, env/*, envp*/, exec);
-		// close(0);	// 
+		exec_cmd(*exec, env, exec);
 		exit_status = wait_for_everyone(exec);
 	}
 	return (exit_status);
@@ -101,8 +100,7 @@ static int	pipes_exec(t_exec **exec, t_env *env)
 		exec_cmd(current, env, exec);
 		current = current->next;
 	}
-	exec_cmd(current, env/*, envp*/, exec);
-	close(0);	// 
+	exec_cmd(current, env, exec);
 	exit_status = wait_for_everyone(exec);
 	return (exit_status);
 }

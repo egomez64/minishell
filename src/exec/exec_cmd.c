@@ -60,7 +60,6 @@ static int	child(t_exec *exec, t_env *env, t_exec **lst)
 	int				err;
 	t_attributes	attributes;
 
-	// close(0);	// 
 	if (exec->next)
 	{
 		dprintf(3, "%d: close_and_set %d\n", getpid(), exec->next->cmd->input_fd);
