@@ -6,15 +6,15 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 12:33:14 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/13 14:50:23 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/24 17:33:25 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int    option_no_newline(char *s)
+static int	option_no_newline(char *s)
 {
-	int    i;
+	int	i;
 
 	i = 0;
 	if (s[i] != '-')
@@ -28,9 +28,9 @@ static int    option_no_newline(char *s)
 		return (0);
 }
 
-static size_t    lst_len(t_list *lst)
+static size_t	lst_len(t_list *lst)
 {
-	size_t    len;
+	size_t	len;
 
 	if (!lst)
 		return (0);
@@ -45,9 +45,9 @@ static size_t    lst_len(t_list *lst)
 	return (len);
 }
 
-static size_t    lst_str_join(char *dest, t_list *lst, size_t len)
+static size_t	lst_str_join(char *dest, t_list *lst, size_t len)
 {
-	size_t    i;
+	size_t	i;
 
 	if (!lst)
 		return (0);
@@ -63,11 +63,11 @@ static size_t    lst_str_join(char *dest, t_list *lst, size_t len)
 	return (i);
 }
 
-static char    *lst_to_str(t_list *lst, int no_newline)
+static char	*lst_to_str(t_list *lst, int no_newline)
 {
-	char    *str;
-	size_t    len;
-	size_t    i;
+	char	*str;
+	size_t	len;
+	size_t	i;
 
 	len = lst_len(lst);
 	str = malloc((len + !no_newline + 1) * sizeof (char));
@@ -83,11 +83,11 @@ static char    *lst_to_str(t_list *lst, int no_newline)
 	return (str);
 }
 
-int    echo(t_cmd *cmd)
+int	echo(t_cmd *cmd)
 {
-	int        no_newline;
-	t_list    *arg;
-	char    *str;
+	int		no_newline;
+	t_list	*arg;
+	char	*str;
 
 	arg = cmd->arguments->next;
 	if (!arg)
@@ -101,7 +101,7 @@ int    echo(t_cmd *cmd)
 	str = lst_to_str(arg, no_newline);
 	if (!str)
 	{
-		return (1);    //
+		return (1);	// 
 	}
 	printf("%s", str);
 	free(str);

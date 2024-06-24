@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   red_treatment.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 17:41:58 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/14 17:42:00 by egomez           ###   ########.fr       */
+/*   Updated: 2024/06/24 17:15:33 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	handle_append(char *path, int *fd, int *exit_s)
 		close(*fd);
 		*fd = -1;
 	}
-
 	*fd = open(path, O_APPEND | O_RDWR | O_CREAT, 0666);
 	if (*fd < 0)
 		*exit_s = 1;

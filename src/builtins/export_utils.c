@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:27:49 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/20 17:27:51 by egomez           ###   ########.fr       */
+/*   Updated: 2024/06/24 17:34:37 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <minishell.h>
 
 int	check_arg(char *s)
@@ -18,7 +19,7 @@ int	check_arg(char *s)
 	i = 0;
 	if (s[0] >= '0' && s[0] <= '9')
 		return (1);
-	while(s[i] && s[i] != '=')
+	while (s[i] && s[i] != '=')
 	{
 		if (is_delimiter(s[i]))
 			return (1);

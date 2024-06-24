@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/20 18:13:23 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/24 14:48:31 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	print_exec(t_exec *exec, t_attributes *att)	//
 	}
 }
 
-static int	child(t_exec *exec, t_env *env/*, char **envp*/, t_exec **lst)
+static int	child(t_exec *exec, t_env *env, t_exec **lst)
 {
 	int				err;
 	t_attributes	attributes;
@@ -63,8 +63,6 @@ static int	child(t_exec *exec, t_env *env/*, char **envp*/, t_exec **lst)
 	// close(0);	// 
 	if (exec->next)
 	{
-		// dprintf(3, "%d: close_and_set %d\n", getpid(), exec->next->in_fd);
-		// close_and_set(&exec->next->in_fd);
 		dprintf(3, "%d: close_and_set %d\n", getpid(), exec->next->cmd->input_fd);
 		close_and_set(&exec->next->cmd->input_fd);
 	}
@@ -83,7 +81,6 @@ static int	child(t_exec *exec, t_env *env/*, char **envp*/, t_exec **lst)
 	print_exec(exec, &attributes);	// 
 	dprintf(3, "%d: execve\n", getpid());
 	execve(attributes.pathname, attributes.argv, attributes.envp);
-	// execve(attributes.pathname, attributes.argv, envp);
 	err = errno;
 	perror("minishell ");
 	free_attributes(attributes);	// 
@@ -93,15 +90,12 @@ static int	child(t_exec *exec, t_env *env/*, char **envp*/, t_exec **lst)
 
 static void	parent(t_exec *exec)
 {
-	// dprintf(3, "close_and_set %d and %d\n", exec->in_fd, exec->out_fd);
-	// close_and_set(&exec->in_fd);
-	// close_and_set(&exec->out_fd);
 	dprintf(3, "close_and_set %d and %d\n", exec->cmd->input_fd, exec->cmd->output_fd);
 	close_and_set(&exec->cmd->input_fd);
 	close_and_set(&exec->cmd->output_fd);
 }
 
-void	exec_cmd(t_exec *exec, t_env *env/*, char **envp*/, t_exec **lst)
+void	exec_cmd(t_exec *exec, t_env *env, t_exec **lst)
 {
 	int	err;
 
@@ -110,7 +104,7 @@ void	exec_cmd(t_exec *exec, t_env *env/*, char **envp*/, t_exec **lst)
 		perror("fork");
 	if (exec->cpid == 0)
 	{
-		err = child(exec, env/*, envp*/, lst);
+		err = child(exec, env, lst);
 		exit(err);
 	}
 	parent(exec);

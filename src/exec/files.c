@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:56:26 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/20 17:29:00 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/24 15:16:53 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@
 // 		error_open(redir->val);
 // 	return (exec->cmd->input_fd);
 // }
-
 
 // static int	open_output(t_exec *exec, t_token *redir)
 // {

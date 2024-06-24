@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:36:25 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/13 15:32:19 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/24 17:35:38 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	convert_in_tab(t_env *envi, char **new_env)
 
 void	bubble_sort(char **new_env)
 {
-	int	i;
-	char *tmp;
+	int		i;
+	char	*tmp;
 
 	i = 0;
 	while (new_env[i])
@@ -75,7 +75,7 @@ void	print_export(t_env **env, char **new_env)
 	char	**to_print;
 
 	i = 0;
-	while(new_env[i])
+	while (new_env[i])
 	{
 		first = *env;
 		to_print = sep_on_equal(new_env[i]);

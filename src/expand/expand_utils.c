@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 11:54:53 by egomez            #+#    #+#             */
-/*   Updated: 2024/05/02 11:54:56 by egomez           ###   ########.fr       */
+/*   Updated: 2024/06/24 17:08:09 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_list	*ft_lstnew_empty()
+t_list	*ft_lstnew_empty(void)
 {
 	t_list	*new;
 
-	new = malloc(sizeof(t_list));
+	new = malloc(sizeof (t_list));
 	if (!new)
 		return (NULL);
 	new->content = malloc(sizeof(char));
@@ -27,7 +27,7 @@ t_list	*ft_lstnew_empty()
 
 int	is_env(char *s)
 {
-    int i;
+	int	i;
 
     i = 0;
     while (s[i] != 0 && s[i] != '$')
@@ -37,7 +37,7 @@ int	is_env(char *s)
     return (0);
 }
 
-bool    is_delimiter(char c)
+bool	is_delimiter(char c)
 {
     if (ft_isalnum(c))
         return (false);
@@ -46,7 +46,7 @@ bool    is_delimiter(char c)
     return (true);
 }
 
-bool    is_whitespace(char c)
+bool	is_whitespace(char c)
 {
     if ((c >= 7 && c <= 13) || c == 32)
         return (true);
@@ -57,7 +57,7 @@ char	*ft_strjoin_char(char *s1, char c, bool free_data)
 {
     int		tot_size;
     char	*newchain;
-    int i;
+	int		i;
 
     if (!s1)
         return (NULL);
@@ -68,7 +68,8 @@ char	*ft_strjoin_char(char *s1, char c, bool free_data)
     if (newchain == NULL)
         return (NULL);
     i = 0;
-    while (s1[i]) {
+	while (s1[i])
+	{
         newchain[i] = s1[i];
         i++;
     }

@@ -6,15 +6,15 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:35:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/13 13:24:43 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/24 17:32:26 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../includes/minishell.h"
-#include "../../includes/builtins.h"
-#include <unistd.h>
-#include <errno.h>
-#include <stdio.h>
+#include "../../includes/minishell.h"
+// #include "../../includes/builtins.h"
+// #include <unistd.h>
+// #include <errno.h>
+// #include <stdio.h>
 
 static int	cd_home(t_env *env, int *exit_s	)
 {
@@ -35,7 +35,7 @@ static int	cd_home(t_env *env, int *exit_s	)
 
 int	cd(int argc, char **argv, char **envp)
 {
-	int ret;
+	int	ret;
 	int	err;
 
 	if (argc > 2)

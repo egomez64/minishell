@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_quote.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 13:43:24 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/07 13:43:26 by egomez           ###   ########.fr       */
+/*   Updated: 2024/06/24 17:03:58 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	how_many_q(char *arg)
 	return (nb);
 }
 
-char    *slash_quotes(char *arg)
+char	*slash_quotes(char *arg)
 {
 	int		nb_quotes;
 	int		i;
@@ -52,39 +52,54 @@ char    *slash_quotes(char *arg)
 		y++;
 		i++;
 	}
-	arg = NULL;
 	free(arg);
 	return (result);
 }
 
-char    *supp_quotes(char *join)
+static int	cpy(char *result, char *join, char *quote)	// To rename
+{
+	int	i;
+
+	i = 0;
+	if (*quote == 0 && (join[i] == '"' || join[i] == '\''))
+	{
+		*quote = join[i];
+		i++;
+	}
+	if (*quote == join[i])
+	{
+		*quote = 0;
+		i++;
+		return (i);
+	}
+	if (join[i] == '\\')
+		i++;
+	*result = join[i];
+	i++;
+	return (i);
+}
+
+char	*supp_quotes(char *join)
 {
 	char	*result;
-	char    quote;
-    int     i;
-    int     y;
-	int		join_size;
+	char	quote;
+	int		i;
+	int		y;
+	int		len_join;
 
-	join_size = ft_strlen(join);
-	result = ft_calloc(1, sizeof(char) * (join_size + 1));
+	len_join = ft_strlen(join);
+	result = ft_calloc((len_join + 1), sizeof(char));
+	if (!result)
+		return (NULL);
 	i = 0;
 	y = 0;
-    quote = 0;
-	while (i < join_size)
+	quote = 0;
+	while (i < len_join)
 	{
-        if (quote == 0 && (join[i] == '"' || join[i] == '\''))
-			quote = join[i++];
-		if (quote == join[i])
-		{
-			quote = 0;
-			i++;
-			continue;
-       	}
-		if (join[i] == '\\')
-			i++;
-		result[y++] = join[i++];
+		i += cpy(result + y, join + i, &quote);
+		y++;
 	}
-	join = NULL;
+	result[i] = '\0';
 	free(join);
 	return (result);
 }

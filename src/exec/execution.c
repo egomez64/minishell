@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/24 14:24:52 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/24 15:46:10 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,13 @@ static int	wait_for_everyone(t_exec **exec)
 	return (exit_status);
 }
 
-static int	simple_exec(t_exec **exec, t_env *env/*, char **envp*/)
+static int	simple_exec(t_exec **exec, t_env *env)
 {
 	int		exit_status;
 
 	dprintf(3, "simple_exec\n");
 	if ((*exec)->cmd->arguments
-		&& is_builtins((char *) (*exec)->cmd->arguments->content))
+		&& is_builtins((char *)((*exec)->cmd->arguments->content)))
 	{
 		dprintf(3, "builtin\n");
 		exit_status = handle_builtins((*exec)->cmd, &env);
@@ -88,7 +88,7 @@ static int	simple_exec(t_exec **exec, t_env *env/*, char **envp*/)
 	return (exit_status);
 }
 
-static int	pipes_exec(t_exec **exec, t_env *env/*, char **envp*/)
+static int	pipes_exec(t_exec **exec, t_env *env)
 {
 	t_exec	*current;
 	int		exit_status;
@@ -98,7 +98,7 @@ static int	pipes_exec(t_exec **exec, t_env *env/*, char **envp*/)
 	while (current->next)
 	{
 		open_pipe(current);
-		exec_cmd(current, env/*, envp*/, exec);
+		exec_cmd(current, env, exec);
 		current = current->next;
 	}
 	exec_cmd(current, env/*, envp*/, exec);
@@ -154,10 +154,10 @@ static void	set_input_output(t_exec *exec)
 		exec->cmd->output_fd = 1;
 }
 
-int execution(t_cmd *cmd, t_env	*env)
+int	execution(t_cmd *cmd, t_env	*env)
 {
 	t_exec	*exec;
-	char	**envp;
+	// char	**envp;
 	int		exit_status;
 
 	if (!cmd)
@@ -168,15 +168,15 @@ int execution(t_cmd *cmd, t_env	*env)
 		return (1);
 	set_input_output(exec);
 	print_cmd(cmd);	// 
-	envp = envlst_to_envp(env);
-	if (!envp)
-	{
-		clear_exec(&exec);
-		return (1);
-	}
+	// envp = envlst_to_envp(env);
+	// if (!envp)
+	// {
+	// 	clear_exec(&exec);
+	// 	return (1);
+	// }
 	if (!exec->next)
-		exit_status = simple_exec(&exec, env/*, envp*/);
+		exit_status = simple_exec(&exec, env);
 	else
-		exit_status = pipes_exec(&exec, env/*, envp*/);
+		exit_status = pipes_exec(&exec, env);
 	return (exit_status);
 }
