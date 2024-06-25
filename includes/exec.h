@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:07:57 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/24 14:41:38 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/25 19:22:29 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ int		execution(t_cmd *cmd, t_env *env);
 int		open_pipe(t_exec *exec);
 int		make_redirections(t_exec *exec);
 void	exec_cmd(t_exec *exec, t_env *env, t_exec **lst);
+
+int		dup_stdfd(int stdfd[2]);
+int		restore_stdfd(int stdfd[2]);
 
 t_attributes
 		fill_attributes(t_exec *exec, t_env *env);

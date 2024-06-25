@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/24 14:48:31 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/25 18:40:45 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,9 @@ static int	child(t_exec *exec, t_env *env, t_exec **lst)
 static void	parent(t_exec *exec)
 {
 	dprintf(3, "close_and_set %d and %d\n", exec->cmd->input_fd, exec->cmd->output_fd);
+	// if (exec->cmd->input_fd != 0)
 	close_and_set(&exec->cmd->input_fd);
+	// if (exec->cmd->output_fd != 1)
 	close_and_set(&exec->cmd->output_fd);
 }
 

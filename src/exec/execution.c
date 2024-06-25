@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/24 15:46:10 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/25 21:18:58 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ static int	wait_for_everyone(t_exec **exec)
 
 static int	simple_exec(t_exec **exec, t_env *env)
 {
-	int		exit_status;
+	int	exit_status;
+	int	stdfd[2];
 
 	dprintf(3, "simple_exec\n");
 	if ((*exec)->cmd->arguments
@@ -80,19 +81,23 @@ static int	simple_exec(t_exec **exec, t_env *env)
 	}
 	else
 	{
+		dup_stdfd(stdfd);
 		dprintf(3, "exec_cmd\n");
 		exec_cmd(*exec, env, exec);
 		exit_status = wait_for_everyone(exec);
+		restore_stdfd(stdfd);
 	}
 	return (exit_status);
 }
 
 static int	pipes_exec(t_exec **exec, t_env *env)
 {
-	t_exec	*current;
 	int		exit_status;
+	t_exec	*current;
+	int		stdfd[2];
 
 	dprintf(3, "pipes_exec\n");
+	dup_stdfd(stdfd);
 	current = *exec;
 	while (current->next)
 	{
@@ -102,6 +107,7 @@ static int	pipes_exec(t_exec **exec, t_env *env)
 	}
 	exec_cmd(current, env, exec);
 	exit_status = wait_for_everyone(exec);
+	restore_stdfd(stdfd);
 	return (exit_status);
 }
 
