@@ -68,26 +68,35 @@ void	free_env(char **new_env)
 	free(new_env);
 }
 
-void	print_export(t_env **env, char **new_env)
+void	print_export(t_env **envi, char **new_env)
 {
 	int		i;
-	t_env	*first;
+	int		y;
 	char	**to_print;
+	t_env	*first;
 
 	i = 0;
 	while (new_env[i])
 	{
-		first = *env;
-		to_print = sep_on_equal(new_env[i]);
-		while (first && !ft_strcmp(first->name, to_print[0]))
-			first = first->next;
-		if (first && first->init == false)
-			printf("declare -x %s\n", to_print[0]);
-		else if (to_print[1])
-			printf("declare -x %s=\"%s\"\n", to_print[0], to_print[1]);
+		first = *envi;
+		y = 0;
+		while (new_env[i][y] != 0 && new_env[i][y] != '=')
+			y++;
+		if (new_env[i][y] != '=')
+		{
+			while (first && ft_strcmp(first->name, new_env[i]))
+				first = first->next;
+			if (first->init == false)
+				printf("declare -x %s\n", new_env[i]);
+			else
+				printf("declare -x %s=\"\"\n", new_env[i]);
+		}
 		else
-			printf("declare -x %s=\"\"\n", to_print[0]);
-		free_split(to_print);
+		{
+			to_print = sep_on_equal(new_env[i]);
+			printf("declare -x %s=\"%s\"\n", to_print[0], to_print[1]);
+			free_split(to_print);
+		}
 		i++;
 	}
 }

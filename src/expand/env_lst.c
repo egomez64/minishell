@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-t_env	*env_new(char	*var_name, char *var_val, bool state)
+t_env	*env_new(char	*var_name, char *var_val, bool init)
 {
 	t_env	*new;
 
@@ -21,7 +21,7 @@ t_env	*env_new(char	*var_name, char *var_val, bool state)
 		return (NULL);
 	new->name = var_name;
 	new->val = var_val;
-	new->init = state;
+	new->init = init;
 	return (new);
 }
 

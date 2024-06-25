@@ -22,7 +22,7 @@ int		env(t_env *envi);
 // int		export_add(t_env **envi, t_cmd *cmd);
 int		export_add(t_env **envi, t_list *args);
 int		export(t_env *envi);
-void	print_export(t_env **env, char **new_env);
+void	print_export(t_env **envi, char **new_env);
 void	free_env(char **new_env);
 void	bubble_sort(char **new_env);
 int		export_join(t_env *envi, char *s);

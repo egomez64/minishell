@@ -83,11 +83,18 @@ int	set_null(t_env *envi, char *s)
 
 	first = envi;
 	if (s[ft_strlen(s) - 1] == '=')
+	{
 		s[ft_strlen(s) - 1] = 0;
-	while (first && ft_strcmp(first->name, s))
-		first = first->next;
-	if (first)
-		first->val = NULL;
+		while (first && ft_strcmp(first->name, s))
+			first = first->next;
+		if (first)
+		{
+			first->val = NULL;
+			first->init = true;
+		}
+		else
+			env_add_back(&envi, env_new(s, NULL, true));
+	}
 	else
 		env_add_back(&envi, env_new(s, NULL, false));
 	return (0);
