@@ -4,6 +4,5 @@ libft.a
 *.o
 
 debug
-outfile
 
 settings.json
