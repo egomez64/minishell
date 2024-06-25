@@ -53,8 +53,8 @@ t_token	*token_new(char	*val, t_arg type);
 t_token	*token_last(t_token *lst);
 void	token_add_back(t_token **lst, t_token *new);
 void	skip(char *s, int *i);
-void	tokenize_word(t_token **tok_lst, char *val, int *i);
-void	tokenize_symbol(t_token **tok_lst, char *val, int *i);
+int		tokenize_word(t_token **tok_lst, char *val);
+int		tokenize_symbol(t_token **tok_lst, char *val);
 t_token	*lexer(char *arg);
 int		redirect_tester(t_token **token);
 int		pipe_tester(t_token **token);
@@ -69,7 +69,7 @@ t_list	*lstlast(t_list *lst);
 void	lstadd_back(t_list **lst, t_list *new);
 void	lstdelone(t_list *lst);
 void	lstclear(t_list **lst);
-t_cmd	*cmd(t_token **token);
+t_cmd	*cmd(t_token *token);
 
 
 /*execute_cmd(t_cmd)

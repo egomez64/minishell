@@ -72,7 +72,7 @@ int	main(int ac, char **av, char **ep)
 			return (2);
 		}
 		dprintf(3, "good syntax\n");
-		commands = cmd(&tmp);
+		commands = cmd(tmp);
 		// dprintf(3, "print 1\n");
 		// print_cmd(commands);
 		// expand_var(&commands, &env_var/*, exit_status*/);

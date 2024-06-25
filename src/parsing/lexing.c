@@ -70,6 +70,7 @@ int	tokenize_symbol(t_token **tok_lst, char *val)
 	int		i;
 	int		double_redirect;
 
+	double_redirect = 0;
 	if ((val[0] == '<' && val[1] == '<') || (val[0] == '>' && val[1] == '>'))
 	{
 		double_redirect = 1;
