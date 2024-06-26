@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 12:33:14 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/24 17:33:25 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 16:08:18 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	option_no_newline(char *s)
 	while (s[i] == 'n')
 		i++;
 	if (s[i] == '\0')
-		return (1);
+		return (i > 1);
 	else
 		return (0);
 }
@@ -96,7 +96,7 @@ int	echo(t_cmd *cmd)
 		return (0);
 	}
 	no_newline = option_no_newline(arg->content);
-	if (no_newline)
+	while (option_no_newline(arg->content))
 		arg = arg->next;
 	str = lst_to_str(arg, no_newline);
 	if (!str)
