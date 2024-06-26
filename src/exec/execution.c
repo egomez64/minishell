@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/26 18:25:21 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 18:49:08 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,24 +126,24 @@ static int	wait_for_everyone(t_cmd **cmd)
 // 	return (exit_status);
 // }
 
-static int	simple_exec(t_cmd **cmd, t_env **envi)
+static int	simple_exec(t_minishell *minish)
 {
 	int	exit_status;
 	int	stdfd[2];
 
 	dprintf(3, "simple_exec\n");
-	if ((*cmd)->arguments
-		&& is_builtins((char *)((*cmd)->arguments->content)))
+	if (minish->commands->arguments
+		&& is_builtins((char *)(minish->commands->arguments->content)))
 	{
 		dprintf(3, "builtin\n");
-		exit_status = handle_builtins(*cmd, envi);
+		exit_status = handle_builtins(minish);
 	}
 	else
 	{
 		dup_stdfd(stdfd);
 		dprintf(3, "exec_cmd\n");
-		exec_cmd(*cmd, envi, cmd);
-		exit_status = wait_for_everyone(cmd);
+		exec_cmd(minish->commands, &minish->envi, &minish->commands);
+		exit_status = wait_for_everyone(&minish->commands);
 		restore_stdfd(stdfd);
 	}
 	return (exit_status);
@@ -274,7 +274,7 @@ int	execution(t_minishell *minishell)
 	// else
 	// 	exit_status = pipes_exec(&exec, &minishell->envi);
 	if (!minishell->commands->next)
-		exit_status = simple_exec(&minishell->commands, &minishell->envi);
+		exit_status = simple_exec(minishell);
 	else
 		exit_status = pipes_exec(&minishell->commands, &minishell->envi);
 	return (exit_status);

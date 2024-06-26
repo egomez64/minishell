@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 15:25:14 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 15:25:42 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 18:40:29 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,29 +21,28 @@ bool	is_builtins(const char	*s)
 	return (false);
 }
 
-int	handle_builtins(t_cmd *cmd, t_env **envi)
+int	handle_builtins(t_minishell *minish)
 {
-	int	exit_s;
-
-	exit_s = 0;
-	if (!cmd->arguments->content)
+	if (!minish->commands->arguments->content)
 		return (1);	// A revoir
-	if (!ft_strcmp(cmd->arguments->content, "pwd"))
-		exit_s = pwd();
-	else if (!ft_strcmp(cmd->arguments->content, "cd"))
-		exit_s = cd(cmd, *envi);
-	else if (!ft_strcmp(cmd->arguments->content, "env"))
-		exit_s = env(*envi);
-	else if (!ft_strcmp(cmd->arguments->content, "export"))
+	if (!ft_strcmp(minish->commands->arguments->content, "echo"))
+		return (echo(minish->commands));
+	if (!ft_strcmp(minish->commands->arguments->content, "cd"))
+		return (cd(minish->commands, minish->envi));
+	if (!ft_strcmp(minish->commands->arguments->content, "pwd"))
+		return (pwd());
+	if (!ft_strcmp(minish->commands->arguments->content, "export"))
 	{
-		if (cmd->arguments->next)
-			exit_s = export_add(envi, cmd->arguments);
+		if (minish->commands->arguments->next)
+			return (export_add(&minish->envi, minish->commands->arguments));
 		else
-			exit_s = export(*envi);
+			return (export(minish->envi));
 	}
-	else if (!ft_strcmp(cmd->arguments->content, "unset"))
-		unset(*envi, cmd->arguments);
-	else if (!ft_strcmp(cmd->arguments->content, "echo"))
-		exit_s = echo(cmd);
-	return (exit_s);
+	if (!ft_strcmp(minish->commands->arguments->content, "unset"))
+		unset(minish->envi, minish->commands->arguments);
+	if (!ft_strcmp(minish->commands->arguments->content, "env"))
+		return (env(minish->envi));
+	if (!ft_strcmp(minish->commands->arguments->content, "exit"))
+		return (__exit(minish->commands->arguments, minish->exit_status));
+	return (0);
 }

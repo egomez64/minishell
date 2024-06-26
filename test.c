@@ -49,14 +49,13 @@ int	main(int ac, char **av, char **ep)
 {
 	t_token		*tmp;
 	char		*line;
-	int			exit_status;
 	t_minishell	minishell;
 	(void)		ac;
 	(void)		av;
 
 	open_debug(3);
 	minishell.envi = get_env(ep);
-	exit_status = 0;
+	minishell.exit_status = 0;
 	while(1)
 	{
 		line = readline("minishell> ");
@@ -80,14 +79,14 @@ int	main(int ac, char **av, char **ep)
 		// dprintf(3, "print 1\n");
 		// print_cmd(commands);
 		// expand_var(&commands, &env_var/*, exit_status*/);
-		expand_var(&minishell, exit_status);
+		expand_var(&minishell, minishell.exit_status);
 		// dprintf(3, "print 2\n");
 		// print_cmd(commands);
 		red_treatment(&minishell);
 		// dprintf(3, "print 3\n");
 		// print_cmd(commands);
 		//dprintf(3, "exit status : %d\n", minishell.commands->exit_s);
-		execution(&minishell);
+		minishell.exit_status = execution(&minishell);
 		// if (commands->arguments && is_builtins(commands->arguments->content))
 		// 	handle_builtins(commands);
 		token_clear(tmp);

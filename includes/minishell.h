@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:40:26 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 17:49:49 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 18:36:58 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_minishell
 {
 	t_cmd	*commands;
 	t_env	*envi;
+	int		exit_status;
 }			t_minishell;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:35:51 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/26 17:23:29 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 18:51:28 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,21 @@ static long	nptr_to_number(int sign, const char *nptr, int *err)
 {
 	long	number;
 
+	number = 0;
 	while (*nptr >= '0' && *nptr <= '9')
 	{
 		number *= 10;
 		number += sign * (*nptr - '0');
 		if ((sign > 0 && number < 0) || (sign < 0 && number > 0))
 		{
-			err = 1;
+			*err = 1;
 			return (0);
 		}
 		nptr++;
 	}
 	if (*nptr != '\0')
 	{
-		err = 1;
+		*err = 1;
 		return (0);
 	}
 	return (number);
@@ -46,22 +47,21 @@ static long	nptr_to_number(int sign, const char *nptr, int *err)
 static long	ft_atol(const char *nptr, int *err)
 {
 	int		sign;
-	long	number;
 
-	number = 0;
 	if (*nptr == '-')
 		sign = -1;
 	else
 		sign = 1;
 	if (*nptr == '+' || *nptr == '-')
 		nptr++;
-	number = nptr_to_number(sign, nptr, err);
-	return (number);
+	return (nptr_to_number(sign, nptr, err));
 }
 
-static char	*error_message(int err, char *num)
+static char	*error_message(int err, char *num)	// 
 {
-	;
+	(void) err;
+	(void) num;
+	return (NULL);
 }
 
 /**
@@ -78,22 +78,22 @@ static char	*error_message(int err, char *num)
  * 		doesn't exit, status 1
 */
 
-int	__exit(t_cmd *cmd, int exit_status)
+int	__exit(t_list *args, int exit_status)
 {
 	long	arg_status;
 	int		err;
 
 	printf("exit\n");
 	err = 0;
-	if (!cmd->arguments->next)
+	if (!args->next)
 		exit(exit_status);
-	arg_status = ft_atol((char *) cmd->arguments->next->content, &err);
+	arg_status = ft_atol((char *) args->next->content, &err);
 	if (err)
 	{
-		error_message(2, (char *) cmd->arguments->next->content);
+		error_message(2, (char *) args->next->content);
 		exit(2);
 	}
-	if (cmd->arguments->next->next)
+	if (args->next->next)
 	{
 		error_message(1, NULL);
 		return (1);
