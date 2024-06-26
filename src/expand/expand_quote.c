@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 13:43:24 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/24 17:03:58 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 14:58:05 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ static int	cpy(char *result, char *join, char *quote)	// To rename
 		i++;
 		return (i);
 	}
-	if (join[i] == '\\')
-		i++;
+	// if (join[i] == '\\')
+	// 	i++;
 	*result = join[i];
 	i++;
 	return (i);
