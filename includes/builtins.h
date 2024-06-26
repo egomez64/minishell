@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:59:40 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/26 15:21:22 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 18:27:32 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int		export_append(t_env **envi, char *s);
 int		set_null(t_env **envi, char *s);
 void	unset(t_env *envi, t_list *args);
 char	**sep_on_equal(char *s);
+int		check_arg(char *s);
 
 int		echo(t_cmd *cmd);
 

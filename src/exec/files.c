@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:56:26 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/25 19:24:58 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 18:16:43 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,55 +74,118 @@ static int	redirect(int *oldfd, int newfd)
 	return (fd);
 }
 
-int	make_redirections(t_exec *exec)
+// int	make_redirections(t_exec *exec)
+// {
+// 	int		err;
+// 	// t_token	*redir;
+// 
+// 	err = 0;
+// 	// redir = exec->cmd->redirections;
+// 	// while (!err && redir)
+// 	// {
+// 	// 	if (redir->type == INPUT)
+// 	// 	{
+// 	// 		dprintf(3, "%d: input\n", getpid());
+// 	// 		err = open_input(exec, redir);
+// 	// 		dprintf(3, "%d: err = %d\n", getpid(), err);
+// 	// 	}
+// 	// 	else if (redir->type == OUTPUT)
+// 	// 	{
+// 	// 		dprintf(3, "%d: output\n", getpid());
+// 	// 		err = open_output(exec, redir);
+// 	// 		dprintf(3, "%d: err = %d\n", getpid(), err);
+// 	// 	}
+// 	// 	// else if (redir->type == HEREDOC)
+// 	// 	// 	err = open_heredoc(exec, redir);
+// 	// 	redir = redir->next;
+// 	// }
+// 	// if (err)
+// 	// 	return (err);
+// 	// // err = redirect(&exec->in_fd, 0);
+// 	if (exec->cmd->input_fd != 0)
+// 	{
+// 		dprintf(3, "%d: redirect %d to 0\n", getpid(), exec->cmd->input_fd);
+// 		err = redirect(&exec->cmd->input_fd, 0);
+// 		if (err == -1)
+// 			return (err);
+// 		exec->cmd->input_fd = 0;
+// 	}
+// 	// // err = redirect(&exec->out_fd, 1);
+// 	if (exec->cmd->output_fd != 1)
+// 	{
+// 		dprintf(3, "%d: redirect %d to 1\n", getpid(), exec->cmd->output_fd);
+// 		err = redirect(&exec->cmd->output_fd, 1);
+// 		if (err == -1)
+// 			return (err);
+// 		exec->cmd->output_fd = 1;
+// 	}
+// 	return (0);
+// }
+
+int	make_redirections(t_cmd *cmd)
 {
 	int		err;
-	// t_token	*redir;
 
 	err = 0;
-	// redir = exec->cmd->redirections;
-	// while (!err && redir)
-	// {
-	// 	if (redir->type == INPUT)
-	// 	{
-	// 		dprintf(3, "%d: input\n", getpid());
-	// 		err = open_input(exec, redir);
-	// 		dprintf(3, "%d: err = %d\n", getpid(), err);
-	// 	}
-	// 	else if (redir->type == OUTPUT)
-	// 	{
-	// 		dprintf(3, "%d: output\n", getpid());
-	// 		err = open_output(exec, redir);
-	// 		dprintf(3, "%d: err = %d\n", getpid(), err);
-	// 	}
-	// 	// else if (redir->type == HEREDOC)
-	// 	// 	err = open_heredoc(exec, redir);
-	// 	redir = redir->next;
-	// }
-	// if (err)
-	// 	return (err);
-	// // err = redirect(&exec->in_fd, 0);
-	if (exec->cmd->input_fd != 0)
+	if (cmd->input_fd != 0)
 	{
-		dprintf(3, "%d: redirect %d to 0\n", getpid(), exec->cmd->input_fd);
-		err = redirect(&exec->cmd->input_fd, 0);
+		dprintf(3, "%d: redirect %d to 0\n", getpid(), cmd->input_fd);
+		err = redirect(&cmd->input_fd, 0);
 		if (err == -1)
 			return (err);
-		exec->cmd->input_fd = 0;
+		cmd->input_fd = 0;
 	}
-	// // err = redirect(&exec->out_fd, 1);
-	if (exec->cmd->output_fd != 1)
+	if (cmd->output_fd != 1)
 	{
-		dprintf(3, "%d: redirect %d to 1\n", getpid(), exec->cmd->output_fd);
-		err = redirect(&exec->cmd->output_fd, 1);
+		dprintf(3, "%d: redirect %d to 1\n", getpid(), cmd->output_fd);
+		err = redirect(&cmd->output_fd, 1);
 		if (err == -1)
 			return (err);
-		exec->cmd->output_fd = 1;
+		cmd->output_fd = 1;
 	}
 	return (0);
 }
 
-int	open_pipe(t_exec *exec)
+// int	open_pipe(t_exec *exec)
+// {
+// 	int	pipefd[2];
+// 	int	err;
+// 
+// 	dprintf(3, "open_pipe\n");
+// 	pipefd[0] = -1;
+// 	pipefd[1] = -1;
+// 	err = pipe(pipefd);
+// 	if (err == -1)
+// 	{
+// 		perror("pipe");
+// 		return (err);
+// 	}
+// 	// exec->out_fd = pipefd[1];
+// 	// exec->next->in_fd = pipefd[0];
+// 	if (exec->cmd->output_fd == -1)
+// 	{
+// 		exec->cmd->output_fd = pipefd[1];
+// 		dprintf(3, "output_fd = %d\n", pipefd[1]);
+// 	}
+// 	else
+// 	{
+// 		close_and_set(pipefd + 1);
+// 		dprintf(3, "close pipefd[1]\n");
+// 	}
+// 	if (exec->next->cmd->input_fd == -1)
+// 	{
+// 		exec->next->cmd->input_fd = pipefd[0];
+// 		dprintf(3, "next->input_fd = %d\n", pipefd[0]);
+// 	}
+// 	else
+// 	{
+// 		close_and_set(pipefd + 0);
+// 		dprintf(3, "close pipefd[0]\n");
+// 	}
+// 	return (err);
+// }
+
+int	open_pipe(t_cmd *cmd)
 {
 	int	pipefd[2];
 	int	err;
@@ -136,11 +199,9 @@ int	open_pipe(t_exec *exec)
 		perror("pipe");
 		return (err);
 	}
-	// exec->out_fd = pipefd[1];
-	// exec->next->in_fd = pipefd[0];
-	if (exec->cmd->output_fd == -1)
+	if (cmd->output_fd == -1)
 	{
-		exec->cmd->output_fd = pipefd[1];
+		cmd->output_fd = pipefd[1];
 		dprintf(3, "output_fd = %d\n", pipefd[1]);
 	}
 	else
@@ -148,9 +209,9 @@ int	open_pipe(t_exec *exec)
 		close_and_set(pipefd + 1);
 		dprintf(3, "close pipefd[1]\n");
 	}
-	if (exec->next->cmd->input_fd == -1)
+	if (cmd->next->input_fd == -1)
 	{
-		exec->next->cmd->input_fd = pipefd[0];
+		cmd->next->input_fd = pipefd[0];
 		dprintf(3, "next->input_fd = %d\n", pipefd[0]);
 	}
 	else

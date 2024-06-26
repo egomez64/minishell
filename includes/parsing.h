@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:43:07 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/24 14:39:57 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:50:36 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_cmd
 	int				exit_s;
 	int				input_fd;
 	int				output_fd;
+	pid_t			pid;
 	struct s_cmd	*next;
 }					t_cmd;
 
