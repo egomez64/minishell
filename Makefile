@@ -22,7 +22,6 @@ SRCS	= test.c 						\
 		src/exec/attributes.c 			\
 		src/exec/close_and_free.c \
 		src/exec/exec_cmd.c \
-		src/exec/exec_lst.c \
 		src/exec/execution.c \
 		src/exec/files.c \
 		src/exec/pathname.c \

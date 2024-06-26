@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 15:25:14 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 18:40:29 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 19:33:28 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 bool	is_builtins(const char	*s)
 {
 	if (!ft_strcmp(s, "echo") || !ft_strcmp(s, "cd") || !ft_strcmp(s, "pwd")
-		|| !ft_strcmp(s, "export") || !ft_strcmp(s, "env")
-		|| !ft_strcmp(s, "unset") || !ft_strcmp(s, "exit"))
+		|| !ft_strcmp(s, "export") || !ft_strcmp(s, "unset")
+		|| !ft_strcmp(s, "env") || !ft_strcmp(s, "exit"))
 		return (true);
 	return (false);
 }
