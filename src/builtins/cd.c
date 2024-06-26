@@ -6,15 +6,11 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:35:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/26 15:27:43 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 19:12:23 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-// #include "../../includes/builtins.h"
-// #include <unistd.h>
-// #include <errno.h>
-// #include <stdio.h>
 
 static int	cd_home(t_env *envi/*, int *exit_s	*/)
 {
@@ -38,7 +34,6 @@ int	cd(t_cmd *cmd, t_env *envi)
 	int	ret;
 	int	err;
 	int argc;
-	// char	*wd;	// 
 
 	argc = ft_lstsize(cmd->arguments);
 	if (argc > 2)
@@ -56,10 +51,5 @@ int	cd(t_cmd *cmd, t_env *envi)
 		perror("minishell: cd");
 		return (err);
 	}
-	// // 
-	// wd = getcwd(NULL, 0);
-	// printf("%s", wd);
-	// free(wd);
-	// // 
 	return (ret);
 }

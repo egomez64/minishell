@@ -6,13 +6,13 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:08:57 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/24 17:11:39 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 19:28:16 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_list	*split_in_lst(char *s)
+static t_list	*split_in_lst(char *s)
 {
 	t_list	*first;
 	t_list	*tmp;
@@ -34,7 +34,7 @@ t_list	*split_in_lst(char *s)
 	return (first);
 }
 
-t_list	*split_on_whitespace(char *s)
+static t_list	*split_on_whitespace(char *s)
 {
 	t_list	*first;
 	t_list	*tmp;
@@ -79,7 +79,7 @@ t_list	*split_on_whitespace(char *s)
 	return (first);
 }
 
-void	changes(t_list *lst, t_env *envi, int exit_status)
+static void	changes(t_list *lst, t_env *envi, int exit_status)
 {
 	t_env	*copy_envi;
 	char	*env_to_find;
@@ -119,7 +119,7 @@ void	changes(t_list *lst, t_env *envi, int exit_status)
 	}
 }
 
-char	*join_lst(t_list *lst)
+static char	*join_lst(t_list *lst)
 {
 	char	*result;
 
@@ -130,24 +130,6 @@ char	*join_lst(t_list *lst)
 		lst = lst->next;
 	}
 	return (result);
-}
-
-int	expand_red(t_token *red, t_env *env, int exit_status)
-{
-	t_token	*tmp;
-	t_list	*new_word;
-
-	while (red)
-	{
-		tmp = red;
-		new_word = NULL;
-		handle_word(tmp->val, env, &new_word, exit_status);
-		if (ft_lstsize(new_word) != 1)
-			return (2);
-		tmp->val = new_word->content;
-		red = red->next;
-	}
-	return (0);
 }
 
 void	handle_word(char *s, t_env *envi, t_list **new, int exit_status)
@@ -174,6 +156,24 @@ void	handle_word(char *s, t_env *envi, t_list **new, int exit_status)
 		splitted = splitted->next;
 		lstdelone(node);
 	}
+}
+
+static int	expand_red(t_token *red, t_env *env, int exit_status)
+{
+	t_token	*tmp;
+	t_list	*new_word;
+
+	while (red)
+	{
+		tmp = red;
+		new_word = NULL;
+		handle_word(tmp->val, env, &new_word, exit_status);
+		if (ft_lstsize(new_word) != 1)
+			return (2);
+		tmp->val = new_word->content;
+		red = red->next;
+	}
+	return (0);
 }
 
 void	expand_var(t_minishell *minishell, int exit_status)

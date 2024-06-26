@@ -6,13 +6,13 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:24:17 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/24 17:15:08 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 19:28:40 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	randomizer(char *str)
+static void	randomizer(char *str)
 {
 	int			fd;
 	int			i;
@@ -29,7 +29,7 @@ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
 	}
 }
 
-void	fill_file(int fd, char *s)
+static void	fill_file(int fd, char *s)
 {
 	char	*line;
 

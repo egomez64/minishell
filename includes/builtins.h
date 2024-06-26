@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:59:40 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/26 18:49:45 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 19:18:17 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,19 @@
 bool	is_builtins(const char	*s);
 int		handle_builtins(t_minishell *minish);
 
-int		pwd(void);
-
-int		env(t_env *envi);
-
-int		export(t_env *envi);
-int		export_add(t_env **envi, t_list *args);
-void	print_export(t_env **envi, char **new_env);
-void	free_env(char **new_env);
-void	bubble_sort(char **new_env);
-int		export_join(t_env **envi, char *s);
-int		export_append(t_env **envi, char *s);
-int		set_null(t_env **envi, char *s);
-void	unset(t_env *envi, t_list *args);
-char	**sep_on_equal(char *s);
-int		check_arg(char *s);
-
 int		echo(t_cmd *cmd);
 
 int		cd(t_cmd *cmd, t_env *envi);
+
+int		pwd(void);
+
+int		export(t_env *envi);
+int		export_add(t_env **envi, t_list *args);
+char	**sep_on_equal(char *s);
+
+void	unset(t_env *envi, t_list *args);
+
+int		env(t_env *envi);
 
 int		__exit(t_list *args, int exit_status);
 

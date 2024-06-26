@@ -6,24 +6,11 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 16:21:11 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/24 15:48:06 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 19:11:43 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// static size_t	env_size(t_env *env)
-// {
-// 	size_t	size;
-// 
-// 	size = 0;
-// 	while (env)
-// 	{
-// 		env = env->next;
-// 		size++;
-// 	}
-// 	return (size);
-// }
 
 static char	*env_to_str(t_env **env)
 {

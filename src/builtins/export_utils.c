@@ -6,26 +6,28 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:27:49 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/24 17:34:37 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 19:16:14 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	check_arg(char *s)
+char	**sep_on_equal(char *s)
 {
-	int	i;
+	char	**new;
+	int		i;
+	int		y;
 
 	i = 0;
-	if (s[0] >= '0' && s[0] <= '9')
-		return (1);
+	y = 0;
+	new = ft_calloc(3, sizeof(char *));
 	while (s[i] && s[i] != '=')
-	{
-		if (is_delimiter(s[i]))
-			return (1);
 		i++;
-	}
-	if (!s[i])
-		return (1);
-	return (0);
+	new[0] = ft_substr(s, 0, i);
+	i++;
+	y = i;
+	while (s[i])
+		i++;
+	new[1] = ft_substr(s, y, i - y);
+	return (new);
 }

@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:43:07 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 17:50:36 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 19:10:03 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,31 +73,4 @@ void	lstdelone(t_list *lst);
 void	lstclear(t_list **lst);
 t_cmd	*cmd(t_token *token);
 
-
-/*execute_cmd(t_cmd)
-{
-	expand_command(t_cmd)
-
-}
-void exec(t_cmd *)
-{
-	if (cmd->next)
-		pipe();
-	execute_cmd(cmd);
-	if (cmd->next)
-		exec(cmd->next)
-}
-
-expand_command(cmd);
-exec_expanded(t_ex)
-
-typedef struct s_expanded
-{
-	char *path;
-	char **argv;
-	int argc;
-	int input_fd;
-	int output_fd;
-} t_expanded;
-*/
 #endif

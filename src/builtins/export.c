@@ -6,13 +6,13 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:36:25 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/24 17:35:38 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 19:18:44 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	convert_in_tab(t_env *envi, char **new_env)
+static void	convert_in_tab(t_env *envi, char **new_env)
 {
 	int	i;
 
@@ -30,7 +30,7 @@ void	convert_in_tab(t_env *envi, char **new_env)
 	}
 }
 
-void	bubble_sort(char **new_env)
+static void	bubble_sort(char **new_env)
 {
 	int		i;
 	char	*tmp;
@@ -55,7 +55,7 @@ void	bubble_sort(char **new_env)
 	}
 }
 
-void	free_env(char **new_env)
+static void	free_env(char **new_env)
 {
 	int	i;
 
@@ -68,7 +68,7 @@ void	free_env(char **new_env)
 	free(new_env);
 }
 
-void	print_export(t_env **envi, char **new_env)
+static void	print_export(t_env **envi, char **new_env)
 {
 	int		i;
 	int		y;

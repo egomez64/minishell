@@ -6,13 +6,13 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 13:43:24 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 14:58:05 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 19:27:25 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	how_many_q(char *arg)
+static int	how_many_q(char *arg)
 {
 	int	i;
 	int	nb;
