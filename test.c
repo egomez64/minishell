@@ -63,6 +63,11 @@ int	main(int ac, char **av, char **ep)
 		if (line == 0)
 			return (0);
 		add_history(line);
+		if (!check_quotes(line))
+		{
+			printf("problems with quotes, a quotes should be open\n");
+			continue;
+		}
 		tmp = lexer(line);
 		if (!parsing(&tmp))
 		{

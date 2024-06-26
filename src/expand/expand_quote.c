@@ -66,14 +66,14 @@ static int	cpy(char *result, char *join, char *quote)	// To rename
 		*quote = join[i];
 		i++;
 	}
-	if (*quote == join[i])
+	else if (*quote == join[i])
 	{
 		*quote = 0;
 		i++;
 		return (i);
 	}
-	// if (join[i] == '\\')
-	// 	i++;
+	 if (join[i] == '\\' && (join[i + 1] == '\'' || join[i + 1] == '"'))
+	 	i++;
 	*result = join[i];
 	i++;
 	return (i);

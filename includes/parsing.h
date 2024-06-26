@@ -53,6 +53,7 @@ typedef struct s_cmd
 t_token	*token_new(char	*val, t_arg type);
 t_token	*token_last(t_token *lst);
 void	token_add_back(t_token **lst, t_token *new);
+int		check_quotes(char *s);
 void	skip(char *s, int *i);
 int		tokenize_word(t_token **tok_lst, char *val);
 int		tokenize_symbol(t_token **tok_lst, char *val);

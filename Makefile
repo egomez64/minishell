@@ -15,9 +15,8 @@ SRCS	= test.c \
 		src/exec/pathname.c src/exec/env_.c \
 		src/builtins/builtins.c src/builtins/pwd.c src/builtins/env.c \
 		src/builtins/export.c src/builtins/export_add.c src/builtins/unset.c \
-		src/builtins/echo.c src/builtins/export_utils.c src/builtins/cd.c
-
-
+		src/builtins/echo.c src/builtins/export_utils.c src/builtins/cd.c \
+		src/parsing/check_quotes.c
 
 HEADERS = minishell.h
 
