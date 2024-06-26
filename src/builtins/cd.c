@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:35:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/24 17:32:26 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 15:27:43 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,42 +16,50 @@
 // #include <errno.h>
 // #include <stdio.h>
 
-static int	cd_home(t_env *env, int *exit_s	)
+static int	cd_home(t_env *envi/*, int *exit_s	*/)
 {
 	int		ret;
 	char	*home;
 
-	while (env && (ft_strcmp(env->name, "$HOME")))
-		env = env->next;
-	if (!env)
+	while (envi && (ft_strcmp(envi->name, "HOME")))
+		envi = envi->next;
+	if (!envi)
 	{
 		write(2, "minishell: cd: HOME not set\n", 29);
 		return (1);
 	}
-	home = env->val;
+	home = envi->val;
 	ret = chdir(home);
 	return (ret);
 }
 
-int	cd(int argc, char **argv, char **envp)
+int	cd(t_cmd *cmd, t_env *envi)
 {
 	int	ret;
 	int	err;
+	int argc;
+	// char	*wd;	// 
 
+	argc = ft_lstsize(cmd->arguments);
 	if (argc > 2)
 	{
 		write(2, "minishell: cd: too many arguments\n", 35);
 		return (1);
 	}
 	if (argc == 1)
-		ret = cd_home(envp);
+		ret = cd_home(envi);
 	else
-		ret = chdir(argv[1]);
+		ret = chdir((char *) cmd->arguments->next->content);
 	if (ret == -1)
 	{
 		err = errno;
 		perror("minishell: cd");
 		return (err);
 	}
+	// // 
+	// wd = getcwd(NULL, 0);
+	// printf("%s", wd);
+	// free(wd);
+	// // 
 	return (ret);
 }

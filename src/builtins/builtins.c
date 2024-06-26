@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 15:25:14 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/24 17:36:38 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/26 15:25:42 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool	is_builtins(const char	*s)
 	return (false);
 }
 
-int	handle_builtins(t_cmd	*cmd, t_env **envi)
+int	handle_builtins(t_cmd *cmd, t_env **envi)
 {
 	int	exit_s;
 
@@ -30,6 +30,8 @@ int	handle_builtins(t_cmd	*cmd, t_env **envi)
 		return (1);	// A revoir
 	if (!ft_strcmp(cmd->arguments->content, "pwd"))
 		exit_s = pwd();
+	else if (!ft_strcmp(cmd->arguments->content, "cd"))
+		exit_s = cd(cmd, *envi);
 	else if (!ft_strcmp(cmd->arguments->content, "env"))
 		exit_s = env(*envi);
 	else if (!ft_strcmp(cmd->arguments->content, "export"))
