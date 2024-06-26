@@ -104,7 +104,7 @@ void	print_export(t_env **envi, char **new_env)
 int	export(t_env *envi)
 {
 	char	**new_env;
-
+	
 	new_env = ft_calloc(env_size(envi) + 1, sizeof (char *));
 	convert_in_tab(envi, new_env);
 	bubble_sort(new_env);

@@ -25,23 +25,23 @@
 // 	return (size);
 // }
 
-static char	*env_to_str(t_env *env)
+static char	*env_to_str(t_env **env)
 {
 	char	*str;
 	size_t	key_len;
 	size_t	val_len;
 
-	key_len = ft_strlen(env->name);
-	if (env->val)
-		val_len = ft_strlen(env->val);
+	key_len = ft_strlen((*env)->name);
+	if ((*env)->val)
+		val_len = ft_strlen((*env)->val);
 	else
 		val_len = 0;
 	str = malloc((key_len + val_len + 2) * sizeof (char));
 	if (!str)
 		return (NULL);
-	ft_strlcpy(str, env->name, key_len + 1);
+	ft_strlcpy(str, (*env)->name, key_len + 1);
 	str[key_len] = '=';
-	ft_strlcpy(str + key_len + 1, env->val, val_len + 1);
+	ft_strlcpy(str + key_len + 1, (*env)->val, val_len + 1);
 	return (str);
 }
 
@@ -58,13 +58,13 @@ static void	free_achar(char **achar)
 	free(achar);
 }
 
-char	**envlst_to_envp(t_env *env)
+char	**envlst_to_envp(t_env **env)
 {
 	char	**envp;
 	size_t	size;
 	size_t	i;
 
-	size = env_size(env);
+	size = env_size(*env);
 	envp = malloc((size + 1) * sizeof (char *));
 	if (!envp)
 		return (NULL);
@@ -77,7 +77,7 @@ char	**envlst_to_envp(t_env *env)
 			free_achar(envp);
 			return (NULL);
 		}
-		env = env->next;
+		env = &(*env)->next;
 		i++;
 	}
 	return (envp);

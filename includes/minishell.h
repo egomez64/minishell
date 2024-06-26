@@ -22,4 +22,10 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+typedef struct s_minishell
+{
+	t_cmd				*commands;
+	t_env				*envi;
+}					t_minishell;
+
 #endif

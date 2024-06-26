@@ -48,12 +48,12 @@ void	handle_output(char *path, int *fd, int *exit_s)
 		*exit_s = 1;
 }
 
-void	red_treatment(t_cmd **lst_cmd)
+void	red_treatment(t_minishell *minishell)
 {
 	t_token	*tmp_red;
 	t_cmd	*cmd;
 
-	cmd = *lst_cmd;
+	cmd = minishell->commands;
 	while (cmd)
 	{
 		tmp_red = cmd->redirections;

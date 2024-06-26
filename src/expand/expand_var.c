@@ -176,30 +176,32 @@ void	handle_word(char *s, t_env *envi, t_list **new, int exit_status)
 	}
 }
 
-void	expand_var(t_cmd *commands, t_env **env_var, int exit_status)
+void	expand_var(t_minishell *minishell, int exit_status)
 {
 	t_list	*tmp_arg;
 	t_token	*tmp_red;
 	t_list	*new_arg;
+	t_cmd	*cmd;
 
 	new_arg = NULL;
-	while (commands)
+	cmd = minishell->commands;
+	while (cmd)
 	{
-		tmp_arg = commands->arguments;
-		tmp_red = commands->redirections;
+		tmp_arg = cmd->arguments;
+		tmp_red = cmd->redirections;
 		while (tmp_arg)
 		{
-			handle_word(tmp_arg->content, *env_var, &new_arg, exit_status);
+			handle_word(tmp_arg->content, minishell->envi, &new_arg, exit_status);
 			tmp_arg = tmp_arg->next;
 		}
-		lstclear(&commands->arguments);
-		commands->arguments = new_arg;
+		lstclear(&cmd->arguments);
+		cmd->arguments = new_arg;
 		new_arg = NULL;
 		while (tmp_red)
 		{
-			commands->exit_s = expand_red(tmp_red, *env_var, exit_status);
+			cmd->exit_s = expand_red(tmp_red, minishell->envi, exit_status);
 			tmp_red = tmp_red->next;
 		}
-		commands = commands->next;
+		cmd = cmd->next;
 	}
 }

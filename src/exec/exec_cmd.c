@@ -55,7 +55,7 @@ static void	print_exec(t_exec *exec, t_attributes *att)	//
 	}
 }
 
-static int	child(t_exec *exec, t_env *env, t_exec **lst)
+static int	child(t_exec *exec, t_env **env, t_exec **lst)
 {
 	int				err;
 	t_attributes	attributes;
@@ -96,7 +96,7 @@ static void	parent(t_exec *exec)
 	close_and_set(&exec->cmd->output_fd);
 }
 
-void	exec_cmd(t_exec *exec, t_env *env, t_exec **lst)
+void	exec_cmd(t_exec *exec, t_env **env, t_exec **lst)
 {
 	int	err;
 

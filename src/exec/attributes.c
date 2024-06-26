@@ -134,7 +134,7 @@ void	free_attributes(t_attributes attributes)
 	free_achar(attributes.envp);
 }
 
-t_attributes	fill_attributes(t_exec *exec, t_env *env)
+t_attributes	fill_attributes(t_exec *exec, t_env **env)
 {
 	t_attributes	attributes;
 	char			*env_path;
@@ -159,7 +159,7 @@ t_attributes	fill_attributes(t_exec *exec, t_env *env)
 		return (attributes);
 	}
 	// envp_path = envp_find(envp, "PATH");
-	env_path = env_find(env, "PATH");
+	env_path = env_find(*env, "PATH");
 	// dprintf(3, "%d: env_path: %s\n", getpid(), env_path);
 	attributes.pathname = find_pathname(attributes.argv[0], env_path);
 	if (!attributes.pathname)

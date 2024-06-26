@@ -32,7 +32,7 @@ char	**sep_on_equal(char *s)
 	return (new);
 }
 
-int	export_join(t_env *envi, char *s)
+int	export_join(t_env **envi, char *s)
 {
 	char	**new;
 	int		i;
@@ -42,11 +42,11 @@ int	export_join(t_env *envi, char *s)
 	while (new[0][i] != '+')
 		i++;
 	new[0][i] = 0;
-	while (envi && ft_strcmp(envi->name, new[0]))
-		envi = envi->next;
-	if (envi)
+	while (*envi && ft_strcmp((*envi)->name, new[0]))
+		*envi = (*envi)->next;
+	if (*envi)
 	{
-		envi->val = ft_strjoin(envi->val, new[1]);
+		(*envi)->val = ft_strjoin((*envi)->val, new[1]);
 		free(new[0]);
 		free(new);
 	}
@@ -58,12 +58,12 @@ int	export_join(t_env *envi, char *s)
 	return (0);
 }
 
-int	export_append(t_env *envi, char *s)
+int	export_append(t_env **envi, char *s)
 {
 	char	**new_var;
 	t_env	*first;
 
-	first = envi;
+	first = *envi;
 	new_var = sep_on_equal(s);
 	while (first && ft_strcmp(first->name, new_var[0]))
 		first = first->next;
@@ -71,17 +71,17 @@ int	export_append(t_env *envi, char *s)
 		first->val = new_var[1];
 	else
 	{
-		env_add_back(&envi, env_new(new_var[0], new_var[1], true));
+		env_add_back(envi, env_new(new_var[0], new_var[1], true));
 		free(new_var);
 	}
 	return (0);
 }
 
-int	set_null(t_env *envi, char *s)
+int	set_null(t_env **envi, char *s)
 {
 	t_env	*first;
 
-	first = envi;
+	first = *envi;
 	if (s[ft_strlen(s) - 1] == '=')
 	{
 		s[ft_strlen(s) - 1] = 0;
@@ -93,10 +93,10 @@ int	set_null(t_env *envi, char *s)
 			first->init = true;
 		}
 		else
-			env_add_back(&envi, env_new(s, NULL, true));
+			env_add_back(envi, env_new(s, NULL, true));
 	}
 	else
-		env_add_back(&envi, env_new(s, NULL, false));
+		env_add_back(envi, env_new(s, NULL, false));
 	return (0);
 }
 
@@ -114,15 +114,15 @@ int	export_add(t_env **envi, t_list *args)
 			i++;
 		if (args->content[ft_strlen(args->content) - 1] == '='
 			|| args->content[i] != '=')
-			set_null(*envi, args->content);
+			set_null(envi, args->content);
 		else if (args->content[i - 1] == '+')
-			exit_s = export_join(*envi, args->content);
+			exit_s = export_join(envi, args->content);
 		else
 		{
 			if (check_arg(args->content))
 				exit_s = 1;
 			else
-				exit_s = export_append(*envi, args->content);
+				exit_s = export_append(envi, args->content);
 		}
 		args = args->next;
 	}

@@ -47,16 +47,15 @@ static int	open_debug(int newfd)
 
 int	main(int ac, char **av, char **ep)
 {
-	t_cmd *commands;
-	t_token *tmp;
-	char    *line;
-	t_env	*env_var;
-	int		exit_status;
-	(void)ac;
-	(void)av;
+	t_token		*tmp;
+	char		*line;
+	int			exit_status;
+	t_minishell	minishell;
+	(void)		ac;
+	(void)		av;
 
 	open_debug(3);
-	env_var = get_env(ep);
+	minishell.envi = get_env(ep);
 	exit_status = 0;
 	while(1)
 	{
@@ -72,23 +71,23 @@ int	main(int ac, char **av, char **ep)
 			return (2);
 		}
 		dprintf(3, "good syntax\n");
-		commands = cmd(tmp);
+		minishell.commands = cmd(tmp);
 		// dprintf(3, "print 1\n");
 		// print_cmd(commands);
 		// expand_var(&commands, &env_var/*, exit_status*/);
-		expand_var(commands, &env_var, exit_status);
+		expand_var(&minishell, exit_status);
 		// dprintf(3, "print 2\n");
 		// print_cmd(commands);
-		red_treatment(&commands);
+		red_treatment(&minishell);
 		// dprintf(3, "print 3\n");
 		// print_cmd(commands);
-		dprintf(3, "exit status : %d\n", cmd_last(commands)->exit_s);
-		execution(commands, env_var);
+		//dprintf(3, "exit status : %d\n", minishell.commands->exit_s);
+		execution(&minishell);
 		// if (commands->arguments && is_builtins(commands->arguments->content))
 		// 	handle_builtins(commands);
 		token_clear(tmp);
-		cmd_clear(commands);
+		//cmd_clear(minishell.commands);
 	}
-    env_clear(env_var);
+    env_clear(minishell.envi);
 	return (0);
 }

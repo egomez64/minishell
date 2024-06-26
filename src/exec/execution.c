@@ -67,7 +67,7 @@ static int	wait_for_everyone(t_exec **exec)
 	return (exit_status);
 }
 
-static int	simple_exec(t_exec **exec, t_env *env)
+static int	simple_exec(t_exec **exec, t_env **env)
 {
 	int	exit_status;
 	int	stdfd[2];
@@ -77,7 +77,7 @@ static int	simple_exec(t_exec **exec, t_env *env)
 		&& is_builtins((char *)((*exec)->cmd->arguments->content)))
 	{
 		dprintf(3, "builtin\n");
-		exit_status = handle_builtins((*exec)->cmd, &env);
+		exit_status = handle_builtins((*exec)->cmd, env);
 	}
 	else
 	{
@@ -90,7 +90,7 @@ static int	simple_exec(t_exec **exec, t_env *env)
 	return (exit_status);
 }
 
-static int	pipes_exec(t_exec **exec, t_env *env)
+static int	pipes_exec(t_exec **exec, t_env **env)
 {
 	int		exit_status;
 	t_exec	*current;
@@ -158,20 +158,20 @@ static void	set_input_output(t_exec *exec)
 		exec->cmd->output_fd = 1;
 }
 
-int	execution(t_cmd *cmd, t_env	*env)
+int	execution(t_minishell *minishell)
 {
 	t_exec	*exec;
 	// char	**envp;
 	int		exit_status;
 
-	if (!cmd)
+	if (minishell->commands == NULL)
 		return (0);
 	// print_env(env);	// 
-	exec = cmd_to_exec(cmd);
+	exec = cmd_to_exec(minishell->commands);
 	if (!exec)
 		return (1);
 	set_input_output(exec);
-	print_cmd(cmd);	// 
+	print_cmd(minishell->commands);	//
 	// envp = envlst_to_envp(env);
 	// if (!envp)
 	// {
@@ -179,8 +179,8 @@ int	execution(t_cmd *cmd, t_env	*env)
 	// 	return (1);
 	// }
 	if (!exec->next)
-		exit_status = simple_exec(&exec, env);
+		exit_status = simple_exec(&exec, &minishell->envi);
 	else
-		exit_status = pipes_exec(&exec, env);
+		exit_status = pipes_exec(&exec, &minishell->envi);
 	return (exit_status);
 }

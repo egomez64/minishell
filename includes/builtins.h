@@ -27,12 +27,10 @@ int		export_add(t_env **envi, t_list *args);
 void	print_export(t_env **envi, char **new_env);
 void	free_env(char **new_env);
 void	bubble_sort(char **new_env);
-int		export_join(t_env *envi, char *s);
-int		export_append(t_env *envi, char *s);
-int		set_null(t_env *envi, char *s);
-int		check_arg(char *s);
-
-void	unset(t_env *envi, char *s);
+int		export_join(t_env **envi, char *s);
+int		export_append(t_env **envi, char *s);
+int		set_null(t_env **envi, char *s);
+void	unset(t_env *envi, t_list *args);
 char	**sep_on_equal(char *s);
 
 int		echo(t_cmd *cmd);

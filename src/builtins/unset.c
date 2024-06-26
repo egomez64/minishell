@@ -12,25 +12,40 @@
 
 #include <minishell.h>
 
-void	unset(t_env *envi, char *s)
+static void unset_one(t_env **envi, char *name)
 {
-	t_env	**adress;
+	t_env	*address;
 
-	while (envi)
+	if ((*envi) == NULL)
+		return ;
+	if (ft_strcmp((*envi)->name, name) == 0)
 	{
-		if (envi->next && !ft_strcmp(envi->next->name, s))
-		{
-			adress = &envi->next;
-			envi = envi->next;
-			if (envi->next)
-				*adress = envi->next;
-			else
-				*adress = NULL;
-			free(envi->name);
-			free(envi->val);
-			break ;
-		}
-		envi = envi->next;
+		address = (*envi)->next;
+		free((*envi)->name);
+		free((*envi)->val);
+		*envi = address;
 	}
-	return ;
+	else
+	{
+		while (*envi && (*envi)->next && ft_strcmp((*envi)->next->name, name))
+			envi = &(*envi)->next;
+
+		if (*envi)
+		{
+			address = (*envi)->next->next;
+			free((*envi)->next->name);
+			free((*envi)->next->val);
+			(*envi)->next = address;
+		}
+	}
+}
+
+void	unset(t_env *envi, t_list *args)
+{
+	args = args->next;
+	while (args)
+	{
+		unset_one(&envi, args->content);
+		args = args->next;
+	}
 }

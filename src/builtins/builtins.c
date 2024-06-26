@@ -41,9 +41,8 @@ int	handle_builtins(t_cmd *cmd, t_env **envi)
 		else
 			exit_s = export(*envi);
 	}
-	else if (cmd->arguments->next
-		&& !ft_strcmp(cmd->arguments->content, "unset"))
-		unset(*envi, cmd->arguments->next->content);
+	else if (!ft_strcmp(cmd->arguments->content, "unset"))
+		unset(*envi, cmd->arguments);
 	else if (!ft_strcmp(cmd->arguments->content, "echo"))
 		exit_s = echo(cmd);
 	return (exit_s);
