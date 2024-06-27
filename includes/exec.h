@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:07:57 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/26 19:09:46 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/27 11:25:15 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ typedef struct s_attributes
 }			t_attributes;
 
 int		execution(t_minishell *minishell);
+
 int		open_pipe(t_cmd *cmd);
 int		make_redirections(t_cmd *cmd);
-void	exec_cmd(t_cmd *cmd, t_env **env, t_cmd **cmd_lst);
+int		exec_cmd(t_cmd *cmd, t_minishell *minish);
+void	fork_cmd(t_cmd *cmd, t_minishell *minish);
 
 int		dup_stdfd(int stdfd[2]);
 int		restore_stdfd(int stdfd[2]);

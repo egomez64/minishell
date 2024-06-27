@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:59:40 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/26 19:18:17 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/27 12:21:08 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 # include <linux/limits.h>
 
-bool	is_builtins(const char	*s);
-int		handle_builtins(t_minishell *minish);
+bool	is_builtin(const char *s);
+int		handle_builtin(t_cmd *cmd, t_minishell *minish);
 
 int		echo(t_cmd *cmd);
 

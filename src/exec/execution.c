@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/26 19:07:19 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/27 12:16:41 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,30 +39,54 @@ static int	wait_for_everyone(t_cmd **cmd)
 	return (exit_status);
 }
 
+// static int	simple_exec(t_minishell *minish)
+// {
+// 	int	exit_status;
+// 	int	stdfd[2];
+// 
+// 	dprintf(3, "simple_exec\n");
+// 	if (minish->commands->arguments
+// 		&& is_builtin((char *)(minish->commands->arguments->content)))
+// 	{
+// 		dprintf(3, "builtin\n");
+// 		exit_status = handle_builtin(minish);
+// 	}
+// 	else
+// 	{
+// 		dup_stdfd(stdfd);
+// 		dprintf(3, "exec_cmd\n");
+// 		exec_cmd(minish->commands, &minish->envi, &minish->commands);
+// 		exit_status = wait_for_everyone(&minish->commands);
+// 		restore_stdfd(stdfd);
+// 	}
+// 	return (exit_status);
+// }
+
 static int	simple_exec(t_minishell *minish)
 {
 	int	exit_status;
 	int	stdfd[2];
 
 	dprintf(3, "simple_exec\n");
+	dup_stdfd(stdfd);
+	make_redirections(minish->commands);
 	if (minish->commands->arguments
-		&& is_builtins((char *)(minish->commands->arguments->content)))
+		&& is_builtin((char *)(minish->commands->arguments->content)))
 	{
 		dprintf(3, "builtin\n");
-		exit_status = handle_builtins(minish);
+		exit_status = handle_builtin(minish->commands, minish);
 	}
 	else
 	{
-		dup_stdfd(stdfd);
 		dprintf(3, "exec_cmd\n");
-		exec_cmd(minish->commands, &minish->envi, &minish->commands);
+		fork_cmd(minish->commands, minish);
 		exit_status = wait_for_everyone(&minish->commands);
-		restore_stdfd(stdfd);
 	}
+	restore_stdfd(stdfd);
 	return (exit_status);
 }
 
-static int	pipes_exec(t_cmd **cmds, t_env **env)
+static int	pipes_exec(t_minishell *minish)
 {
 	int		exit_status;
 	t_cmd	*current;
@@ -70,15 +94,15 @@ static int	pipes_exec(t_cmd **cmds, t_env **env)
 
 	dprintf(3, "pipes_exec\n");
 	dup_stdfd(stdfd);
-	current = *cmds;
+	current = minish->commands;
 	while (current->next)
 	{
 		open_pipe(current);
-		exec_cmd(current, env, cmds);
+		fork_cmd(current, minish);
 		current = current->next;
 	}
-	exec_cmd(current, env, cmds);
-	exit_status = wait_for_everyone(cmds);
+	fork_cmd(current, minish);
+	exit_status = wait_for_everyone(&minish->commands);
 	restore_stdfd(stdfd);
 	return (exit_status);
 }
@@ -120,17 +144,17 @@ static void	set_input_output(t_cmd *cmd)
 		cmd->output_fd = 1;
 }
 
-int	execution(t_minishell *minishell)
+int	execution(t_minishell *minish)
 {
 	int		exit_status;
 
-	if (minishell->commands == NULL)
+	if (minish->commands == NULL)
 		return (0);
-	set_input_output(minishell->commands);
-	print_cmd(minishell->commands);	//
-	if (!minishell->commands->next)
-		exit_status = simple_exec(minishell);
+	set_input_output(minish->commands);
+	print_cmd(minish->commands);	//
+	if (!minish->commands->next)
+		exit_status = simple_exec(minish);
 	else
-		exit_status = pipes_exec(&minishell->commands, &minishell->envi);
+		exit_status = pipes_exec(minish);
 	return (exit_status);
 }
