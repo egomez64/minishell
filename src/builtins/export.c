@@ -19,11 +19,14 @@ static void	convert_in_tab(t_env *envi, char **new_env)
 	i = 0;
 	while (envi)
 	{
-		new_env[i] = ft_strdup(envi->name);
-		if (envi->val)
+		if (ft_strcmp(envi->name, "_"))
 		{
-			new_env[i] = ft_strjoin_char(new_env[i], '=', true);
-			new_env[i] = ft_strjoin(new_env[i], envi->val);
+			new_env[i] = ft_strdup(envi->name);
+			if (envi->val)
+			{
+				new_env[i] = ft_strjoin_char(new_env[i], '=', true);
+				new_env[i] = ft_strjoin(new_env[i], envi->val);
+			}
 		}
 		i++;
 		envi = envi->next;

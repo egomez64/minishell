@@ -110,6 +110,11 @@ int	export_add(t_env **envi, t_list *args)
 	args = args->next;
 	while (args)
 	{
+		if (args->content[0] == '_' && (!args->content[1] || args->content[1] == '='))
+		{
+			args = args->next;
+			continue;
+		}
 		while (args->content[i] && args->content[i] != '=')
 			i++;
 		if (args->content[ft_strlen(args->content) - 1] == '='
