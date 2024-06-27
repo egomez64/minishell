@@ -27,12 +27,15 @@ static void unset_one(t_env **envi, char *name)
 	}
 	else
 	{
-		while (*envi && (*envi)->next && ft_strcmp((*envi)->next->name, name))
+		while (*envi && (*envi)->next && ft_strcmp((*envi)->next->name, name) == 0)
 			envi = &(*envi)->next;
 
-		if (*envi)
+		if (*envi && ft_strcmp((*envi)->next->name, name))
 		{
-			address = (*envi)->next->next;
+			if ((*envi)->next->next)
+				address = (*envi)->next->next;
+			else
+				address = NULL;
 			free((*envi)->next->name);
 			free((*envi)->next->val);
 			(*envi)->next = address;

@@ -28,13 +28,22 @@ int	main(int ac, char **av, char **ep)
 	(void)		av;
 
 	open_debug(3);
+	init_minishell(&minishell);
 	minishell.envi = get_env(ep);
 	minishell.exit_status = 0;
 	while(1)
 	{
 		line = readline("minishell> ");
-		if (line == 0)
+		if (line == NULL)
+		{
+			free_minishell(&minishell);
 			return (0);
+		}
+		if (line[0] == 0)
+		{
+			free(line);
+			continue;
+		}
 		add_history(line);
 		if (!check_quotes(line))
 		{
@@ -53,7 +62,10 @@ int	main(int ac, char **av, char **ep)
 		red_treatment(&minishell);
 		minishell.exit_status = execution(&minishell);
 		token_clear(tmp);
+
+		cmd_clear(minishell.commands);
+		free(line);
 	}
-    env_clear(minishell.envi);
+    free_minishell(&minishell);
 	return (0);
 }

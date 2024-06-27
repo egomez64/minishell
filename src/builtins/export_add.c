@@ -34,17 +34,19 @@ static int	export_join(t_env **envi, char *s)
 {
 	char	**new;
 	int		i;
+	t_env	*tmp;
 
 	i = 0;
+	tmp = *envi;
 	new = sep_on_equal(s);
 	while (new[0][i] != '+')
 		i++;
 	new[0][i] = 0;
-	while (*envi && ft_strcmp((*envi)->name, new[0]))
-		*envi = (*envi)->next;
-	if (*envi)
+	while (tmp && ft_strcmp(tmp->name, new[0]))
+		tmp = tmp->next;
+	if (tmp)
 	{
-		(*envi)->val = ft_strjoin((*envi)->val, new[1]);
+		tmp->val = ft_strjoin(tmp->val, new[1]);
 		free(new[0]);
 		free(new);
 	}

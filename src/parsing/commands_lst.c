@@ -53,4 +53,5 @@ void	cmd_clear(t_cmd	*cmd)
 	if (cmd->redirections)
 		token_clear(cmd->redirections);
 	free(cmd);
+	cmd = NULL;
 }

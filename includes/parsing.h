@@ -50,6 +50,8 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }					t_cmd;
 
+typedef struct s_minishell t_minishell;
+
 t_token	*token_new(char	*val, t_arg type);
 t_token	*token_last(t_token *lst);
 void	token_add_back(t_token **lst, t_token *new);
@@ -72,5 +74,8 @@ void	lstadd_back(t_list **lst, t_list *new);
 void	lstdelone(t_list *lst);
 void	lstclear(t_list **lst);
 t_cmd	*cmd(t_token *token);
+void	free_minishell(t_minishell *minishell);
+void	init_minishell(t_minishell *minishell);
+
 
 #endif
