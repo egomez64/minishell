@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/27 11:39:35 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/28 13:52:01 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,9 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 
 	attributes = fill_attributes(cmd->arguments, &minish->envi);
 	if (!attributes.pathname)
-		return (1);
+		return (1);				// 
+	if (*attributes.pathname == '\0')
+		return (127);				// 
 	dprintf(3, "%d: execve\n", getpid());
 	execve(attributes.pathname, attributes.argv, attributes.envp);
 	err = errno;
