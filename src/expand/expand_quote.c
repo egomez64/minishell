@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 13:43:24 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 19:27:25 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/28 16:35:55 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,24 +56,22 @@ char	*slash_quotes(char *arg)
 	return (result);
 }
 
-static int	cpy(char *result, char *join, char *quote)	// To rename
+static int	copy_noquote(char *result, char *join, char *quote)
 {
 	int	i;
 
 	i = 0;
-	if (*quote == 0 && (join[i] == '"' || join[i] == '\''))
+	while (join[i] && ((*quote == 0 && (join[i] == '"' || join[i] == '\''))
+			|| (*quote == join[i])))
 	{
-		*quote = join[i];
+		if (*quote == 0)
+			*quote = join[i];
+		else
+			*quote = 0;
 		i++;
 	}
-	else if (*quote == join[i])
-	{
-		*quote = 0;
+	if (join[i] == '\\' && (join[i + 1] == '\'' || join[i + 1] == '"'))
 		i++;
-		return (i);
-	}
-	 if (join[i] == '\\' && (join[i + 1] == '\'' || join[i + 1] == '"'))
-	 	i++;
 	*result = join[i];
 	i++;
 	return (i);
@@ -96,10 +94,10 @@ char	*supp_quotes(char *join)
 	quote = 0;
 	while (i < len_join)
 	{
-		i += cpy(result + y, join + i, &quote);
+		i += copy_noquote(result + y, join + i, &quote);
 		y++;
 	}
-	result[i] = '\0';
+	result[y] = '\0';
 	free(join);
 	return (result);
 }
