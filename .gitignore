@@ -4,5 +4,6 @@ libft.a
 *.o
 
 debug
+minishell_tester
 
 settings.json
