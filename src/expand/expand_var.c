@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:08:57 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 19:28:16 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/28 16:32:44 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@ static t_list	*split_in_lst(char *s)
 	}
 	return (first);
 }
+
+/**
+ * `echo a  "" b"  c" `
+ * turns into	`a  b c`
+ * instead of	`a  b  c`
+ */
 
 static t_list	*split_on_whitespace(char *s)
 {
