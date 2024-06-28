@@ -33,10 +33,11 @@ int	main(int ac, char **av, char **ep)
 	minishell.exit_status = 0;
 	while(1)
 	{
-		line = readline("minishell> ");
+		// line = readline("minishell> ");
+		line = readline("SupraVala: ");		// Just for the tester
 		if (line == NULL)
 		{
-			free_minishell(&minishell);
+			// free_minishell(&minishell);
 			return (minishell.exit_status);
 		}
 		if (line[0] == 0)
