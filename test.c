@@ -38,6 +38,7 @@ int	main(int ac, char **av, char **ep)
 		if (line == NULL)
 		{
 			// free_minishell(&minishell);
+			write(2, "exit\n", 6);
 			return (minishell.exit_status);
 		}
 		if (line[0] == 0)
