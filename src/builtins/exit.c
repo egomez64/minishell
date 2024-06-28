@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:35:51 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/26 19:11:03 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/28 12:58:38 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,21 @@ static long	ft_atol(const char *nptr, int *err)
 	return (nptr_to_number(sign, nptr, err));
 }
 
-static char	*error_message(int err, char *num)	// 
+static char	*error_message(int err, char *num)
 {
-	(void) err;
-	(void) num;
+	char	*join1;
+	char	*join2;
+
+	if (err == 1)
+		write(2, "minishell: exit: too many arguments\n", 37);
+	else if (err == 2)
+	{
+		join1 = ft_strjoin("bash: exit: ", num);
+		join2 = ft_strjoin(join1, ": numeric argument required\n");
+		write(2, join2, ft_strlen(join2));
+		free(join1);
+		free(join2);
+	}
 	return (NULL);
 }
 
@@ -61,7 +72,7 @@ int	__exit(t_list *args, int exit_status)
 	long	arg_status;
 	int		err;
 
-	printf("exit\n");
+	write(2, "exit\n", 6);
 	err = 0;
 	if (!args->next)
 		exit(exit_status);
