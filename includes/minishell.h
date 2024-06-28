@@ -21,6 +21,7 @@
 # include <builtins.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+#include <signal.h>
 
 typedef struct s_minishell
 {

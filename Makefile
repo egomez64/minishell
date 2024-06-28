@@ -27,6 +27,7 @@ SRCS	= test.c \
 		src/exec/files.c \
 		src/exec/pathname.c \
 		src/exec/env_.c \
+		src/exec/sign.c \
 		src/builtins/builtins.c \
 		src/builtins/echo.c \
 		src/builtins/cd.c \
