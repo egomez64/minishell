@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:08:57 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/30 15:41:01 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/30 17:19:50 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,8 @@ void	expand_var(t_minishell *minishell, int exit_status)
 		tmp_red = cmd->redirections;
 		while (tmp_arg)
 		{
-			handle_word(tmp_arg->content, minishell->envi, &new_arg, exit_status);
+			handle_word(tmp_arg->content, minishell->envi,
+				&new_arg, exit_status);
 			tmp_arg = tmp_arg->next;
 		}
 		lstclear(&cmd->arguments);

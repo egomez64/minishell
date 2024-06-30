@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:38:45 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 19:16:12 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/30 16:56:00 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,11 @@ int	export_add(t_env **envi, t_list *args)
 	args = args->next;
 	while (args)
 	{
-		if (args->content[0] == '_' && (!args->content[1] || args->content[1] == '='))
+		if (args->content[0] == '_'
+			&& (!args->content[1] || args->content[1] == '='))
 		{
 			args = args->next;
-			continue;
+			continue ;
 		}
 		while (args->content[i] && args->content[i] != '=')
 			i++;

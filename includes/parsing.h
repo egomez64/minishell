@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:43:07 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 19:10:03 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/30 15:48:23 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@ typedef enum arg_type
 	OUTPUT,
 	HEREDOC,
 	APPEND,
-}	t_arg ;
+}	t_arg;
 
-const static char * arg_to_string[] = { // 
-	[WORD] = "Word",
-	[PIPE] = "Pipe",
-	[INPUT] = "INPUT",
-	[OUTPUT] = "OUTPUT",
-	[HEREDOC] = "HEREDOC",
-	[APPEND] = "APPEND",
-};
+// const static char * arg_to_string[] = { // 
+// 	[WORD] = "Word",
+// 	[PIPE] = "Pipe",
+// 	[INPUT] = "INPUT",
+// 	[OUTPUT] = "OUTPUT",
+// 	[HEREDOC] = "HEREDOC",
+// 	[APPEND] = "APPEND",
+// };
 
 typedef struct s_token
 {
@@ -50,7 +50,7 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }					t_cmd;
 
-typedef struct s_minishell t_minishell;
+typedef struct s_minishell	t_minishell;
 
 t_token	*token_new(char	*val, t_arg type);
 t_token	*token_last(t_token *lst);
@@ -76,6 +76,5 @@ void	lstclear(t_list **lst);
 t_cmd	*cmd(t_token *token);
 void	free_minishell(t_minishell *minishell);
 void	init_minishell(t_minishell *minishell);
-
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:40:26 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 18:36:58 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/30 15:46:12 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <builtins.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-#include <signal.h>
+# include <signal.h>
 
 typedef struct s_minishell
 {

@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:43:35 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 19:22:13 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/30 17:20:48 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	tokenize_word(t_token **tok_lst, char *val)
 			squote = !squote;
 		i++;
 	}
-
 	word = ft_substr(val, 0, i);
 	token_add_back(tok_lst, token_new(word, WORD));
 	return (i);

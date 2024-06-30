@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 17:19:38 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 19:29:27 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/30 15:45:17 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <stdbool.h>
 # include <minishell.h>
 
-typedef struct s_minishell t_minishell;
+typedef struct s_minishell	t_minishell;
 
 typedef struct s_env
 {
@@ -40,7 +40,7 @@ void	expand_var(t_minishell *minishell, int exit_status);
 
 char	*ft_strjoin_char(char *s1, char c, bool free_data);
 bool	is_delimiter(char c);
-t_list	*ft_lstnew_empty();
+t_list	*ft_lstnew_empty(void);
 char	*supp_quotes(char *join);
 char	*slash_quotes(char *arg);
 bool	is_whitespace(char c);

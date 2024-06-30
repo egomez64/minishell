@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/30 15:12:49 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/30 17:17:58 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@
 // 	parent(cmd);
 // }
 
-
 int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 {
 	int				err;
@@ -80,7 +79,8 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 }
 
 int	child(t_cmd *cmd, t_minishell *minish)
-{	if (cmd->next)
+{
+	if (cmd->next)
 	{
 		// dprintf(3, "%d: close_and_set %d\n", getpid(), cmd->next->input_fd);
 		close_and_set(&cmd->next->input_fd);
