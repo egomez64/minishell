@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:08:57 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/30 12:07:47 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/30 15:41:01 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,27 @@ static t_list	*split_in_lst(char *s)
 		i++;
 	}
 	return (first);
+}
+
+static int	split_on_whitespace_aux(t_list **tmp, char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && !is_whitespace(s[i]))
+	{
+		(*tmp)->content = ft_strjoin_char((*tmp)->content, s[i], false);
+		i++;
+	}
+	if (s[i])
+	{
+		lstadd_back(tmp, ft_lstnew_empty());
+		*tmp = (*tmp)->next;
+	}
+	while (s[i] && is_whitespace(s[i]))
+		i++;
+	i--;
+	return (i);
 }
 
 /**
@@ -63,59 +84,46 @@ static t_list	*split_on_whitespace(char *s)
 		if (quote)
 			tmp->content = ft_strjoin_char(tmp->content, s[i], false);
 		else
-		{
-			while (s[i] && !is_whitespace(s[i]))
-			{
-				tmp->content = ft_strjoin_char(tmp->content, s[i], false);
-				i++;
-			}
-			if (s[i])
-			{
-				lstadd_back(&tmp, ft_lstnew_empty());
-				tmp = tmp->next;
-			}
-			while (s[i] && is_whitespace(s[i]))
-				i++;
-			continue ;
-		}
+			i += split_on_whitespace_aux(&tmp, s + i);
 		i++;
 	}
 	return (first);
 }
 
-static void	changes(t_list *lst, t_env *envi, int exit_status)
+static void	changes_aux(t_list *lst, t_env *envi)
 {
-	t_env	*copy_envi;
 	char	*env_to_find;
 
+	env_to_find = lst->content + 1;
+	while (envi)
+	{
+		if (ft_strcmp(env_to_find, envi->name))
+		{
+			envi = envi->next;
+			continue ;
+		}
+		free(lst->content);
+		lst->content = NULL;
+		lst->content = ft_strdup(envi->val);
+		lst->content = slash_quotes(lst->content);
+		break ;
+	}
+	if (!envi)
+	{
+		free(lst->content);
+		lst->content = NULL;
+		lst->content = ft_strdup("");
+	}
+}
+
+static void	changes(t_list *lst, t_env *envi, int exit_status)
+{
 	while (lst)
 	{
-		copy_envi = envi;
 		if (is_env(lst->content))
 		{
 			if (lst->content[1] != '?')
-			{
-				env_to_find = lst->content + 1;
-				while (copy_envi)
-				{
-					if (ft_strcmp(env_to_find, copy_envi->name))
-					{
-						copy_envi = copy_envi->next;
-						continue ;
-					}
-					free(lst->content);
-					lst->content = NULL;
-					lst->content = ft_strdup(copy_envi->val);
-					lst->content = slash_quotes(lst->content);
-					break ;
-				}
-				if (!copy_envi)
-				{
-					free(lst->content);
-					lst->content = NULL;
-					lst->content = ft_strdup("");
-				}
-			}
+				changes_aux(lst, envi);
 			else
 				lst->content = ft_itoa(exit_status);
 		}
