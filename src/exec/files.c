@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:56:26 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/26 19:09:23 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/30 15:12:49 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	make_redirections(t_cmd *cmd)
 	err = 0;
 	if (cmd->input_fd != 0)
 	{
-		dprintf(3, "%d: redirect %d to 0\n", getpid(), cmd->input_fd);
+		// dprintf(3, "%d: redirect %d to 0\n", getpid(), cmd->input_fd);
 		err = redirect(&cmd->input_fd, 0);
 		if (err == -1)
 			return (err);
@@ -47,7 +47,7 @@ int	make_redirections(t_cmd *cmd)
 	}
 	if (cmd->output_fd != 1)
 	{
-		dprintf(3, "%d: redirect %d to 1\n", getpid(), cmd->output_fd);
+		// dprintf(3, "%d: redirect %d to 1\n", getpid(), cmd->output_fd);
 		err = redirect(&cmd->output_fd, 1);
 		if (err == -1)
 			return (err);
@@ -61,7 +61,7 @@ int	open_pipe(t_cmd *cmd)
 	int	pipefd[2];
 	int	err;
 
-	dprintf(3, "open_pipe\n");
+	// dprintf(3, "open_pipe\n");
 	pipefd[0] = -1;
 	pipefd[1] = -1;
 	err = pipe(pipefd);
@@ -73,22 +73,22 @@ int	open_pipe(t_cmd *cmd)
 	if (cmd->output_fd == -1)
 	{
 		cmd->output_fd = pipefd[1];
-		dprintf(3, "output_fd = %d\n", pipefd[1]);
+		// dprintf(3, "output_fd = %d\n", pipefd[1]);
 	}
 	else
 	{
 		close_and_set(pipefd + 1);
-		dprintf(3, "close pipefd[1]\n");
+		// dprintf(3, "close pipefd[1]\n");
 	}
 	if (cmd->next->input_fd == -1)
 	{
 		cmd->next->input_fd = pipefd[0];
-		dprintf(3, "next->input_fd = %d\n", pipefd[0]);
+		// dprintf(3, "next->input_fd = %d\n", pipefd[0]);
 	}
 	else
 	{
 		close_and_set(pipefd + 0);
-		dprintf(3, "close pipefd[0]\n");
+		// dprintf(3, "close pipefd[0]\n");
 	}
 	return (err);
 }

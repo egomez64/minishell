@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/28 13:52:01 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/30 15:12:49 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@
 // 
 // 	if (cmd->next)
 // 	{
-// 		dprintf(3, "%d: close_and_set %d\n", getpid(), cmd->next->input_fd);
+// 		// dprintf(3, "%d: close_and_set %d\n", getpid(), cmd->next->input_fd);
 // 		close_and_set(&cmd->next->input_fd);
 // 	}
 // 	make_redirections(cmd);
 // 	attributes = fill_attributes(cmd->arguments, env);
 // 	if (!attributes.pathname)
 // 		return (1);
-// 	dprintf(3, "%d: execve\n", getpid());
+// 	// dprintf(3, "%d: execve\n", getpid());
 // 	execve(attributes.pathname, attributes.argv, attributes.envp);
 // 	err = errno;
 // 	perror("minishell ");
@@ -38,7 +38,7 @@
 
 // static void	parent(t_cmd *cmd)
 // {
-// 	dprintf(3, "close_and_set %d and %d\n", cmd->input_fd, cmd->output_fd);
+// 	// dprintf(3, "close_and_set %d and %d\n", cmd->input_fd, cmd->output_fd);
 // 	close_and_set(&cmd->input_fd);
 // 	close_and_set(&cmd->output_fd);
 // }
@@ -69,7 +69,7 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 		return (1);				// 
 	if (*attributes.pathname == '\0')
 		return (127);				// 
-	dprintf(3, "%d: execve\n", getpid());
+	// dprintf(3, "%d: execve\n", getpid());
 	execve(attributes.pathname, attributes.argv, attributes.envp);
 	err = errno;
 	perror("minishell ");
@@ -82,7 +82,7 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 int	child(t_cmd *cmd, t_minishell *minish)
 {	if (cmd->next)
 	{
-		dprintf(3, "%d: close_and_set %d\n", getpid(), cmd->next->input_fd);
+		// dprintf(3, "%d: close_and_set %d\n", getpid(), cmd->next->input_fd);
 		close_and_set(&cmd->next->input_fd);
 	}
 	make_redirections(cmd);
@@ -104,7 +104,7 @@ void	fork_cmd(t_cmd *cmd, t_minishell *minish)
 		err = child(cmd, minish);
 		exit(err);
 	}
-	dprintf(3, "close_and_set %d and %d\n", cmd->input_fd, cmd->output_fd);
+	// dprintf(3, "close_and_set %d and %d\n", cmd->input_fd, cmd->output_fd);
 	close_and_set(&cmd->input_fd);
 	close_and_set(&cmd->output_fd);
 }

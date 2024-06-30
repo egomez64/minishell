@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/27 12:16:41 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/30 15:12:49 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ static int	wait_for_everyone(t_cmd **cmd)
 	last_pid = cmd_last(*cmd)->pid;
 	while (pid != -1)
 	{
-		dprintf(3, "waiting...\n");
+		// dprintf(3, "waiting...\n");
 		pid = wait(&wstatus);
-		dprintf(3, "wait %d\n", pid);
+		// dprintf(3, "wait %d\n", pid);
 		if (pid == last_pid)
 		{
 			exit_status = WEXITSTATUS(wstatus);
-			dprintf(3, "exit_status: %d\n", exit_status);
+			// dprintf(3, "exit_status: %d\n", exit_status);
 		}
 	}
 	return (exit_status);
@@ -44,17 +44,17 @@ static int	wait_for_everyone(t_cmd **cmd)
 // 	int	exit_status;
 // 	int	stdfd[2];
 // 
-// 	dprintf(3, "simple_exec\n");
+// 	// dprintf(3, "simple_exec\n");
 // 	if (minish->commands->arguments
 // 		&& is_builtin((char *)(minish->commands->arguments->content)))
 // 	{
-// 		dprintf(3, "builtin\n");
+// 		// dprintf(3, "builtin\n");
 // 		exit_status = handle_builtin(minish);
 // 	}
 // 	else
 // 	{
 // 		dup_stdfd(stdfd);
-// 		dprintf(3, "exec_cmd\n");
+// 		// dprintf(3, "exec_cmd\n");
 // 		exec_cmd(minish->commands, &minish->envi, &minish->commands);
 // 		exit_status = wait_for_everyone(&minish->commands);
 // 		restore_stdfd(stdfd);
@@ -67,18 +67,18 @@ static int	simple_exec(t_minishell *minish)
 	int	exit_status;
 	int	stdfd[2];
 
-	dprintf(3, "simple_exec\n");
+	// dprintf(3, "simple_exec\n");
 	dup_stdfd(stdfd);
 	make_redirections(minish->commands);
 	if (minish->commands->arguments
 		&& is_builtin((char *)(minish->commands->arguments->content)))
 	{
-		dprintf(3, "builtin\n");
+		// dprintf(3, "builtin\n");
 		exit_status = handle_builtin(minish->commands, minish);
 	}
 	else
 	{
-		dprintf(3, "exec_cmd\n");
+		// dprintf(3, "exec_cmd\n");
 		fork_cmd(minish->commands, minish);
 		exit_status = wait_for_everyone(&minish->commands);
 	}
@@ -92,7 +92,7 @@ static int	pipes_exec(t_minishell *minish)
 	t_cmd	*current;
 	int		stdfd[2];
 
-	dprintf(3, "pipes_exec\n");
+	// dprintf(3, "pipes_exec\n");
 	dup_stdfd(stdfd);
 	current = minish->commands;
 	while (current->next)
@@ -114,24 +114,24 @@ static void	print_cmd(t_cmd *cmd)	//
 
 	while (cmd)
 	{
-		dprintf(3, "arg\n");
+		// dprintf(3, "arg\n");
 		arg = cmd->arguments;
 		while (arg)
 		{
-			dprintf(3, "\t%s\n", (char *) arg->content);
+			// dprintf(3, "\t%s\n", (char *) arg->content);
 			arg = arg->next;
 		}
-		dprintf(3, "redir\n");
+		// dprintf(3, "redir\n");
 		redir = cmd->redirections;
 		while (redir)
 		{
-			dprintf(3, "\t%s\n", redir->val);
+			// dprintf(3, "\t%s\n", redir->val);
 			redir = redir->next;
 		}
-		dprintf(3, "input_fd: %d, output_fd: %d, exit_status: %d\n", cmd->input_fd, cmd->output_fd, cmd->exit_s);
+		// dprintf(3, "input_fd: %d, output_fd: %d, exit_status: %d\n", cmd->input_fd, cmd->output_fd, cmd->exit_s);
 		cmd = cmd->next;
 	}
-	dprintf(3, "\n");
+	// dprintf(3, "\n");
 }
 
 static void	set_input_output(t_cmd *cmd)
