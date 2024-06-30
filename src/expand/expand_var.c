@@ -6,7 +6,7 @@
 /*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:08:57 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/28 16:32:44 by maamine          ###   ########.fr       */
+/*   Updated: 2024/06/30 12:07:47 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,8 @@ void	handle_word(char *s, t_env *envi, t_list **new, int exit_status)
 	splitted = split_in_lst(s);
 	changes(splitted, envi, exit_status);
 	result = join_lst(splitted);
+	// if (result[0] == '\0')
+	// 	;	// Do whatever so that the node is deleted. To avoid `echo a $A` giving `a ` instead of `a`.
 	splitted = split_on_whitespace(result);
 	node = splitted;
 	while (node)
