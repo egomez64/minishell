@@ -51,16 +51,14 @@ static t_list	*split_on_whitespace(char *s)
 	first = ft_lstnew_empty();
 	tmp = first;
 	quote = 0;
-	if (s[0] == '\'' || s[0] == '"')
-		quote = s[0];
 	while (s[i])
 	{
-		if ((s[i] == '\'' || s[i] == '"') && (i > 0 && s[i - 1] != '\\'))
+		if ((s[i] == '\'' || s[i] == '"') && (i <= 0 || s[i - 1] != '\\'))
 		{
-			if (quote && quote == s[i])
-				quote = 0;
-			else if (!quote)
+			if (!quote)
 				quote = s[i];
+			else if (quote == s[i])
+				quote = 0;
 		}
 		if (quote)
 			tmp->content = ft_strjoin_char(tmp->content, s[i], false);
