@@ -12,23 +12,23 @@
 
 #include <minishell.h>
 
-int	handle_signals(int signal, int exit_status)
+extern int g_sig;
+
+void	normal_c(int signal)
 {
-	if (signal == SIGINT)
-	{
-		write(2, "^C\n", 4);
-		return (130);
-	}
-	else if (signal == SIGQUIT)
-	{
-		// write(2, "", 1);
-		// return (131);	// Unfinished
-		write(2, "exit\n", 6);
-		exit(exit_status);
-	}
-	return (0);			// Just to return something
+	(void)signal;
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
+void	heredoc_c(int signal)
+{
+	g_sig = signal;
+
+	ioctl(0, TIOCSTI, '\n');
+}
 // int	handle_signals(int signal)
 // {
 // 	if (signal == SIGINT)

@@ -18,6 +18,7 @@
 // 	close(fd);
 // 	return (0);
 // }
+int	g_sig;
 
 int	main(int ac, char **av, char **ep)
 {
@@ -31,10 +32,14 @@ int	main(int ac, char **av, char **ep)
 	init_minishell(&minishell);
 	minishell.envi = get_env(ep);
 	minishell.exit_status = 0;
+	g_sig = 0;
 	while(1)
 	{
 		// line = readline("minishell> ");
-		line = readline("SupraVala: ");		// Just for the tester
+		signal(SIGINT, &normal_c);
+		signal(SIGQUIT, SIG_IGN);
+		line = readline("SupraVala: ");
+		signal(SIGINT, SIG_IGN);// Just for the tester
 		if (line == NULL)
 		{
 			// free_minishell(&minishell);

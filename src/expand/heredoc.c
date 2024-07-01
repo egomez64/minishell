@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <minishell.h>
+extern int	g_sig;
 
 static void	randomizer(char *str)
 {
@@ -33,16 +34,22 @@ static void	fill_file(int fd, char *s)
 {
 	char	*line;
 
-	printf("\n");
+	signal(SIGINT, &heredoc_c);
 	line = readline("heredoc>");
 	if (line < 0)
 		return ;
+	if (g_sig == SIGINT)
+	{
+		free(line);
+		return ;
+	}
 	while (ft_strcmp(line, s))
 	{
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		line = readline("heredoc> ");
 	}
+	printf("\n");
 }
 
 void	handle_heredoc(char *s, int *fd, int *exit_s)
@@ -68,5 +75,6 @@ void	handle_heredoc(char *s, int *fd, int *exit_s)
 		*exit_s = 1;
 	unlink(path);
 	path = NULL;
+	signal(SIGINT, SIG_IGN);
 	free(path);
 }

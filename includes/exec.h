@@ -50,4 +50,7 @@ char			**envlst_to_envp(t_env **env);
 
 void			close_and_set(int *fd);
 
+void			normal_c(int signal);
+void			heredoc_c(int signal);
+
 #endif
