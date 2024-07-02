@@ -26,8 +26,11 @@ void	normal_c(int signal)
 void	heredoc_c(int signal)
 {
 	g_sig = signal;
+	char c = '\n';
 
-	ioctl(0, TIOCSTI, '\n');
+	ioctl(0, TIOCSTI, &c);
+	rl_on_new_line();
+	rl_replace_line("", 0);
 }
 // int	handle_signals(int signal)
 // {
