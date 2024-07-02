@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/30 17:17:58 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/02 15:22:16 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ void	fork_cmd(t_cmd *cmd, t_minishell *minish)
 		perror("fork");
 	if (cmd->pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);		// 
+		signal(SIGQUIT, SIG_DFL);		// 
 		err = child(cmd, minish);
 		exit(err);
 	}

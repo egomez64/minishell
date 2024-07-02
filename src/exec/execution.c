@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/30 15:12:49 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/02 15:22:14 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+extern int g_sig;
 
 /// @brief Waits for every command to end.
 /// @return Exit status of the last command.
@@ -27,13 +29,15 @@ static int	wait_for_everyone(t_cmd **cmd)
 	last_pid = cmd_last(*cmd)->pid;
 	while (pid != -1)
 	{
-		// dprintf(3, "waiting...\n");
 		pid = wait(&wstatus);
-		// dprintf(3, "wait %d\n", pid);
-		if (pid == last_pid)
-		{
+		if (pid == last_pid && WIFEXITED(wstatus))
 			exit_status = WEXITSTATUS(wstatus);
-			// dprintf(3, "exit_status: %d\n", exit_status);
+		else if (WIFSIGNALED(wstatus))
+		{
+			if (pid == last_pid)
+				exit_status = sig_exec(wstatus);
+			else
+				sig_exec(wstatus);
 		}
 	}
 	return (exit_status);
@@ -92,7 +96,6 @@ static int	pipes_exec(t_minishell *minish)
 	t_cmd	*current;
 	int		stdfd[2];
 
-	// dprintf(3, "pipes_exec\n");
 	dup_stdfd(stdfd);
 	current = minish->commands;
 	while (current->next)
@@ -103,6 +106,8 @@ static int	pipes_exec(t_minishell *minish)
 	}
 	fork_cmd(current, minish);
 	exit_status = wait_for_everyone(&minish->commands);
+	// signal(SIGINT, SIG_IGN);
+	// signal(SIGQUIT, SIG_IGN);
 	restore_stdfd(stdfd);
 	return (exit_status);
 }

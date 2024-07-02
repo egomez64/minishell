@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:07:57 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/30 15:45:59 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/02 15:19:14 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,6 @@ void			close_and_set(int *fd);
 
 void			normal_c(int signal);
 void			heredoc_c(int signal);
+int				sig_exec(int wstatus);
 
 #endif
