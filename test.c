@@ -59,7 +59,7 @@ int	main(int ac, char **av, char **ep)
 			continue ;
 		}
 		tmp = lexer(line);
-		if (!parsing(&tmp))
+		if (tmp && !parsing(&tmp))
 		{
 			write(2, "syntax error !\n", 16);
 			token_clear(tmp);

@@ -46,6 +46,8 @@ void	cmd_add_back(t_cmd **lst, t_cmd *new)
 
 void	cmd_clear(t_cmd	*cmd)
 {
+	if (!cmd)
+		return ;
 	if (cmd->next)
 		cmd_clear(cmd->next);
 	if (cmd->arguments)

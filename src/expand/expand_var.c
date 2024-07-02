@@ -17,14 +17,26 @@ static t_list	*split_in_lst(char *s)
 	t_list	*first;
 	t_list	*tmp;
 	int		i;
+	int		s_quote;
+	bool	is_var;
 
 	i = 0;
+	s_quote = 0;
+	is_var = (s[0] == '$' && s[1] && !is_delimiter(s[1]));
 	first = ft_lstnew_empty();
 	tmp = first;
 	while (s[i])
 	{
-		if (i && is_delimiter(s[i]))
+		if (s[i] == '\'')
+			s_quote = !s_quote;
+		//if (i && !s_quote && is_delimiter(s[i]) && !(s[i - 1] == '$' && s[i] == '?'))
+		if (i != 0 && !s_quote
+			&& ((!is_var && s[i] == '$' && s[i + 1] && (!is_delimiter(s[i + 1]) || (s[i + 1] == '?')))
+				|| (is_var
+					&& (is_delimiter(s[i])
+						&& !(s[i - 1] == '$' && s[i] == '?')))))
 		{
+			is_var = !is_var;
 			ft_lstadd_back(&tmp, ft_lstnew_empty());
 			tmp = tmp->next;
 		}
@@ -39,11 +51,14 @@ static int	split_on_whitespace_aux(t_list **tmp, char *s)
 	int	i;
 
 	i = 0;
-	while (s[i] && !is_whitespace(s[i]))
+	while (s[i] && !is_whitespace(s[i])
+		&& !(s[i] == '\'' || s[i] == '"') && (i <= 0 || s[i - 1] != '\\'))
 	{
 		(*tmp)->content = ft_strjoin_char((*tmp)->content, s[i], false);
 		i++;
 	}
+	if (!is_whitespace(s[i]))
+		return (i);
 	if (s[i])
 	{
 		lstadd_back(tmp, ft_lstnew_empty());
@@ -112,7 +127,7 @@ static void	changes_aux(t_list *lst, t_env *envi)
 	{
 		free(lst->content);
 		lst->content = NULL;
-		lst->content = ft_strdup("");
+		//lst->content = ft_strdup("");
 	}
 }
 
@@ -120,7 +135,8 @@ static void	changes(t_list *lst, t_env *envi, int exit_status)
 {
 	while (lst)
 	{
-		if (is_env(lst->content))
+		// if (is_env(lst->content))
+		if (lst->content[0] == '$' && lst->content[1])
 		{
 			if (lst->content[1] != '?')
 				changes_aux(lst, envi);
@@ -138,7 +154,8 @@ static char	*join_lst(t_list *lst)
 	result = ft_calloc(1, sizeof(char));
 	while (lst)
 	{
-		result = ft_strjoin(result, lst->content);
+		if (lst->content)
+			result = ft_strjoin(result, lst->content);
 		lst = lst->next;
 	}
 	return (result);
@@ -152,6 +169,11 @@ void	handle_word(char *s, t_env *envi, t_list **new, int exit_status)
 
 	splitted = split_in_lst(s);
 	changes(splitted, envi, exit_status);
+	if (!splitted->content)
+	{
+		lstclear(&splitted);
+		return ;
+	}
 	result = join_lst(splitted);
 	// if (result[0] == '\0')
 	// 	;	// Do whatever so that the node is deleted. To avoid `echo a $A` giving `a ` instead of `a`.
@@ -162,14 +184,15 @@ void	handle_word(char *s, t_env *envi, t_list **new, int exit_status)
 		node->content = supp_quotes(node->content);
 		node = node->next;
 	}
-	while (splitted)
-	{
-		node = lstnew(splitted->content);
-		lstadd_back(new, node);
-		node = splitted;
-		splitted = splitted->next;
-		lstdelone(node);
-	}
+	lstadd_back(new, splitted);
+	// while (splitted)
+	// {
+	// 	node = lstnew(splitted->content);
+	// 	lstadd_back(new, node);
+	// 	node = splitted;
+	// 	splitted = splitted->next;
+	// 	lstdelone(node);
+	// }
 }
 
 static int	expand_red(t_token *red, t_env *env, int exit_status)

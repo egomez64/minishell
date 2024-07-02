@@ -14,14 +14,14 @@
 
 int	redirect_tester(t_token **token)
 {
-	if ((*token)->next != NULL && (*token)->next->type != WORD)
+	if ((*token)->next == NULL || (*token)->next->type != WORD)
 		return (0);
 	return (1);
 }
 
 int	pipe_tester(t_token **token)
 {
-	if ((*token)->next != NULL && (*token)->next->type == PIPE)
+	if ((*token)->next == NULL || (*token)->next->type == PIPE)
 		return (0);
 	return (1);
 }
@@ -33,16 +33,13 @@ int	parsing(t_token **token)
 	tmp = *token;
 	if (tmp->type == PIPE)
 		return (0);
-	while (tmp->next != NULL)
+	while (tmp)
 	{
 		if (tmp->type == PIPE && !pipe_tester(&tmp))
 			return (0);
-		else if (tmp->type != WORD && tmp->type != PIPE
-			&& !redirect_tester(&tmp))
+		else if (tmp->type != WORD && !redirect_tester(&tmp))
 			return (0);
 		tmp = tmp->next;
 	}
-	if (tmp->type == PIPE)
-		return (0);
 	return (1);
 }

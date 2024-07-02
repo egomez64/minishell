@@ -22,24 +22,29 @@ static int	wait_for_everyone(t_cmd **cmd)
 	int		wstatus;
 	pid_t	last_pid;
 	pid_t	pid;
+	int		sig_handler;
 
 	pid = 0;
 	wstatus = 0;
 	exit_status = 0;
 	last_pid = cmd_last(*cmd)->pid;
+	sig_handler = 0;
 	while (pid != -1)
 	{
 		pid = wait(&wstatus);
 		if (pid == last_pid && WIFEXITED(wstatus))
 			exit_status = WEXITSTATUS(wstatus);
-		else if (WIFSIGNALED(wstatus))
+		else if (WIFSIGNALED(wstatus) && !sig_handler)
 		{
 			if (pid == last_pid)
-				exit_status = sig_exec(wstatus);
-			else
+		 		exit_status = sig_exec(wstatus);
+		 	else
 				sig_exec(wstatus);
+			sig_handler = 1;
 		}
 	}
+	// if (WIFEXITED(wstatus))
+	// 	sig_exec(wstatus);
 	return (exit_status);
 }
 

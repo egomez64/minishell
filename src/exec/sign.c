@@ -41,6 +41,7 @@ int	sig_exec(int wstatus)
 	if (signal == SIGINT)
 	{
 		normal_c(signal);
+		write(2, "\n", 2);
 		return (WEXITSTATUS(wstatus));
 	}
 	else if (signal == SIGQUIT)
