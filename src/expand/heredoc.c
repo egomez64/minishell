@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:24:17 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/26 19:28:40 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/02 14:19:35 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,17 @@ static void	fill_file(int fd, char *s)
 	char	*line;
 
 	signal(SIGINT, &heredoc_c);
-	line = readline("heredoc>");
+	line = readline("heredoc> ");
 	if (line < 0)
 		return ;
-	if (g_sig == SIGINT)
-	{
-		free(line);
-		return ;
-	}
 	while (ft_strcmp(line, s))
 	{
+		if (g_sig == SIGINT)
+		{
+			free(line);
+			printf("\n");
+			return ;
+		}
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		line = readline("heredoc> ");

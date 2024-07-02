@@ -32,9 +32,10 @@ int	main(int ac, char **av, char **ep)
 	init_minishell(&minishell);
 	minishell.envi = get_env(ep);
 	minishell.exit_status = 0;
-	g_sig = 0;
+	// g_sig = 0;
 	while(1)
 	{
+		g_sig = 0;
 		// line = readline("minishell> ");
 		signal(SIGINT, &normal_c);
 		signal(SIGQUIT, SIG_IGN);
@@ -49,19 +50,21 @@ int	main(int ac, char **av, char **ep)
 		if (line[0] == 0)
 		{
 			free(line);
-			continue;
+			continue ;
 		}
 		add_history(line);
 		if (!check_quotes(line))
 		{
 			printf("problems with quotes, a quotes should be open\n");
-			continue;
+			continue ;
 		}
 		tmp = lexer(line);
 		if (!parsing(&tmp))
 		{
 			write(2, "syntax error !\n", 16);
-			return (2);
+			token_clear(tmp);
+			minishell.exit_status = 2;
+			continue ;
 		}
 		// dprintf(3, "good syntax\n");
 		minishell.commands = cmd(tmp);
