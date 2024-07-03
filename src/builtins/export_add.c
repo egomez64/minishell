@@ -12,6 +12,23 @@
 
 #include <minishell.h>
 
+static void	error_message(char *arg)
+{
+	char	*str;
+	int		arg_len;
+
+	arg_len = ft_strlen(arg);
+	str = malloc((47 + arg_len) * sizeof (char));
+	if (!str)
+		return ;
+	ft_strlcpy(str, "minishell: export: `", 21);
+	ft_strlcpy(str + 20, arg, arg_len + 1);
+	ft_strlcpy(str + 20 + arg_len, "\': not a valid identifier\n", 27);
+	write(2, str, ft_strlen(str));
+	// free(message);
+	free(str);
+}
+
 static int	check_arg(char *s)
 {
 	int	i;
@@ -99,6 +116,22 @@ static int	set_null(t_env **envi, char *s)
 	return (0);
 }
 
+static int	error(char *arg)
+{
+	int	i;
+
+	if (!ft_isalpha(arg[0]))
+		return (1);
+	i = 1;
+	while(arg[i] && arg[i] != '=')
+	{
+		if (is_delimiter(arg[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	export_add(t_env **envi, t_list *args)
 {
 	int	i;
@@ -116,19 +149,26 @@ int	export_add(t_env **envi, t_list *args)
 			args = args->next;
 			continue ;
 		}
+		if (error(args->content))
+		{
+			error_message(args->content);
+			args = args->next;
+			exit_s = 1;
+			continue;
+		}
 		while (args->content[i] && args->content[i] != '=')
 			i++;
 		if (args->content[ft_strlen(args->content) - 1] == '='
 			|| args->content[i] != '=')
 			set_null(envi, args->content);
 		else if (args->content[i - 1] == '+')
-			exit_s = export_join(envi, args->content);
+			exit_s = (exit_s || export_join(envi, args->content));
 		else
 		{
 			if (check_arg(args->content))
 				exit_s = 1;
 			else
-				exit_s = export_append(envi, args->content);
+				exit_s = (exit_s || export_append(envi, args->content));
 		}
 		args = args->next;
 	}

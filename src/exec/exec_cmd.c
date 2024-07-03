@@ -63,6 +63,8 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 	int				err;
 	t_attributes	attributes;
 
+	if (is_dir)
+		err();
 	attributes = fill_attributes(cmd->arguments, &minish->envi);
 	if (!attributes.pathname)
 		return (1);				// 

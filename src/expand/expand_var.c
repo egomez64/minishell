@@ -165,6 +165,17 @@ static char	*join_lst(t_list *lst)
 	return (result);
 }
 
+static int	is_split_empty(t_list *splitted)
+{
+	while (splitted)
+	{
+		if (splitted->content)
+			return (0);
+		splitted = splitted->next;
+	}
+	return (1);
+}
+
 void	handle_word(char *s, t_env *envi, t_list **new, int exit_status)
 {
 	t_list	*splitted;
@@ -173,7 +184,7 @@ void	handle_word(char *s, t_env *envi, t_list **new, int exit_status)
 
 	splitted = split_in_lst(s);
 	changes(splitted, envi, exit_status);
-	if (!splitted->content)
+	if (is_split_empty(splitted))
 	{
 		lstclear(&splitted);
 		return ;

@@ -27,12 +27,10 @@ int	main(int ac, char **av, char **ep)
 	t_minishell	minishell;
 	(void)		ac;
 	(void)		av;
-	// (void)		ep;
 
 	// open_debug(3);
 	init_minishell(&minishell);
 	minishell.envi = get_env(ep);
-	// minishell.envi = NULL;
 	minishell.exit_status = 0;
 	// g_sig = 0;
 	while(1)
