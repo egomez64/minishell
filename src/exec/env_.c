@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 16:21:11 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/26 19:11:43 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/03 20:18:15 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ static char	*env_to_str(t_env **env)
 		return (NULL);
 	ft_strlcpy(str, (*env)->name, key_len + 1);
 	str[key_len] = '=';
-	ft_strlcpy(str + key_len + 1, (*env)->val, val_len + 1);
+	if ((*env)->val)
+		ft_strlcpy(str + key_len + 1, (*env)->val, val_len + 1);
 	return (str);
 }
 
