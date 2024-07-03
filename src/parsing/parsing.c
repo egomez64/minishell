@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:49:24 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/24 16:48:13 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/03 18:45:23 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int	parsing(t_token **token)
 	{
 		if (tmp->type == PIPE && !pipe_tester(&tmp))
 			return (0);
-		else if (tmp->type != WORD && !redirect_tester(&tmp))
+		else if (tmp->type != PIPE && tmp->type != WORD
+			&& !redirect_tester(&tmp))
 			return (0);
 		tmp = tmp->next;
 	}
