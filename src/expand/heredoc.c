@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:24:17 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/03 16:40:37 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/03 19:21:18 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	fill_file(int fd, char *s)
 
 	signal(SIGINT, &heredoc_c);
 	line = readline("heredoc> ");
-	if (line < 0)
+	if (!line)
 		return ;
 	while (ft_strcmp(line, s))
 	{
