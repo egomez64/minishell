@@ -79,24 +79,23 @@ static int	export_append(t_env **envi, char *s)
 
 static int	set_null(t_env **envi, char *s)
 {
-	t_env	*first;
+	t_env	*current;
+	bool	equal;
 
-	first = *envi;
-	if (s[ft_strlen(s) - 1] == '=')
-	{
+	current = *envi;
+	equal = (s[ft_strlen(s) - 1] == '=');
+	if (equal)
 		s[ft_strlen(s) - 1] = 0;
-		while (first && ft_strcmp(first->name, s))
-			first = first->next;
-		if (first)
-		{
-			first->val = NULL;
-			first->init = true;
-		}
-		else
-			env_add_back(envi, env_new(s, NULL, true));
+	while (current && ft_strcmp(current->name, s))
+		current = current->next;
+	if (current)
+	{
+		current->val = NULL;
+		if (equal)
+			current->init = equal;
 	}
 	else
-		env_add_back(envi, env_new(s, NULL, false));
+		env_add_back(envi, env_new(s, NULL, equal));
 	return (0);
 }
 
@@ -107,11 +106,12 @@ int	export_add(t_env **envi, t_list *args)
 
 	i = 0;
 	exit_s = 0;
+	if (envi == NULL)
+		return (0);
 	args = args->next;
 	while (args)
 	{
-		if (args->content[0] == '_'
-			&& (!args->content[1] || args->content[1] == '='))
+		if (args->content[0] == '_' && (!args->content[1] || args->content[1] == '='))
 		{
 			args = args->next;
 			continue ;

@@ -27,8 +27,8 @@ static void	convert_in_tab(t_env *envi, char **new_env)
 				new_env[i] = ft_strjoin_char(new_env[i], '=', true);
 				new_env[i] = ft_strjoin(new_env[i], envi->val);
 			}
+			i++;
 		}
-		i++;
 		envi = envi->next;
 	}
 }
@@ -71,25 +71,26 @@ static void	free_env(char **new_env)
 	free(new_env);
 }
 
-static void	print_export(t_env **envi, char **new_env)
+static void	print_export(t_env *envi, char **new_env)
 {
 	int		i;
 	int		y;
 	char	**to_print;
-	t_env	*first;
+	t_env	*current;
 
 	i = 0;
+	current = envi;
 	while (new_env[i])
 	{
-		first = *envi;
 		y = 0;
+		current = envi;
 		while (new_env[i][y] != 0 && new_env[i][y] != '=')
 			y++;
 		if (new_env[i][y] != '=')
 		{
-			while (first && ft_strcmp(first->name, new_env[i]))
-				first = first->next;
-			if (first->init == false)
+			while (current && ft_strcmp(current->name, new_env[i]))
+				current = current->next;
+			if (current->init == false)
 				printf("declare -x %s\n", new_env[i]);
 			else
 				printf("declare -x %s=\"\"\n", new_env[i]);
@@ -100,6 +101,9 @@ static void	print_export(t_env **envi, char **new_env)
 			printf("declare -x %s=\"%s\"\n", to_print[0], to_print[1]);
 			free_split(to_print);
 		}
+		// printf("%d\n", i);
+		// if (i == 37)
+		// 	printf("breakpoint here\n");
 		i++;
 	}
 }
@@ -107,11 +111,13 @@ static void	print_export(t_env **envi, char **new_env)
 int	export(t_env *envi)
 {
 	char	**new_env;
-	
+
+	if (envi == NULL)
+		return (0);
 	new_env = ft_calloc(env_size(envi) + 1, sizeof (char *));
 	convert_in_tab(envi, new_env);
 	bubble_sort(new_env);
-	print_export(&envi, new_env);
+	print_export(envi, new_env);
 	free_env(new_env);
 	return (0);
 }
