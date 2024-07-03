@@ -2,7 +2,7 @@ NAME = minishell
 
 LIBFT = libft/libft.a
 
-CC = cc
+CC = clang 
 
 SRCS	= test.c \
 		src/parsing/lexing.c \
@@ -60,7 +60,7 @@ endif
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $@ $(LDFLAGS)
+	$(CC) $(OBJS) $(LIBFT) $(LDFLAGS) -o $@ 
 
 $(LIBFT):
 	@make -j8 -C libft/ all
