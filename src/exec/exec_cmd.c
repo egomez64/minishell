@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/02 15:22:16 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/03 18:25:21 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 		return (1);				// 
 	if (*attributes.pathname == '\0')
 		return (127);				// 
-	// dprintf(3, "%d: execve\n", getpid());
 	execve(attributes.pathname, attributes.argv, attributes.envp);
 	err = errno;
 	perror("minishell ");
@@ -81,9 +80,10 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 int	child(t_cmd *cmd, t_minishell *minish)
 {
 	if (cmd->next)
-	{
-		// dprintf(3, "%d: close_and_set %d\n", getpid(), cmd->next->input_fd);
 		close_and_set(&cmd->next->input_fd);
+	if (cmd->exit_s)
+	{
+		return (1);	// 
 	}
 	make_redirections(cmd);
 	if (is_builtin(cmd->arguments->content))
@@ -106,7 +106,6 @@ void	fork_cmd(t_cmd *cmd, t_minishell *minish)
 		err = child(cmd, minish);
 		exit(err);
 	}
-	// dprintf(3, "close_and_set %d and %d\n", cmd->input_fd, cmd->output_fd);
 	close_and_set(&cmd->input_fd);
 	close_and_set(&cmd->output_fd);
 }

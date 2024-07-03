@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:24:17 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/02 14:43:48 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/03 16:40:37 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	handle_heredoc(char *s, int *fd, int *exit_s)
 	if (*fd < 0)
 		*exit_s = 1;
 	unlink(path);
-	path = NULL;
-	signal(SIGINT, SIG_IGN);
 	free(path);
+	signal(SIGINT, SIG_IGN);
 }

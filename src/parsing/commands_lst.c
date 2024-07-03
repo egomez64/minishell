@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands_lst.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 19:40:09 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/24 15:52:05 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/03 17:23:34 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ t_cmd	*cmd_new(void)
 	new->arguments = NULL;
 	new->redirections = NULL;
 	new->exit_s = 0;
+	// new->input_fd = -2;
+	// new->output_fd = -2;
 	new->input_fd = -1;
 	new->output_fd = -1;
 	return (new);
