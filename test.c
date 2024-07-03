@@ -55,7 +55,7 @@ int	main(int ac, char **av, char **ep)
 		add_history(line);
 		if (!check_quotes(line))
 		{
-			printf("problems with quotes, a quotes should be open\n");
+			//printf("problems with quotes, a quotes should be open\n");
 			continue ;
 		}
 		tmp = lexer(line);

@@ -17,21 +17,22 @@ static t_list	*split_in_lst(char *s)
 	t_list	*first;
 	t_list	*tmp;
 	int		i;
-	int		s_quote;
+	char	quote;
 	bool	is_var;
 
 	i = 0;
-	s_quote = 0;
+	quote = 0;
 	is_var = (s[0] == '$' && s[1] && !is_delimiter(s[1]));
 	first = ft_lstnew_empty();
 	tmp = first;
 	while (s[i])
 	{
-		if (s[i] == '\'')
-			s_quote = !s_quote;
-		//if (i && !s_quote && is_delimiter(s[i]) && !(s[i - 1] == '$' && s[i] == '?'))
-		if (i != 0 && !s_quote
-			&& ((!is_var && s[i] == '$' && s[i + 1] && (!is_delimiter(s[i + 1]) || (s[i + 1] == '?')))
+		if (quote == 0 && (s[i] == '\''|| s[i] == '"'))
+			quote = s[i];
+		else if(quote == s[i])
+			quote = 0;
+		if (i != 0 && quote != '\''
+			&& (((!is_var && s[i] == '$' && s[i + 1] && (!is_delimiter(s[i + 1]) || (s[i + 1] == '?'))) || (s[i - 1] == '?' && s[i - 2] == '$'))
 				|| (is_var
 					&& (is_delimiter(s[i])
 						&& !(s[i - 1] == '$' && s[i] == '?')))))
@@ -58,7 +59,10 @@ static int	split_on_whitespace_aux(t_list **tmp, char *s)
 		i++;
 	}
 	if (!is_whitespace(s[i]))
+	{
+		i--;
 		return (i);
+	}
 	if (s[i])
 	{
 		lstadd_back(tmp, ft_lstnew_empty());
@@ -175,6 +179,7 @@ void	handle_word(char *s, t_env *envi, t_list **new, int exit_status)
 		return ;
 	}
 	result = join_lst(splitted);
+	//result = slash_quotes(result);
 	// if (result[0] == '\0')
 	// 	;	// Do whatever so that the node is deleted. To avoid `echo a $A` giving `a ` instead of `a`.
 	splitted = split_on_whitespace(result);
