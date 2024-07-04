@@ -45,7 +45,7 @@ char	*supp_quotes(char *join);
 char	*slash_quotes(char *arg);
 bool	is_whitespace(char c);
 
-void	handle_heredoc(char *s, int *fd, int *exit_s);
+void	handle_heredoc(char *s, int *fd, int *exit_s, int n_line);
 void	red_treatment(t_minishell *minishell);
 // void	handle_output(char *path, int *fd, int *exit_s);
 // void	handle_append(char *path, int *fd, int *exit_s);

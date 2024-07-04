@@ -30,29 +30,62 @@ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
 	}
 }
 
-static void	fill_file(int fd, char *s)
+static void	heredoc_warning(int n, char *delim)
+{
+	char	*str;
+	char	*nptr;
+	int		n_len;
+	int		delim_len;
+
+	nptr = ft_itoa(n);
+	if (!nptr)
+		return ;
+	n_len = ft_strlen(nptr);
+	delim_len = ft_strlen(delim);
+	str = malloc((84 + n_len + delim_len) * sizeof (char));
+	if (!str)
+	{
+		free (nptr);
+		return ;
+	}
+	ft_strlcpy(str, "minishell: warning: here-document at line ", 43);
+	ft_strlcpy(str + 42, nptr, n_len + 1);
+	ft_strlcpy(str + 42 + n_len, " delimited by end-of-file (wanted `", 36);
+	ft_strlcpy(str + 77 + n_len, delim, delim_len + 1);
+	ft_strlcpy(str + 77 + n_len + delim_len, "')\n", 4);
+	write(2, str, ft_strlen(str));
+	free(str);
+	free(nptr);
+}
+
+static int	fill_file(int fd, char *delim, int n_line)
 {
 	char	*line;
 
 	signal(SIGINT, &heredoc_c);
 	line = readline("heredoc> ");
-	if (!line)
-		return ;
-	while (ft_strcmp(line, s))
+	// if (!line)
+	// 	return (1);
+	while (ft_strcmp(line, delim))
 	{
 		if (g_sig == SIGINT)
 		{
 			free(line);
-			return ;
+			return (130);
 		}
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		line = readline("heredoc> ");
 	}
-	printf("\n");
+	if (!line)
+	{
+		heredoc_warning(n_line, delim);
+		return (0);
+	}
+	return (0);
 }
 
-void	handle_heredoc(char *s, int *fd, int *exit_s)
+void	handle_heredoc(char *s, int *fd, int *exit_s, int n_line)
 {
 	char	name[13];
 	char	*path;
@@ -68,7 +101,9 @@ void	handle_heredoc(char *s, int *fd, int *exit_s)
 	*fd = open(path, O_RDWR | O_CREAT | O_TRUNC, 0666);
 	if (*fd < 0)
 		return ;
-	fill_file(*fd, s);
+	*exit_s = fill_file(*fd, s, n_line);
+	if (*exit_s)
+		return ;
 	close(*fd);
 	*fd = open(path, O_RDONLY, 0666);
 	if (*fd < 0)

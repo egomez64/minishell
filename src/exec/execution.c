@@ -54,7 +54,7 @@ static int	simple_exec(t_minishell *minish)
 	int	stdfd[2];
 
 	if (minish->commands->exit_s)
-		return (1);
+		return (minish->commands->exit_s);
 	dup_stdfd(stdfd);
 	make_redirections(minish->commands);
 	if (minish->commands->arguments
@@ -135,7 +135,6 @@ int	execution(t_minishell *minish)
 	if (minish->commands == NULL)
 		return (0);
 	set_input_output(minish->commands);
-	// print_cmd(minish->commands);	//
 	if (!minish->commands->next)
 		exit_status = simple_exec(minish);
 	else

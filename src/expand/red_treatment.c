@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <minishell.h>
+extern int	g_sig;
 
 static int	handle_input(char *path, int *fd, int *exit_s)
 {
@@ -97,15 +98,16 @@ void	red_treatment(t_minishell *minishell)
 		redir = cmd->redirections;
 		while (redir && !cmd->exit_s)
 		{
-			if (redir->type == HEREDOC)
-				handle_heredoc(redir->val, &cmd->input_fd, &cmd->exit_s);
+			if (redir->type == HEREDOC && g_sig != SIGINT)
+				handle_heredoc(redir->val, &cmd->input_fd, &cmd->exit_s,
+					minishell->n_line);
 			else if (redir->type == INPUT)
 				err = handle_input(redir->val, &cmd->input_fd, &cmd->exit_s);
 			else if (redir->type == APPEND)
 				err = handle_append(redir->val, &cmd->output_fd, &cmd->exit_s);
 			else if (redir->type == OUTPUT)
 				err = handle_output(redir->val, &cmd->output_fd, &cmd->exit_s);
-			if (cmd->exit_s)
+			if (cmd->exit_s && cmd->exit_s != 130)
 				error_message(redir->val, err);
 			redir = redir->next;
 		}

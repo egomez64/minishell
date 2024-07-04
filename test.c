@@ -3,7 +3,7 @@
 // static int	open_debug(int newfd)
 // {
 // 	int	fd;
-// 
+//
 // 	fd = open("debug", O_RDWR | O_CREAT | O_TRUNC,
 // 		S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 // 	if (fd == -1)
@@ -32,6 +32,7 @@ int	main(int ac, char **av, char **ep)
 	init_minishell(&minishell);
 	minishell.envi = get_env(ep);
 	minishell.exit_status = 0;
+	minishell.n_line = 1;
 	// g_sig = 0;
 	while(1)
 	{
@@ -50,12 +51,13 @@ int	main(int ac, char **av, char **ep)
 		if (line[0] == 0)
 		{
 			free(line);
+			minishell.n_line++;
 			continue ;
 		}
 		add_history(line);
 		if (!check_quotes(line))
 		{
-			//printf("problems with quotes, a quotes should be open\n");
+			minishell.n_line++;
 			continue ;
 		}
 		tmp = lexer(line);
@@ -66,7 +68,6 @@ int	main(int ac, char **av, char **ep)
 			minishell.exit_status = 2;
 			continue ;
 		}
-		// dprintf(3, "good syntax\n");
 		minishell.commands = cmd(tmp);
 		expand_var(&minishell, minishell.exit_status);
 		red_treatment(&minishell);
@@ -75,6 +76,7 @@ int	main(int ac, char **av, char **ep)
 
 		cmd_clear(minishell.commands);
 		free(line);
+		minishell.n_line++;
 	}
     free_minishell(&minishell);
 	return (0);

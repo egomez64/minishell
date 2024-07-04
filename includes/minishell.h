@@ -29,6 +29,7 @@ typedef struct s_minishell
 	t_cmd	*commands;
 	t_env	*envi;
 	int		exit_status;
+	int		n_line;
 }			t_minishell;
 
 #endif
