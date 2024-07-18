@@ -6,13 +6,13 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 03:59:15 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/02 15:20:44 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/04 17:34:01 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-extern int g_sig;
+extern int	g_sig;
 
 void	normal_c(int signal)
 {
@@ -25,9 +25,10 @@ void	normal_c(int signal)
 
 void	heredoc_c(int signal)
 {
-	g_sig = signal;
-	char c = '\n';
+	char	c;
 
+	g_sig = signal;
+	c = '\n';
 	ioctl(0, TIOCSTI, &c);
 	rl_on_new_line();
 	rl_replace_line("", 0);
