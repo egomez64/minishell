@@ -1,55 +1,7 @@
 NAME = minishell
-
-LIBFT = libft/libft.a
-
-CC = clang 
-
-SRCS	= test.c \
-		src/parsing/lexing.c \
-		src/parsing/token_list.c \
-		src/parsing/parsing.c \
-		src/parsing/commands_lst.c \
-		src/parsing/create_cmd.c \
-		src/parsing/lst.c \
-		src/parsing/check_quotes.c \
-		src/parsing/free_minishell.c \
-		src/expand/env_lst.c \
-		src/expand/get_env.c \
-		src/expand/expand_utils.c \
-		src/expand/expand_var.c \
-		src/expand/expand_quote.c \
-		src/expand/heredoc.c \
-		src/expand/red_treatment.c \
-		src/exec/attributes.c \
-		src/exec/close_and_free.c \
-		src/exec/exec_cmd.c \
-		src/exec/execution.c \
-		src/exec/files.c \
-		src/exec/pathname.c \
-		src/exec/env_.c \
-		src/exec/sign.c \
-		src/exec/is_dir.c \
-		src/builtins/builtins.c \
-		src/builtins/echo.c \
-		src/builtins/cd.c \
-		src/builtins/pwd.c \
-		src/builtins/export.c \
-		src/builtins/export_add.c \
-		src/builtins/export_utils.c \
-		src/builtins/unset.c \
-		src/builtins/env.c \
-		src/builtins/exit.c \
-		src/utils/free_achar.c
-		
-
-
-HEADERS = minishell.h
-
-OBJS = $(SRCS:.c=.o)
-
-LDFLAGS = -lreadline
-
+CC = clang
 CFLAGS = -Wall -Wextra -Werror  -g -Iincludes -Ilibft
+LDFLAGS = -lreadline
 
 ifdef DEBUG
 CFLAGS = -Wall -Wextra -Iincludes -Ilibft -g
@@ -59,19 +11,69 @@ ifdef CHECK
 CFLAGS += -fsanitize=address
 endif
 
+LIBFT = libft/libft.a
+HEADERS = minishell.h
+
+SRC_DIR	= src
+OBJ_DIR	= obj
+DIRDUP	= mkdir -p $(@D)
+
+SRC	= test.c \
+		parsing/lexing.c \
+		parsing/token_list.c \
+		parsing/parsing.c \
+		parsing/commands_lst.c \
+		parsing/create_cmd.c \
+		parsing/lst.c \
+		parsing/check_quotes.c \
+		parsing/free_minishell.c \
+		expand/env_lst.c \
+		expand/get_env.c \
+		expand/expand_utils.c \
+		expand/expand_var.c \
+		expand/expand_quote.c \
+		expand/heredoc.c \
+		expand/red_treatment.c \
+		exec/attributes.c \
+		exec/close_and_free.c \
+		exec/exec_cmd.c \
+		exec/execution.c \
+		exec/files.c \
+		exec/pathname.c \
+		exec/env_.c \
+		exec/sign.c \
+		exec/is_dir.c \
+		builtins/builtins.c \
+		builtins/echo.c \
+		builtins/cd.c \
+		builtins/pwd.c \
+		builtins/export.c \
+		builtins/export_add.c \
+		builtins/export_utils.c \
+		builtins/unset.c \
+		builtins/env.c \
+		builtins/exit.c \
+		utils/free_achar.c
+		
+SRC		:= $(SRC:%=$(SRC_DIR)/%)
+OBJ 	:= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+# OBJ 	:= $(SRC:%.c=%.o)
+
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(OBJS) $(LIBFT) $(LDFLAGS) -o $@ 
+$(NAME): $(OBJ) $(LIBFT)
+	$(CC) $(OBJ) $(LIBFT) $(LDFLAGS) -o $@ 
 
 $(LIBFT):
 	@make -j8 -C libft/ all
 
-%.o: %.c $(HEADER)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADER)
+# %.o: %.c $(HEADER)
+	$(DIRDUP)
 	$(CC) $(CFLAGS) $< -c -o $@
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJ)
 	@make -C libft/ clean
 	
 fclean: clean
