@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:59:40 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/27 12:21:08 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:33:53 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <linux/limits.h>
 
 bool	is_builtin(const char *s);
-int		handle_builtin(t_cmd *cmd, t_minishell *minish);
+int		handle_builtin(t_cmd *cmd, t_minishell *minish, int stdfd[2]);
 
 int		echo(t_cmd *cmd);
 
@@ -32,6 +32,6 @@ void	unset(t_env *envi, t_list *args);
 
 int		env(t_env *envi);
 
-int		__exit(t_minishell minish, t_list *args);
+int		__exit(t_minishell *minish, t_list *args, int stdfd[2]);
 
 #endif

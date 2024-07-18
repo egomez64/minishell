@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/18 16:13:52 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:33:21 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static int	simple_exec(t_minishell *minish)
 	make_redirections(minish->commands);
 	if (minish->commands->arguments
 		&& is_builtin((char *)(minish->commands->arguments->content)))
-		exit_status = handle_builtin(minish->commands, minish);
+		exit_status = handle_builtin(minish->commands, minish, stdfd);
 	else
 	{
 		fork_cmd(minish->commands, minish, stdfd);
