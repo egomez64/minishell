@@ -6,13 +6,13 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/03 18:35:05 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/04 17:46:57 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-extern int g_sig;
+extern int	g_sig;
 
 /// @brief Waits for every command to end.
 /// @return Exit status of the last command.
@@ -20,13 +20,12 @@ static int	wait_for_everyone(t_cmd **cmd)
 {
 	int		exit_status;
 	int		wstatus;
-	pid_t	last_pid;
 	pid_t	pid;
+	pid_t	last_pid;
 	int		sig_handler;
 
+	exit_status = -1;
 	pid = 0;
-	wstatus = 0;
-	exit_status = 0;
 	last_pid = cmd_last(*cmd)->pid;
 	sig_handler = 0;
 	while (pid != -1)
@@ -37,14 +36,46 @@ static int	wait_for_everyone(t_cmd **cmd)
 		else if (WIFSIGNALED(wstatus) && !sig_handler)
 		{
 			if (pid == last_pid)
-		 		exit_status = sig_exec(wstatus);
-		 	else
+				exit_status = sig_exec(wstatus);
+			else
 				sig_exec(wstatus);
 			sig_handler = 1;
 		}
 	}
 	return (exit_status);
 }
+
+// /// @brief Waits for every command to end.
+// /// @return Exit status of the last command.
+// static int	wait_for_everyone(t_cmd **cmd)
+// {
+// 	int		exit_status;
+// 	int		wstatus;
+// 	pid_t	last_pid;
+// 	pid_t	pid;
+// 	int		sig_handler;
+// 
+// 	pid = 0;
+// 	wstatus = 0;
+// 	exit_status = 0;
+// 	last_pid = cmd_last(*cmd)->pid;
+// 	sig_handler = 0;
+// 	while (pid != -1)
+// 	{
+// 		pid = wait(&wstatus);
+// 		if (pid == last_pid && WIFEXITED(wstatus))
+// 			exit_status = WEXITSTATUS(wstatus);
+// 		else if (WIFSIGNALED(wstatus) && !sig_handler)
+// 		{
+// 			if (pid == last_pid)
+// 				exit_status = sig_exec(wstatus);
+// 			else
+// 				sig_exec(wstatus);
+// 			sig_handler = 1;
+// 		}
+// 	}
+// 	return (exit_status);
+// }
 
 static int	simple_exec(t_minishell *minish)
 {

@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:07:57 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/02 15:19:14 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/04 17:21:37 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include <unistd.h>
 # include <parsing.h>
 # include <errno.h>
-# include <sys/stat.h>
 # include <fcntl.h>
+# include <sys/stat.h>
 # include <sys/wait.h>
 
 typedef struct s_string
@@ -53,5 +53,7 @@ void			close_and_set(int *fd);
 void			normal_c(int signal);
 void			heredoc_c(int signal);
 int				sig_exec(int wstatus);
+
+int				is_dir(char *str);
 
 #endif
