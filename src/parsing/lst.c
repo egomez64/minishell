@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lst.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:10:36 by egomez            #+#    #+#             */
-/*   Updated: 2024/01/25 13:50:39 by egomez           ###   ########.fr       */
+/*   Updated: 2024/07/18 14:51:02 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	lstdelone(t_list *lst)
 {
 	if (!lst)
 		return ;
+	free(lst->content);
 	free(lst);
 }
 

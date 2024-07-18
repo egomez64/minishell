@@ -73,7 +73,7 @@ int	main(int ac, char **av, char **ep)
 		expand_var(&minishell, minishell.exit_status);
 		red_treatment(&minishell);
 		minishell.exit_status = execution(&minishell);
-		token_clear(tmp);
+		// token_clear(tmp);
 
 		cmd_clear(minishell.commands);
 		free(line);
