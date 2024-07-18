@@ -46,9 +46,10 @@ int	main(int ac, char **av, char **ep)
 		{
 			// free_minishell(&minishell);
 			write(2, "exit\n", 6);
+			free_minishell(&minishell);
 			return (minishell.exit_status);
 		}
-		if (line[0] == 0)
+		if (line[0] == '\0')
 		{
 			free(line);
 			minishell.n_line++;
@@ -78,6 +79,6 @@ int	main(int ac, char **av, char **ep)
 		free(line);
 		minishell.n_line++;
 	}
-    free_minishell(&minishell);
+	free_minishell(&minishell);
 	return (0);
 }

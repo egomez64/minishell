@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:08:57 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/30 17:19:50 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 14:33:38 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ static t_list	*split_in_lst(char *s)
 						&& !(s[i - 1] == '$' && s[i] == '?')))))
 		{
 			is_var = !is_var;
-			ft_lstadd_back(&tmp, ft_lstnew_empty());
+			ft_lstadd_back(&tmp, ft_lstnew_empty());	// Pourquoi ?
 			tmp = tmp->next;
 		}
-		tmp->content = ft_strjoin_char(tmp->content, s[i], false);
+		tmp->content = ft_strjoin_char(tmp->content, s[i], true);
 		i++;
 	}
 	return (first);
@@ -55,7 +55,7 @@ static int	split_on_whitespace_aux(t_list **tmp, char *s)
 	while (s[i] && !is_whitespace(s[i])
 		&& !(s[i] == '\'' || s[i] == '"') && (i <= 0 || s[i - 1] != '\\'))
 	{
-		(*tmp)->content = ft_strjoin_char((*tmp)->content, s[i], false);
+		(*tmp)->content = ft_strjoin_char((*tmp)->content, s[i], true);
 		i++;
 	}
 	if (!is_whitespace(s[i]))
@@ -101,7 +101,7 @@ static t_list	*split_on_whitespace(char *s)
 				quote = 0;
 		}
 		if (quote)
-			tmp->content = ft_strjoin_char(tmp->content, s[i], false);
+			tmp->content = ft_strjoin_char(tmp->content, s[i], true);
 		else
 			i += split_on_whitespace_aux(&tmp, s + i);
 		i++;
@@ -148,7 +148,10 @@ static void	changes(t_list *lst, t_env *envi, int exit_status)
 			if (lst->content[1] != '?')
 				changes_aux(lst, envi);
 			else
+			{
+				free(lst->content);
 				lst->content = ft_itoa(exit_status);
+			}
 		}
 		lst = lst->next;
 	}
@@ -157,12 +160,19 @@ static void	changes(t_list *lst, t_env *envi, int exit_status)
 static char	*join_lst(t_list *lst)
 {
 	char	*result;
+	char	*tmp;
 
 	result = ft_calloc(1, sizeof(char));
 	while (lst)
 	{
 		if (lst->content)
-			result = ft_strjoin(result, lst->content);
+		{
+			tmp = ft_strjoin(result, lst->content);
+			free(result);
+			if (!tmp)
+				return (NULL);
+			result = tmp;
+		}
 		lst = lst->next;
 	}
 	return (result);
@@ -196,7 +206,9 @@ void	handle_word(char *s, t_env *envi, t_list **new, int exit_status)
 	//result = slash_quotes(result);
 	// if (result[0] == '\0')
 	// 	;	// Do whatever so that the node is deleted. To avoid `echo a $A` giving `a ` instead of `a`.
+	lstclear(&splitted);
 	splitted = split_on_whitespace(result);
+	free(result);
 	node = splitted;
 	while (node)
 	{
@@ -239,10 +251,10 @@ void	expand_var(t_minishell *minishell, int exit_status)
 	t_list	*new_arg;
 	t_cmd	*cmd;
 
-	new_arg = NULL;
 	cmd = minishell->commands;
 	while (cmd)
 	{
+		new_arg = NULL;
 		tmp_arg = cmd->arguments;
 		tmp_red = cmd->redirections;
 		while (tmp_arg)
@@ -253,7 +265,6 @@ void	expand_var(t_minishell *minishell, int exit_status)
 		}
 		lstclear(&cmd->arguments);
 		cmd->arguments = new_arg;
-		new_arg = NULL;
 		while (tmp_red)
 		{
 			cmd->exit_s = expand_red(tmp_red, minishell->envi, exit_status);

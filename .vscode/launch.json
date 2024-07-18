@@ -1,0 +1,52 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "C/C++ Runner: Debug Session",
+			"type": "cppdbg",
+			"request": "launch",
+			"args": [],
+			"stopAtEntry": false,
+			"externalConsole": false,
+			"cwd": "/nfs/homes/maamine/Documents/42/42cursus/3rd Circle/Minishell/egomez_github_ssh/",
+			"program": "/nfs/homes/maamine/Documents/42/42cursus/3rd Circle/Minishell/egomez_github_ssh/minishell",
+			"MIMode": "gdb",
+			"miDebuggerPath": "/usr/bin/gdb",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				}
+			]
+		},
+		{
+			"name": "(gdb) Launch",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "/nfs/homes/maamine/Documents/42/42cursus/3rd Circle/Minishell/egomez_github_ssh/minishell",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${fileDirname}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				}
+				// ,
+				// {
+				// 	"description": "Set Disassembly Flavor to Intel",
+				// 	"text": "-gdb-set disassembly-flavor intel",
+				// 	"ignoreFailures": true
+				// }
+			]
+		}
+	]
+}
