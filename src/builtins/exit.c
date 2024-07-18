@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:35:51 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/28 12:58:38 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/04 17:48:40 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include <minishell.h>
 
 static long	nptr_to_number(int sign, const char *nptr, int *err)
 {
@@ -87,6 +87,6 @@ int	__exit(t_list *args, int exit_status)
 		error_message(1, NULL);
 		return (1);
 	}
-	exit_status = arg_status & 255;	// Nope, misses something. Maybe.
+	exit_status = arg_status & 0xff;
 	exit(exit_status);
 }

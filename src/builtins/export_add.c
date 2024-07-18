@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_add.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:38:45 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/30 16:56:00 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/04 17:51:59 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static void	error_message(char *arg)
 	ft_strlcpy(str + 20, arg, arg_len + 1);
 	ft_strlcpy(str + 20 + arg_len, "\': not a valid identifier\n", 27);
 	write(2, str, ft_strlen(str));
-	// free(message);
 	free(str);
 }
 
@@ -126,7 +125,7 @@ static int	error(char *arg)
 	if (!ft_isalpha(arg[0]) && arg[0] != '_')
 		return (1);
 	i = 1;
-	while(arg[i] && arg[i] != '=')
+	while (arg[i] && arg[i] != '=')
 	{
 		if (is_delimiter(arg[i]))
 		{
@@ -150,7 +149,8 @@ int	export_add(t_env **envi, t_list *args)
 	args = args->next;
 	while (args)
 	{
-		if (args->content[0] == '_' && (!args->content[1] || args->content[1] == '='))
+		if (args->content[0] == '_'
+			&& (!args->content[1] || args->content[1] == '='))
 		{
 			args = args->next;
 			continue ;
@@ -160,7 +160,7 @@ int	export_add(t_env **envi, t_list *args)
 			error_message(args->content);
 			args = args->next;
 			exit_s = 1;
-			continue;
+			continue ;
 		}
 		while (args->content[i] && args->content[i] != '=')
 			i++;

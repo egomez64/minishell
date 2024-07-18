@@ -40,7 +40,7 @@ int	main(int ac, char **av, char **ep)
 		// line = readline("minishell> ");
 		signal(SIGINT, &normal_c);
 		signal(SIGQUIT, SIG_IGN);
-		line = readline("SupraVala: ");
+		line = readline("minishell> ");
 		signal(SIGINT, SIG_IGN);// Just for the tester
 		if (line == NULL)
 		{

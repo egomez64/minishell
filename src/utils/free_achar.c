@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   free_achar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/13 09:36:04 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/04 17:48:40 by maamine          ###   ########.fr       */
+/*   Created: 2024/07/04 17:54:30 by maamine           #+#    #+#             */
+/*   Updated: 2024/07/04 17:55:19 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	env(t_env *envi)
+void	free_achar(char **achar)
 {
-	while (envi)
+	int	i;
+
+	i = 0;
+	while (achar[i])
 	{
-		if (envi->val)
-			printf("%s=%s\n", envi->name, envi->val);
-		envi = envi->next;
+		free(achar[i]);
+		i++;
 	}
-	return (0);
+	free(achar);
 }

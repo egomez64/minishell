@@ -6,11 +6,11 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:56:26 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/03 17:29:41 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/04 17:48:40 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include <minishell.h>
 
 /// @brief Redirects an `oldfd` to a `newfd`,
 // 		closing and reopenning it if necessary.
