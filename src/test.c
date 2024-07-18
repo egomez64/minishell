@@ -75,7 +75,7 @@ int	main(int ac, char **av, char **ep)
 		minishell.exit_status = execution(&minishell);
 		// token_clear(tmp);
 
-		cmd_clear(minishell.commands);
+		cmd_clear(&minishell.commands);
 		free(line);
 		minishell.n_line++;
 	}

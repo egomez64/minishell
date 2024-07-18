@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:43:07 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/30 15:48:23 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:49:13 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int		redirect_tester(t_token **token);
 int		pipe_tester(t_token **token);
 int		parsing(t_token **token);
 void	token_clear(t_token	*token);
-void	cmd_clear(t_cmd	*cmd);
+void	cmd_clear(t_cmd	**cmd);
 void	cmd_add_back(t_cmd **lst, t_cmd *new);
 t_cmd	*cmd_last(t_cmd *lst);
 t_cmd	*cmd_new(void);

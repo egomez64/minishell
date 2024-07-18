@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:47:38 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/24 16:06:10 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 17:02:39 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,11 @@ void	token_add_back(t_token **lst, t_token *new)
 
 void	token_clear(t_token	*token)
 {
-	if (token && token->next != NULL)
+	if (token && token->next)
 		token_clear(token->next);
 	if (token)
 	{
 		free(token->val);
-		token->type = 0;
-		token->val = NULL;
 		free(token);
 	}
 }

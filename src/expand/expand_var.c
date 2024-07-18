@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:08:57 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/18 14:33:38 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 17:27:28 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ void	handle_word(char *s, t_env *envi, t_list **new, int exit_status)
 	// }
 }
 
-static int	expand_red(t_token *red, t_env *env, int exit_status)
+static int	expand_red(t_token *red, t_env *env, int exit_status)	// Supprimer tmp, red suffit
 {
 	t_token	*tmp;
 	t_list	*new_word;
@@ -238,7 +238,9 @@ static int	expand_red(t_token *red, t_env *env, int exit_status)
 		handle_word(tmp->val, env, &new_word, exit_status);
 		if (ft_lstsize(new_word) != 1)
 			return (2);
+		free(tmp->val);
 		tmp->val = new_word->content;
+		free(new_word);
 		red = red->next;
 	}
 	return (0);

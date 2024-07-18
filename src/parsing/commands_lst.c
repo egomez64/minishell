@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 19:40:09 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/03 17:23:34 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:49:27 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,16 @@ void	cmd_add_back(t_cmd **lst, t_cmd *new)
 		*lst = new;
 }
 
-void	cmd_clear(t_cmd	*cmd)
+void	cmd_clear(t_cmd	**cmd)
 {
-	if (!cmd)
+	if (!cmd || !*cmd)
 		return ;
-	if (cmd->next)
-		cmd_clear(cmd->next);
-	if (cmd->arguments)
-		lstclear(&cmd->arguments);
-	if (cmd->redirections)
-		token_clear(cmd->redirections);
-	free(cmd);
-	cmd = NULL;
+	if ((*cmd)->next)
+		cmd_clear(&(*cmd)->next);
+	if ((*cmd)->arguments)
+		lstclear(&(*cmd)->arguments);
+	if ((*cmd)->redirections)
+		token_clear((*cmd)->redirections);
+	free(*cmd);
+	*cmd = NULL;
 }
