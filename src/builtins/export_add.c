@@ -77,7 +77,7 @@ static int	export_join(t_env **envi, char *s)
 	return (0);
 }
 
-static int	export_append(t_env **envi, char *s)
+static int	export_update(t_env **envi, char *s)
 {
 	char	**new_var;
 	t_env	*first;
@@ -90,7 +90,7 @@ static int	export_append(t_env **envi, char *s)
 		first->val = new_var[1];
 	else
 	{
-		env_add_back(envi, env_new(new_var[0], new_var[1], true));
+		env_add_back(envi, env_new(new_var[0], new_var[1]));
 		free(new_var);
 	}
 	return (0);
@@ -99,22 +99,13 @@ static int	export_append(t_env **envi, char *s)
 static int	set_null(t_env **envi, char *s)
 {
 	t_env	*current;
-	bool	equal;
 
 	current = *envi;
-	equal = (s[ft_strlen(s) - 1] == '=');
-	if (equal)
-		s[ft_strlen(s) - 1] = 0;
 	while (current && ft_strcmp(current->name, s))
 		current = current->next;
-	if (current)
-	{
-		current->val = NULL;
-		if (equal)
-			current->init = equal;
-	}
-	else
-		env_add_back(envi, env_new(s, NULL, equal));
+	if (current && ft_strcmp(current->name, s) == 0)
+		return (0);
+	env_add_back(envi, env_new(s, NULL));
 	return (0);
 }
 
@@ -164,8 +155,7 @@ int	export_add(t_env **envi, t_list *args)
 		}
 		while (args->content[i] && args->content[i] != '=')
 			i++;
-		if (args->content[ft_strlen(args->content) - 1] == '='
-			|| args->content[i] != '=')
+		if (args->content[i] != '=')
 			set_null(envi, args->content);
 		else if (args->content[i - 1] == '+')
 			exit_s = (exit_s || export_join(envi, args->content));
@@ -174,7 +164,7 @@ int	export_add(t_env **envi, t_list *args)
 			if (check_arg(args->content))
 				exit_s = 1;
 			else
-				exit_s = (exit_s || export_append(envi, args->content));
+				exit_s = (exit_s || export_update(envi, args->content));
 		}
 		args = args->next;
 	}

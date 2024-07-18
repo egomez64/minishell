@@ -22,11 +22,10 @@ typedef struct s_env
 {
 	char			*name;
 	char			*val;
-	bool			init;
 	struct s_env	*next;
 }					t_env;
 
-t_env	*env_new(char	*var_name, char *var_val, bool init);
+t_env	*env_new(char	*var_name, char *var_val/*, bool init*/);
 t_env	*env_last(t_env *lst);
 void	env_add_back(t_env **lst, t_env *new);
 void	env_clear(t_env	*lst);

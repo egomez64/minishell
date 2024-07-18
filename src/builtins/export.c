@@ -19,7 +19,7 @@ static char	*env_to_str(t_env *env_var)
 	int		val_len;
 
 	name_len = ft_strlen(env_var->name);
-	if (env_var->init)
+	if (env_var->val)
 		val_len = ft_strlen(env_var->val);
 	else
 		val_len = -3;

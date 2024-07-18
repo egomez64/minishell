@@ -29,7 +29,7 @@ t_env	*get_env(char **env_var)
 			secure++;
 		if (secure > 1)
 			env_add_back(&env_lst, env_new(ft_strdup(current_var[0]),
-					ft_strdup(current_var[1]), true));
+					ft_strdup(current_var[1])));
 		i++;
 		free_split(current_var);
 	}
