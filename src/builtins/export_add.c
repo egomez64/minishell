@@ -63,7 +63,10 @@ static int	export_join(t_env **envi, char *s)
 		tmp = tmp->next;
 	if (tmp)
 	{
-		tmp->val = ft_strjoin(tmp->val, new[1]);
+		if (!tmp->val)
+			tmp->val = ft_strdup(new[1]);
+		else
+			tmp->val = ft_strjoin(tmp->val, new[1]);
 		free(new[0]);
 		free(new);
 	}
@@ -120,13 +123,16 @@ static int	error(char *arg)
 {
 	int	i;
 
-	if (!ft_isalpha(arg[0]))
+	if (!ft_isalpha(arg[0]) && arg[0] != '_')
 		return (1);
 	i = 1;
 	while(arg[i] && arg[i] != '=')
 	{
 		if (is_delimiter(arg[i]))
-			return (1);
+		{
+			if (arg[i] != '+')
+				return (1);
+		}
 		i++;
 	}
 	return (0);
