@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/04 17:46:57 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:13:52 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static int	simple_exec(t_minishell *minish)
 		exit_status = handle_builtin(minish->commands, minish);
 	else
 	{
-		fork_cmd(minish->commands, minish);
+		fork_cmd(minish->commands, minish, stdfd);
 		exit_status = wait_for_everyone(&minish->commands);
 	}
 	restore_stdfd(stdfd);
@@ -109,10 +109,10 @@ static int	pipes_exec(t_minishell *minish)
 	while (current->next)
 	{
 		open_pipe(current);
-		fork_cmd(current, minish);
+		fork_cmd(current, minish, stdfd);
 		current = current->next;
 	}
-	fork_cmd(current, minish);
+	fork_cmd(current, minish, stdfd);
 	exit_status = wait_for_everyone(&minish->commands);
 	restore_stdfd(stdfd);
 	return (exit_status);

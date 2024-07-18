@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:07:57 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/04 17:21:37 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:13:30 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int				execution(t_minishell *minishell);
 int				open_pipe(t_cmd *cmd);
 int				make_redirections(t_cmd *cmd);
 int				exec_cmd(t_cmd *cmd, t_minishell *minish);
-void			fork_cmd(t_cmd *cmd, t_minishell *minish);
+void			fork_cmd(t_cmd *cmd, t_minishell *minish, int stdfd[2]);
 
 int				dup_stdfd(int stdfd[2]);
 int				restore_stdfd(int stdfd[2]);

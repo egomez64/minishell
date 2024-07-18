@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/14 18:54:10 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:13:05 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	child(t_cmd *cmd, t_minishell *minish)
 		return (exec_cmd(cmd, minish));
 }
 
-void	fork_cmd(t_cmd *cmd, t_minishell *minish)
+void	fork_cmd(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 {
 	int	err;
 
@@ -54,6 +54,8 @@ void	fork_cmd(t_cmd *cmd, t_minishell *minish)
 		perror("fork");
 	if (cmd->pid == 0)
 	{
+		close(stdfd[0]);
+		close(stdfd[1]);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		err = child(cmd, minish);
