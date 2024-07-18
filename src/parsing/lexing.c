@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:43:35 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/30 17:20:48 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 15:57:11 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	skip(char *s, int *i)
 
 int	tokenize_word(t_token **tok_lst, char *val)
 {
+	t_token	*new_token;
 	int		dquote;
 	int		squote;
 	char	*word;
@@ -40,28 +41,32 @@ int	tokenize_word(t_token **tok_lst, char *val)
 		i++;
 	}
 	word = ft_substr(val, 0, i);
-	token_add_back(tok_lst, token_new(word, WORD));
+	new_token = token_new(word, WORD);
+	token_add_back(tok_lst, new_token);
 	return (i);
 }
 
 static void	add_symbol(t_token **tok_lst, char *symbol, int double_redirect)
 {
+	t_token	*new_token;
+
 	if (symbol[0] == '<')
 	{
 		if (double_redirect == 1)
-			token_add_back(tok_lst, token_new(symbol, HEREDOC));
+			new_token = token_new(symbol, HEREDOC);
 		else
-			token_add_back(tok_lst, token_new(symbol, INPUT));
+			new_token = token_new(symbol, INPUT);
 	}
 	else if (symbol[0] == '>')
 	{
 		if (double_redirect == 1)
-			token_add_back(tok_lst, token_new(symbol, APPEND));
+			new_token = token_new(symbol, APPEND);
 		else
-			token_add_back(tok_lst, token_new(symbol, OUTPUT));
+			new_token = token_new(symbol, OUTPUT);
 	}
 	else
-		token_add_back(tok_lst, token_new(symbol, PIPE));
+		new_token = token_new(symbol, PIPE);
+	token_add_back(tok_lst, new_token);
 }
 
 int	tokenize_symbol(t_token **tok_lst, char *val)
