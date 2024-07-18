@@ -3,27 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   attributes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 15:32:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/26 19:11:32 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/04 17:58:06 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-
-static void	free_achar(char **array)
-{
-	size_t	i;
-
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-}
+#include <minishell.h>
 
 static char	**arglst_to_argv(t_list *arguments)
 {
@@ -86,7 +73,7 @@ t_attributes	fill_attributes(t_list *args, t_env **envi)
 	if (!attributes.pathname)
 	{
 		free_achar(attributes.envp);
-		free(attributes.argv);
+		free_achar(attributes.argv);
 	}
 	return (attributes);
 }

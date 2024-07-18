@@ -6,65 +6,19 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/03 18:25:21 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/14 18:54:10 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-
-// static int	child(t_cmd *cmd, t_env **env, t_cmd **lst)
-// {
-// 	int				err;
-// 	t_attributes	attributes;
-// 
-// 	if (cmd->next)
-// 	{
-// 		// dprintf(3, "%d: close_and_set %d\n", getpid(), cmd->next->input_fd);
-// 		close_and_set(&cmd->next->input_fd);
-// 	}
-// 	make_redirections(cmd);
-// 	attributes = fill_attributes(cmd->arguments, env);
-// 	if (!attributes.pathname)
-// 		return (1);
-// 	// dprintf(3, "%d: execve\n", getpid());
-// 	execve(attributes.pathname, attributes.argv, attributes.envp);
-// 	err = errno;
-// 	perror("minishell ");
-// 	free_attributes(attributes);	// 
-// 	(void) lst;						// 
-// 	// clear_exec(lst);				// 
-// 	return (err);
-// }
-
-// static void	parent(t_cmd *cmd)
-// {
-// 	// dprintf(3, "close_and_set %d and %d\n", cmd->input_fd, cmd->output_fd);
-// 	close_and_set(&cmd->input_fd);
-// 	close_and_set(&cmd->output_fd);
-// }
-
-// void	exec_cmd(t_cmd *cmd, t_env **env, t_cmd **cmd_lst)
-// {
-// 	int	err;
-// 
-// 	cmd->pid = fork();
-// 	if (cmd->pid == -1)
-// 		perror("fork");
-// 	if (cmd->pid == 0)
-// 	{
-// 		err = child(cmd, env, cmd_lst);
-// 		exit(err);
-// 	}
-// 	parent(cmd);
-// }
+#include <minishell.h>
 
 int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 {
 	int				err;
 	t_attributes	attributes;
 
-	/*if (is_dir)
-		err();*/
+// 	if (check_name(cmd->arguments->content, &err))
+// 		return (err);
 	attributes = fill_attributes(cmd->arguments, &minish->envi);
 	if (!attributes.pathname)
 		return (1);				// 
@@ -73,9 +27,6 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 	execve(attributes.pathname, attributes.argv, attributes.envp);
 	err = errno;
 	perror("minishell ");
-	// free_attributes(attributes);	// 
-	// (void) lst;						// `lst` becomes `&minish->commands`
-	// // clear_exec(lst);				// 
 	return (err);
 }
 
@@ -103,8 +54,8 @@ void	fork_cmd(t_cmd *cmd, t_minishell *minish)
 		perror("fork");
 	if (cmd->pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);		// 
-		signal(SIGQUIT, SIG_DFL);		// 
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		err = child(cmd, minish);
 		exit(err);
 	}

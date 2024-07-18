@@ -6,11 +6,11 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:35:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/03 20:35:44 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/04 17:50:16 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include <minishell.h>
 
 static int	cd_home(t_env *envi)
 {
@@ -50,14 +50,12 @@ static void	error_message(char *arg, int err)
 	ft_strlcpy(str + 17 + path_len, message, message_len + 1);
 	ft_strlcpy(str + 17 + path_len + message_len, "\n", 2);
 	write(2, str, ft_strlen(str));
-	// free(message);
 	free(str);
 }
 
 int	cd(t_cmd *cmd, t_env *envi)
 {
 	int	ret;
-	// int	err;
 	int	argc;
 
 	argc = ft_lstsize(cmd->arguments);
@@ -73,8 +71,6 @@ int	cd(t_cmd *cmd, t_env *envi)
 	if (ret == -1)
 	{
 		error_message(cmd->arguments->next->content, errno);
-		// err = errno;
-		// perror("minishell: cd");
 		return (1);
 	}
 	return (ret);

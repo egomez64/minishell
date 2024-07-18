@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:40:26 by egomez            #+#    #+#             */
-/*   Updated: 2024/06/30 15:46:12 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/04 17:55:46 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,7 @@ typedef struct s_minishell
 	int		exit_status;
 	int		n_line;
 }			t_minishell;
+
+void	free_achar(char **achar);
 
 #endif

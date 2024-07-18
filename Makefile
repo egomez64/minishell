@@ -37,7 +37,8 @@ SRCS	= test.c \
 		src/builtins/export_utils.c \
 		src/builtins/unset.c \
 		src/builtins/env.c \
-		src/builtins/exit.c
+		src/builtins/exit.c \
+		src/utils/free_achar.c
 		
 
 

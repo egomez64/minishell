@@ -6,11 +6,11 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 16:21:11 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/03 20:18:15 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/04 17:58:18 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include <minishell.h>
 
 static char	*env_to_str(t_env **env)
 {
@@ -31,19 +31,6 @@ static char	*env_to_str(t_env **env)
 	if ((*env)->val)
 		ft_strlcpy(str + key_len + 1, (*env)->val, val_len + 1);
 	return (str);
-}
-
-static void	free_achar(char **achar)
-{
-	int	i;
-
-	i = 0;
-	while (achar[i])
-	{
-		free(achar[i]);
-		i++;
-	}
-	free(achar);
 }
 
 char	**envlst_to_envp(t_env **env)

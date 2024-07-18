@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   close_and_free.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:07:42 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/10 11:09:33 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/04 17:48:40 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include <minishell.h>
 
 void	close_and_set(int *fd)
 {
