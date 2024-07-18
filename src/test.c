@@ -30,7 +30,7 @@ int	main(int ac, char **av, char **ep)
 
 	// open_debug(3);
 	init_minishell(&minishell);
-	minishell.envi = get_env(ep);
+	minishell.envi = envp_to_lst(ep);
 	minishell.exit_status = 0;
 	minishell.n_line = 1;
 	// g_sig = 0;

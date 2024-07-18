@@ -20,8 +20,8 @@ void	init_minishell(t_minishell *minishell)
 
 void	free_minishell(t_minishell *minishell)
 {
-	// if (minishell->commands)
-	// 	cmd_clear(minishell->commands);
+	if (minishell->commands)
+		cmd_clear(minishell->commands);
 	if (minishell->envi)
 		env_clear(minishell->envi);
 }

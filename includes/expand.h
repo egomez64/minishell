@@ -30,7 +30,7 @@ t_env	*env_last(t_env *lst);
 void	env_add_back(t_env **lst, t_env *new);
 void	env_clear(t_env	*lst);
 int		env_size(t_env *env);
-t_env	*get_env(char **env_var);
+t_env	*envp_to_lst(char **env_var);
 int		is_env(char *s);
 
 void	handle_word(char *s, t_env *envi, t_list **new, int exit_status);

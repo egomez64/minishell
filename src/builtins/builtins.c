@@ -43,6 +43,6 @@ int	handle_builtin(t_cmd *cmd, t_minishell *minish)
 	if (!ft_strcmp(cmd->arguments->content, "env"))
 		return (env(minish->envi));
 	if (!ft_strcmp(cmd->arguments->content, "exit"))
-		return (__exit(cmd->arguments, minish->exit_status));
+		return (__exit(*minish, cmd->arguments));
 	return (0);
 }

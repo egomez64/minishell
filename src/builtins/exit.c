@@ -67,7 +67,7 @@ static char	*error_message(int err, char *num)
 	return (NULL);
 }
 
-int	__exit(t_list *args, int exit_status)
+int	__exit(t_minishell minish, t_list *args/*, int exit_status*/)
 {
 	long	arg_status;
 	int		err;
@@ -75,11 +75,15 @@ int	__exit(t_list *args, int exit_status)
 	write(2, "exit\n", 6);
 	err = 0;
 	if (!args->next)
-		exit(exit_status);
+	{
+		free_minishell(&minish);
+		exit(minish.exit_status);
+	}
 	arg_status = ft_atol((char *) args->next->content, &err);
 	if (err)
 	{
 		error_message(2, (char *) args->next->content);
+		free_minishell(&minish);
 		exit(2);
 	}
 	if (args->next->next)
@@ -87,6 +91,7 @@ int	__exit(t_list *args, int exit_status)
 		error_message(1, NULL);
 		return (1);
 	}
-	exit_status = arg_status & 0xff;
-	exit(exit_status);
+	minish.exit_status = arg_status & 0xff;
+	free_minishell(&minish);
+	exit(minish.exit_status);
 }

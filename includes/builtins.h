@@ -32,6 +32,6 @@ void	unset(t_env *envi, t_list *args);
 
 int		env(t_env *envi);
 
-int		__exit(t_list *args, int exit_status);
+int		__exit(t_minishell minish, t_list *args);
 
 #endif

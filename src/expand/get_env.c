@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-t_env	*get_env(char **env_var)
+t_env	*envp_to_lst(char **env_var)
 {
 	int		i;
 	int		secure;
