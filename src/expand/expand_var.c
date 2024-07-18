@@ -123,8 +123,11 @@ static void	changes_aux(t_list *lst, t_env *envi)
 		}
 		free(lst->content);
 		lst->content = NULL;
-		lst->content = ft_strdup(envi->val);
-		lst->content = slash_quotes(lst->content);
+		if (envi->val)
+		{
+			lst->content = ft_strdup(envi->val);
+			lst->content = slash_quotes(lst->content);
+		}
 		break ;
 	}
 	if (!envi)
