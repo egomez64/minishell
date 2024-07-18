@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 16:21:11 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/04 17:58:18 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:17:25 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@ char	**envlst_to_envp(t_env **env)
 		env = &(*env)->next;
 		i++;
 	}
+	envp[i] = NULL;
 	return (envp);
 }
