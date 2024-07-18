@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:24:17 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/03 19:21:18 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/18 16:43:14 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
 		str[i] = table[str[i] % (sizeof(table) - 1)];
 		i++;
 	}
+	close(fd);
 }
 
 static void	heredoc_warning(int n, char *delim)
