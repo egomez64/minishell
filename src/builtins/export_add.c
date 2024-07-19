@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:38:45 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/04 17:51:59 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/19 11:54:55 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,27 +50,35 @@ static int	export_join(t_env **envi, char *s)
 {
 	char	**new;
 	int		i;
-	t_env	*tmp;
+	t_env	*new_env_var;
+	char	*tmp_val;
 
 	i = 0;
-	tmp = *envi;
+	new_env_var = *envi;
 	new = sep_on_equal(s);
 	while (new[0][i] != '+')
 		i++;
 	new[0][i] = 0;
-	while (tmp && ft_strcmp(tmp->name, new[0]))
-		tmp = tmp->next;
-	if (tmp)
+	while (new_env_var && ft_strcmp(new_env_var->name, new[0]))
+		new_env_var = new_env_var->next;
+	if (new_env_var)
 	{
-		if (!tmp->val)
-			tmp->val = ft_strdup(new[1]);
+		if (!new_env_var->val)
+			new_env_var->val = new[1];
 		else
-			tmp->val = ft_strjoin(tmp->val, new[1]);
+		{
+			tmp_val = new_env_var->val;
+			new_env_var->val = ft_strjoin(tmp_val, new[1]);
+			free(tmp_val);
+			free(new[1]);
+		}
 		free(new[0]);
 		free(new);
 	}
 	else
 	{
+		free(new[0]);
+		free(new[1]);
 		free(new);
 		return (1);
 	}
@@ -87,7 +95,12 @@ static int	export_update(t_env **envi, char *s)
 	while (first && ft_strcmp(first->name, new_var[0]))
 		first = first->next;
 	if (first)
+	{
+		free(first->val);
 		first->val = new_var[1];
+		free(new_var[0]);
+		free(new_var);
+	}
 	else
 	{
 		env_add_back(envi, env_new(new_var[0], new_var[1]));
@@ -99,13 +112,15 @@ static int	export_update(t_env **envi, char *s)
 static int	set_null(t_env **envi, char *s)
 {
 	t_env	*current;
+	char	*dup;
 
 	current = *envi;
 	while (current && ft_strcmp(current->name, s))
 		current = current->next;
 	if (current && ft_strcmp(current->name, s) == 0)
 		return (0);
-	env_add_back(envi, env_new(s, NULL));
+	dup = ft_strdup(s);
+	env_add_back(envi, env_new(dup, NULL));
 	return (0);
 }
 
@@ -133,7 +148,6 @@ int	export_add(t_env **envi, t_list *args)
 	int	i;
 	int	exit_s;
 
-	i = 0;
 	exit_s = 0;
 	if (envi == NULL)
 		return (0);
@@ -153,6 +167,7 @@ int	export_add(t_env **envi, t_list *args)
 			exit_s = 1;
 			continue ;
 		}
+		i = 0;
 		while (args->content[i] && args->content[i] != '=')
 			i++;
 		if (args->content[i] != '=')
