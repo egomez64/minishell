@@ -46,6 +46,30 @@ static int	check_arg(char *s)
 	return (0);
 }
 
+static int	export_update(t_env **envi, char *s)
+{
+	char	**new_var;
+	t_env	*first;
+
+	first = *envi;
+	new_var = sep_on_equal(s);
+	while (first && ft_strcmp(first->name, new_var[0]))
+		first = first->next;
+	if (first)
+	{
+		free(first->val);
+		first->val = new_var[1];
+		free(new_var[0]);
+		free(new_var);
+	}
+	else
+	{
+		env_add_back(envi, env_new(new_var[0], new_var[1]));
+		free(new_var);
+	}
+	return (0);
+}
+
 static int	export_join(t_env **envi, char *s)
 {
 	char	**new;
@@ -73,39 +97,10 @@ static int	export_join(t_env **envi, char *s)
 			free(new[1]);
 		}
 		free(new[0]);
-		free(new);
 	}
 	else
-	{
-		free(new[0]);
-		free(new[1]);
-		free(new);
-		return (1);
-	}
-	return (0);
-}
-
-static int	export_update(t_env **envi, char *s)
-{
-	char	**new_var;
-	t_env	*first;
-
-	first = *envi;
-	new_var = sep_on_equal(s);
-	while (first && ft_strcmp(first->name, new_var[0]))
-		first = first->next;
-	if (first)
-	{
-		free(first->val);
-		first->val = new_var[1];
-		free(new_var[0]);
-		free(new_var);
-	}
-	else
-	{
-		env_add_back(envi, env_new(new_var[0], new_var[1]));
-		free(new_var);
-	}
+		env_add_back(envi, env_new(new[0], new[1]));
+	free(new);
 	return (0);
 }
 
