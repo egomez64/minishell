@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:07:57 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/18 16:13:30 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/19 15:03:48 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,6 @@ void			normal_c(int signal);
 void			heredoc_c(int signal);
 int				sig_exec(int wstatus);
 
-int				is_dir(char *str);
+// int				is_dir(char *str);
 
 #endif
