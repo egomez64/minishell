@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/18 16:35:14 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/19 12:37:58 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 		return (1);				// 
 	if (*attributes.pathname == '\0')
 		return (127);				// 
+	free_minishell(minish);
 	execve(attributes.pathname, attributes.argv, attributes.envp);
 	err = errno;
 	perror("minishell ");

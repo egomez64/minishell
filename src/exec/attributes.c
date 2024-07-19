@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 15:32:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/04 17:58:06 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/19 12:44:01 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	**arglst_to_argv(t_list *arguments)
 	i = 0;
 	while (i < size)
 	{
-		argv[i] = arguments->content;
+		argv[i] = ft_strdup(arguments->content);
 		arguments = arguments->next;
 		i++;
 	}
