@@ -31,11 +31,11 @@ static t_list	*split_in_lst(char *s)
 			quote = s[i];
 		else if(quote == s[i])
 			quote = 0;
-		if (i != 0 && quote != '\''
+		if ((i != 0 && quote != '\''
 			&& (((!is_var && s[i] == '$' && s[i + 1] && (!is_delimiter(s[i + 1]) || (s[i + 1] == '?'))) || (s[i - 1] == '?' && s[i - 2] == '$'))
 				|| (is_var
 					&& (is_delimiter(s[i])
-						&& !(s[i - 1] == '$' && s[i] == '?')))))
+						&& !(s[i - 1] == '$' && s[i] == '?'))))) || (is_var && (s[i] == '\'' || s[i] == '"')))
 		{
 			is_var = !is_var;
 			ft_lstadd_back(&tmp, ft_lstnew_empty());	// Pourquoi ?
@@ -112,8 +112,12 @@ static t_list	*split_on_whitespace(char *s)
 static void	changes_aux(t_list *lst, t_env *envi)
 {
 	char	*env_to_find;
+	int		i;
 
-	env_to_find = lst->content + 1;
+	i = 1;
+	while (!is_delimiter(lst->content[i]))
+		i++;
+	env_to_find = ft_substr(lst->content, 1, i - 1);
 	while (envi)
 	{
 		if (ft_strcmp(env_to_find, envi->name))
