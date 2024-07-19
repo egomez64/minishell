@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <minishell.h>
+
 extern int	g_sig;
 
 static int	handle_input(char *path, int *fd, int *exit_s)
@@ -82,7 +83,6 @@ static void	error_message(char *path, int err)
 	ft_strlcpy(str + 13 + path_len, message, message_len + 1);
 	ft_strlcpy(str + 13 + path_len + message_len, "\n", 2);
 	write(2, str, ft_strlen(str));
-	// free(message);
 	free(str);
 }
 

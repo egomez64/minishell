@@ -24,7 +24,7 @@ bool	is_builtin(const char *s)
 int	handle_builtin(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 {
 	if (!cmd->arguments->content)
-		return (1);	// A revoir
+		return (1);
 	if (!ft_strcmp(cmd->arguments->content, "echo"))
 		return (echo(cmd));
 	if (!ft_strcmp(cmd->arguments->content, "cd"))

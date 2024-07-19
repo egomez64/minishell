@@ -25,7 +25,7 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
-t_env	*env_new(char	*var_name, char *var_val/*, bool init*/);
+t_env	*env_new(char	*var_name, char *var_val);
 t_env	*env_last(t_env *lst);
 void	env_add_back(t_env **lst, t_env *new);
 void	env_clear(t_env	*lst);
@@ -43,6 +43,10 @@ t_list	*ft_lstnew_empty(void);
 char	*supp_quotes(char *join);
 char	*slash_quotes(char *arg);
 bool	is_whitespace(char c);
+t_list	*split_on_whitespace(char *s);
+t_list	*split_in_lst(char *s);
+int		expand_red(t_token *red, t_env *env, int exit_status);
+void	expand_var(t_minishell *minishell, int ex_status);
 
 void	handle_heredoc(char *s, int *fd, int *exit_s, int n_line);
 void	red_treatment(t_minishell *minishell);

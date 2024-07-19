@@ -12,24 +12,29 @@
 
 #include <minishell.h>
 
-static void unset_one(t_env **envi, char *name)
+static	void	check_first(t_env **envi)
+{
+	t_env	*address;
+
+	address = (*envi)->next;
+	free((*envi)->name);
+	free((*envi)->val);
+	*envi = address;
+}
+
+static void	unset_one(t_env **envi, char *name)
 {
 	t_env	*address;
 
 	if ((*envi) == NULL)
 		return ;
 	if (ft_strcmp((*envi)->name, name) == 0)
-	{
-		address = (*envi)->next;
-		free((*envi)->name);
-		free((*envi)->val);
-		*envi = address;
-	}
+		check_first(envi);
 	else
 	{
-		while (*envi && (*envi)->next->next && ft_strcmp((*envi)->next->name, name))
+		while (*envi && (*envi)->next->next
+			&& ft_strcmp((*envi)->next->name, name))
 			envi = &(*envi)->next;
-
 		if (*envi && ft_strcmp((*envi)->next->name, name) == 0)
 		{
 			if ((*envi)->next->next)

@@ -18,7 +18,7 @@ SRC_DIR	= src
 OBJ_DIR	= obj
 DIRDUP	= mkdir -p $(@D)
 
-SRC	= test.c \
+SRC	= main.c \
 		parsing/lexing.c \
 		parsing/token_list.c \
 		parsing/parsing.c \
@@ -27,10 +27,12 @@ SRC	= test.c \
 		parsing/lst.c \
 		parsing/check_quotes.c \
 		parsing/free_minishell.c \
+		expand/expand_start.c \
 		expand/env_lst.c \
 		expand/get_env.c \
 		expand/expand_utils.c \
 		expand/expand_var.c \
+		expand/expand_var2.c \
 		expand/expand_quote.c \
 		expand/heredoc.c \
 		expand/red_treatment.c \

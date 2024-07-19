@@ -46,79 +46,6 @@ static int	check_arg(char *s)
 	return (0);
 }
 
-static int	export_update(t_env **envi, char *s)
-{
-	char	**new_var;
-	t_env	*first;
-
-	first = *envi;
-	new_var = sep_on_equal(s);
-	while (first && ft_strcmp(first->name, new_var[0]))
-		first = first->next;
-	if (first)
-	{
-		free(first->val);
-		first->val = new_var[1];
-		free(new_var[0]);
-		free(new_var);
-	}
-	else
-	{
-		env_add_back(envi, env_new(new_var[0], new_var[1]));
-		free(new_var);
-	}
-	return (0);
-}
-
-static int	export_join(t_env **envi, char *s)
-{
-	char	**new;
-	int		i;
-	t_env	*new_env_var;
-	char	*tmp_val;
-
-	i = 0;
-	new_env_var = *envi;
-	new = sep_on_equal(s);
-	while (new[0][i] != '+')
-		i++;
-	new[0][i] = 0;
-	while (new_env_var && ft_strcmp(new_env_var->name, new[0]))
-		new_env_var = new_env_var->next;
-	if (new_env_var)
-	{
-		if (!new_env_var->val)
-			new_env_var->val = new[1];
-		else
-		{
-			tmp_val = new_env_var->val;
-			new_env_var->val = ft_strjoin(tmp_val, new[1]);
-			free(tmp_val);
-			free(new[1]);
-		}
-		free(new[0]);
-	}
-	else
-		env_add_back(envi, env_new(new[0], new[1]));
-	free(new);
-	return (0);
-}
-
-static int	set_null(t_env **envi, char *s)
-{
-	t_env	*current;
-	char	*dup;
-
-	current = *envi;
-	while (current && ft_strcmp(current->name, s))
-		current = current->next;
-	if (current && ft_strcmp(current->name, s) == 0)
-		return (0);
-	dup = ft_strdup(s);
-	env_add_back(envi, env_new(dup, NULL));
-	return (0);
-}
-
 static int	error(char *arg)
 {
 	int	i;
@@ -138,9 +65,29 @@ static int	error(char *arg)
 	return (0);
 }
 
-int	export_add(t_env **envi, t_list *args)
+static	int	handle_args(char *content, t_env **envi)
 {
 	int	i;
+
+	i = 0;
+	while (content[i] && content[i] != '=')
+		i++;
+	if (content[i] != '=')
+		set_null(envi, content);
+	else if (content[i - 1] == '+')
+		return (export_join(envi, content));
+	else
+	{
+		if (check_arg(content))
+			return (1);
+		else
+			return (export_update(envi, content));
+	}
+	return (0);
+}
+
+int	export_add(t_env **envi, t_list *args)
+{
 	int	exit_s;
 
 	exit_s = 0;
@@ -162,20 +109,7 @@ int	export_add(t_env **envi, t_list *args)
 			exit_s = 1;
 			continue ;
 		}
-		i = 0;
-		while (args->content[i] && args->content[i] != '=')
-			i++;
-		if (args->content[i] != '=')
-			set_null(envi, args->content);
-		else if (args->content[i - 1] == '+')
-			exit_s = (exit_s || export_join(envi, args->content));
-		else
-		{
-			if (check_arg(args->content))
-				exit_s = 1;
-			else
-				exit_s = (exit_s || export_update(envi, args->content));
-		}
+		exit_s = handle_args(args->content, envi);
 		args = args->next;
 	}
 	return (exit_s);

@@ -101,7 +101,7 @@ int	echo(t_cmd *cmd)
 	str = lst_to_str(arg, no_newline);
 	if (!str)
 	{
-		return (1);	// 
+		return (1);
 	}
 	printf("%s", str);
 	free(str);

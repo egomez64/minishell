@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/19 12:37:58 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/20 15:46:16 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,9 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 	int				err;
 	t_attributes	attributes;
 
-// 	if (check_name(cmd->arguments->content, &err))
-// 		return (err);
 	attributes = fill_attributes(cmd->arguments, &minish->envi);
 	if (!attributes.pathname)
-		return (1);				// 
+		return (1);
 	if (*attributes.pathname == '\0')
 		return (127);				// 
 	free_minishell(minish);
@@ -37,7 +35,7 @@ int	child(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 		close_and_set(&cmd->next->input_fd);
 	if (cmd->exit_s)
 	{
-		return (1);	// 
+		return (1);
 	}
 	make_redirections(cmd);
 	if (is_builtin(cmd->arguments->content))
