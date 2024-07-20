@@ -27,6 +27,9 @@ int		pwd(void);
 int		export(t_env *envi);
 int		export_add(t_env **envi, t_list *args);
 char	**sep_on_equal(char *s);
+int		export_join(t_env **envi, char *s);
+int		set_null(t_env **envi, char *s);
+int		export_update(t_env **envi, char *s);
 
 void	unset(t_env *envi, t_list *args);
 

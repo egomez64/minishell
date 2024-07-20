@@ -35,10 +35,7 @@ int	is_dir(char *str)
 	if (!is_path(str))
 		return (0);
 	if (stat(str, &buf))
-	{
-		
 		return (-1);
-	}
 	return (S_ISDIR(buf.st_mode));
 }
 

@@ -22,7 +22,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
-#include <sys/ioctl.h>
+# include <sys/ioctl.h>
 
 typedef struct s_minishell
 {

@@ -22,8 +22,6 @@ t_cmd	*cmd_new(void)
 	new->arguments = NULL;
 	new->redirections = NULL;
 	new->exit_s = 0;
-	// new->input_fd = -2;
-	// new->output_fd = -2;
 	new->input_fd = -1;
 	new->output_fd = -1;
 	return (new);

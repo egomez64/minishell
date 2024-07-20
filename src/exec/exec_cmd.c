@@ -17,13 +17,11 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 	int				err;
 	t_attributes	attributes;
 
-// 	if (check_name(cmd->arguments->content, &err))
-// 		return (err);
 	attributes = fill_attributes(cmd->arguments, &minish->envi);
 	if (!attributes.pathname)
-		return (1);				// 
+		return (1);
 	if (*attributes.pathname == '\0')
-		return (127);				// 
+		return (127);
 	execve(attributes.pathname, attributes.argv, attributes.envp);
 	err = errno;
 	perror("minishell ");
@@ -36,7 +34,7 @@ int	child(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 		close_and_set(&cmd->next->input_fd);
 	if (cmd->exit_s)
 	{
-		return (1);	// 
+		return (1);
 	}
 	make_redirections(cmd);
 	if (is_builtin(cmd->arguments->content))

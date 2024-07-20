@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <minishell.h>
+
 extern int	g_sig;
 
 static void	randomizer(char *str)
@@ -65,8 +66,6 @@ static int	fill_file(int fd, char *delim, int n_line)
 
 	signal(SIGINT, &heredoc_c);
 	line = readline("heredoc> ");
-	// if (!line)
-	// 	return (1);
 	while (ft_strcmp(line, delim))
 	{
 		if (g_sig == SIGINT)

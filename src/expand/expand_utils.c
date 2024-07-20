@@ -67,8 +67,6 @@ char	*ft_strjoin_char(char *s1, char c, bool free_data)
 	if (!s1)
 		return (NULL);
 	tot_size = ft_strlen(s1) + 2;
-	// if (tot_size == 0)		// It won't ever be 0! ft_strlen cannot output -2!
-	// 	return (NULL);
 	newchain = ft_calloc((size_t)tot_size, sizeof(char));
 	if (newchain == NULL)
 		return (NULL);
