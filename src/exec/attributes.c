@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 15:32:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/19 12:44:01 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/20 15:35:43 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ t_attributes	fill_attributes(t_list *args, t_env **envi)
 		return (attributes);
 	}
 	env_path = env_find(*envi, "PATH");
-	attributes.pathname = find_pathname(attributes.argv[0], env_path);
+	// attributes.pathname = find_pathname(attributes.argv[0], env_path);
+	attributes.pathname = ft_strdup(attributes.argv[0]);
+	check_name(attributes.pathname, env_path);
 	if (!attributes.pathname)
 	{
 		free_achar(attributes.envp);

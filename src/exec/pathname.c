@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:11:19 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/04 17:48:40 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/20 15:31:15 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 /// @param str The `string` to manage.
 /// @return A `t_string`, with the `string`
 // 		and its allocated size (`-1` if nothing allocated).
-static t_string	create_t_string(char *str)
+static t_string	setup_t_string(char *str)
 {
 	t_string	string;
 
@@ -67,61 +67,129 @@ static int	create_pathname(t_string *pathname, t_string *exec, char *envp_path)
 /// @return `0` if success, `-1` if an error occured.
 static int	init_pathname(t_string *pathname, t_string *exec, char *exec_name)
 {
-	*exec = create_t_string(exec_name);
-	if (exec->size == -1)
-		pathname->ptr = ft_strdup("");
-	else
-		pathname->ptr = ft_strdup(exec_name);
+	*exec = setup_t_string(exec_name);
+	pathname->ptr = ft_strdup(exec_name);
 	if (!pathname->ptr)
 		return (-1);
-	*pathname = create_t_string(pathname->ptr);
+	*pathname = setup_t_string(pathname->ptr);
 	return (0);
 }
+
+// /// @brief Creates two `t_string`'s for `find_pathname()`.
+// /// @param pathname A duplicate of `exec_name`,
+// // 		an empty `string` if `exec_name` is `NULL`.
+// /// @param exec A `t_string` pointing to `exec_name` and storing its size.
+// /// @return `0` if success, `-1` if an error occured.
+// static int	init_pathname(t_string *pathname, t_string *exec, char *exec_name)
+// {
+// 	*exec = setup_t_string(exec_name);
+// 	if (exec->size == -1)
+// 		pathname->ptr = ft_strdup("");
+// 	else
+// 		pathname->ptr = ft_strdup(exec_name);
+// 	if (!pathname->ptr)
+// 		return (-1);
+// 	*pathname = setup_t_string(pathname->ptr);
+// 	return (0);
+// }
 
 /// @brief Looks through `envp_path` to find a valid `pathname`
 // 		that can be executed.
 /// @param exec Name of the executable to find.
 /// @return `1` if found, `0` if not, `-1` if an error occured.
-static int	look_through_envp(t_string *pathname, t_string *exec,
-	char *envp_path)
+static int	look_through_envp(char *name, char *envp_path)
 {
+	t_string	pathname;
+	t_string	exec_name;
 	int			jump;
 
+	if (init_pathname(&pathname, &exec_name, name) == -1)
+		return (1);
 	while (*envp_path)
 	{
-		if (access(pathname->ptr, X_OK) == 0)
-			return (1);
 		while (*envp_path && *envp_path == ':')
 			envp_path++;
-		jump = create_pathname(pathname, exec, envp_path);
+		jump = create_pathname(&pathname, &exec_name, envp_path);
 		if (jump == -1)
-			return (-1);
+			return (1);
+		if (access(pathname.ptr, X_OK))
+			if (!is_dir(pathname.ptr))
+				break ;
 		envp_path += jump;
 	}
+	free(name);
+	name = pathname.ptr;
 	return (0);
 }
 
-char	*find_pathname(char *exec_name, char *envp_path)
-{
-	t_string	pathname;
-	t_string	exec;
-	int			init;
-	int			found;
+// /// @brief Looks through `envp_path` to find a valid `pathname`
+// // 		that can be executed.
+// /// @param exec Name of the executable to find.
+// /// @return `1` if found, `0` if not, `-1` if an error occured.
+// static int	look_through_envp(t_string *pathname, t_string *exec,
+// 	char *envp_path)
+// {
+// 	int			jump;
+// 
+// 	while (*envp_path)
+// 	{
+// 		if (access(pathname->ptr, X_OK) == 0)
+// 			return (1);
+// 		while (*envp_path && *envp_path == ':')
+// 			envp_path++;
+// 		jump = create_pathname(pathname, exec, envp_path);
+// 		if (jump == -1)
+// 			return (-1);
+// 		envp_path += jump;
+// 	}
+// 	return (0);
+// }
 
-	init = init_pathname(&pathname, &exec, exec_name);
-	if (init == -1)
-		return (NULL);
-	if (pathname.ptr[0] == '\0' || access(pathname.ptr, X_OK) == 0)
-		return (pathname.ptr);
+// char	*find_pathname(char *exec_name, char *envp_path)
+// {
+// 	t_string	pathname;
+// 	t_string	exec;
+// 	int			init;
+// 	int			found;
+// 
+// 	init = init_pathname(&pathname, &exec, exec_name);
+// 	if (init == -1)
+// 		return (NULL);
+// 	if (pathname.ptr[0] == '\0' || access(pathname.ptr, X_OK) == 0)
+// 		return (pathname.ptr);
+// 	if (!envp_path)
+// 	{
+// 		pathname.ptr[0] = '\0';
+// 		return (pathname.ptr);
+// 	}
+// 	found = look_through_envp(&pathname, &exec, envp_path);
+// 	if (found == -1)
+// 		return (NULL);
+// 	else if (found == 0)
+// 		pathname.ptr[0] = '\0';
+// 	return (pathname.ptr);
+// }
+
+int	locate_and_replace(char *name, char *envp_path)
+{
+	int		err;
+	char	*str_err;
+
 	if (!envp_path)
 	{
-		pathname.ptr[0] = '\0';
-		return (pathname.ptr);
+		if (!access(name, X_OK))
+		{
+			err = errno;
+			str_err = strerror(err);
+			str_error_message(name, str_err);
+			return (126 + (err == EACCES || err == ENOENT || err == ENOTDIR));
+		}
+		return (0);
 	}
-	found = look_through_envp(&pathname, &exec, envp_path);
-	if (found == -1)
-		return (NULL);
-	else if (found == 0)
-		pathname.ptr[0] = '\0';
-	return (pathname.ptr);
+	if (look_through_envp(name, envp_path))
+	{
+		str_error_message(name, "command not found");
+		return (127);
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:56:33 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/19 15:16:26 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/20 15:35:58 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,14 @@
  * 			try to execute.
  */
 
-static void	error_message(char *name, char *err)
+void	str_error_message(char *name, char *err)
 {
 	char	*str;
 	int		name_len;
 	int		err_len;
 
+	name_len = ft_strlen(name);
+	err_len = ft_strlen(err);
 	str = malloc((name_len + err_len + 15) * sizeof (char));
 	if (!str)
 		return ;
@@ -65,35 +67,27 @@ int	is_dir(char *str)
 {
 	struct stat	buf;
 
-	if (!is_path(str))
-		return (0);
 	if (stat(str, &buf) != 0)
 	{
-		error_message(str, strerror(errno));
+		str_error_message(str, strerror(errno));
 		return (-1);
 	}
 	return (S_ISDIR(buf.st_mode));
 }
 
-int	check_name(char *str)
+int	check_name(char *str, char *envp_path)
 {
-	int	dir;
-
 	if (!is_path(str))
-	{
-		;	// Find command through PATH
-		error_message(str, "command not found");
-		return (127);
-	}
+		return (locate_and_replace(str, envp_path));
 	else if (is_dir(str))
 	{
-		error_message(str, "Is a directory");
+		str_error_message(str, "Is a directory");
 		return (126);
 	}
 	else if (!access(str, X_OK))
 	{
-		error_message(str, "Permission denied");
-		error_message(str, "No such file or directory");
+		str_error_message(str, "Permission denied");
+		str_error_message(str, "No such file or directory");
 		return (1);
 	}
 	return (0);
