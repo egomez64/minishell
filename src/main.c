@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egomez <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 14:19:02 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/20 14:19:04 by egomez           ###   ########.fr       */
+/*   Updated: 2024/07/20 16:14:28 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static	int	prompt(t_minishell	*minishell, char **line)
 {
 	*line = NULL;
 	*line = readline("minishell> ");
+	// *line = readline("SupraVala: ");
 	signal(SIGINT, SIG_IGN);
 	if (*line == NULL)
 	{

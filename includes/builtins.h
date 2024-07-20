@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:59:40 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/18 16:33:53 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/20 17:35:41 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		handle_builtin(t_cmd *cmd, t_minishell *minish, int stdfd[2]);
 
 int		echo(t_cmd *cmd);
 
-int		cd(t_cmd *cmd, t_env *envi);
+int		cd(t_cmd *cmd, t_env **envi);
 
 int		pwd(void);
 

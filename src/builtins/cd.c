@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:35:02 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/04 17:50:16 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/20 17:42:15 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,28 @@ static void	error_message(char *arg, int err)
 	free(str);
 }
 
-int	cd(t_cmd *cmd, t_env *envi)
+static void	update_pwd(t_env **envi)
+{
+	t_env	*new_env;
+	char	*name;
+	char	*val;
+
+	new_env = find_in_env(*envi, "PWD");
+	val = getcwd(NULL, 0);
+	if (new_env)
+	{
+		free(new_env->val);
+		new_env->val = val;
+	}
+	else
+	{
+		name = ft_strdup("PWD");
+		new_env = env_new(name, val);
+		env_add_back(envi, new_env);
+	}
+}
+
+int	cd(t_cmd *cmd, t_env **envi)
 {
 	int	ret;
 	int	argc;
@@ -65,7 +86,7 @@ int	cd(t_cmd *cmd, t_env *envi)
 		return (1);
 	}
 	if (argc == 1)
-		ret = cd_home(envi);
+		ret = cd_home(*envi);
 	else
 		ret = chdir((char *) cmd->arguments->next->content);
 	if (ret == -1)
@@ -73,5 +94,6 @@ int	cd(t_cmd *cmd, t_env *envi)
 		error_message(cmd->arguments->next->content, errno);
 		return (1);
 	}
+	update_pwd(envi);
 	return (ret);
 }

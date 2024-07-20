@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:11:19 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/20 15:31:15 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/20 16:39:19 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,13 @@ static int	init_pathname(t_string *pathname, t_string *exec, char *exec_name)
 // 		that can be executed.
 /// @param exec Name of the executable to find.
 /// @return `1` if found, `0` if not, `-1` if an error occured.
-static int	look_through_envp(char *name, char *envp_path)
+static int	look_through_envp(char **name, char *envp_path)
 {
 	t_string	pathname;
 	t_string	exec_name;
 	int			jump;
 
-	if (init_pathname(&pathname, &exec_name, name) == -1)
+	if (init_pathname(&pathname, &exec_name, *name) == -1)
 		return (1);
 	while (*envp_path)
 	{
@@ -112,13 +112,15 @@ static int	look_through_envp(char *name, char *envp_path)
 		jump = create_pathname(&pathname, &exec_name, envp_path);
 		if (jump == -1)
 			return (1);
-		if (access(pathname.ptr, X_OK))
-			if (!is_dir(pathname.ptr))
+		if (access(pathname.ptr, X_OK) == 0)
+			if (!is_dir(pathname.ptr, 0))
 				break ;
 		envp_path += jump;
 	}
-	free(name);
-	name = pathname.ptr;
+	if (!*envp_path)
+		return (1);
+	free(*name);
+	*name = pathname.ptr;
 	return (0);
 }
 
@@ -170,25 +172,25 @@ static int	look_through_envp(char *name, char *envp_path)
 // 	return (pathname.ptr);
 // }
 
-int	locate_and_replace(char *name, char *envp_path)
+int	locate_and_replace(char **name, char *envp_path)
 {
 	int		err;
 	char	*str_err;
 
 	if (!envp_path)
 	{
-		if (!access(name, X_OK))
+		if (access(*name, X_OK) != 0)
 		{
 			err = errno;
 			str_err = strerror(err);
-			str_error_message(name, str_err);
+			str_error_message(*name, str_err);
 			return (126 + (err == EACCES || err == ENOENT || err == ENOTDIR));
 		}
 		return (0);
 	}
 	if (look_through_envp(name, envp_path))
 	{
-		str_error_message(name, "command not found");
+		str_error_message(*name, "command not found");
 		return (127);
 	}
 	return (0);

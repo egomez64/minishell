@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/20 15:46:16 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/20 17:19:30 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,24 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 	int				err;
 	t_attributes	attributes;
 
-	attributes = fill_attributes(cmd->arguments, &minish->envi);
-	if (!attributes.pathname)
-		return (1);
-	if (*attributes.pathname == '\0')
-		return (127);				// 
+	err = fill_attributes(&attributes, cmd->arguments, &minish->envi);
 	free_minishell(minish);
+	if (err)
+		return (err);
+	// if (!attributes.pathname)
+	// 	return (1);
+	// if (*attributes.pathname == '\0')
+	// 	return (127);				// 
 	execve(attributes.pathname, attributes.argv, attributes.envp);
 	err = errno;
-	perror("minishell ");
-	return (err);
+	if (err == 13)
+	{
+		str_error_message(attributes.pathname, "Permission denied");
+		return (126);
+	}
+	// perror("minishell ");
+	// return (err);
+	return (0);
 }
 
 int	child(t_cmd *cmd, t_minishell *minish, int stdfd[2])

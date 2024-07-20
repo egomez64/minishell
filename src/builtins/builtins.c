@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 15:25:14 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/18 16:33:55 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/20 17:35:29 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	handle_builtin(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 	if (!ft_strcmp(cmd->arguments->content, "echo"))
 		return (echo(cmd));
 	if (!ft_strcmp(cmd->arguments->content, "cd"))
-		return (cd(cmd, minish->envi));
+		return (cd(cmd, &minish->envi));
 	if (!ft_strcmp(cmd->arguments->content, "pwd"))
 		return (pwd());
 	if (!ft_strcmp(cmd->arguments->content, "export"))

@@ -6,11 +6,18 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 16:21:11 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/18 16:17:25 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/20 17:24:05 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+t_env	*find_in_env(t_env *envi, char *val_name)
+{
+	while (envi && ft_strcmp(envi->name, val_name))
+		envi = envi->next;
+	return (envi);
+}
 
 static char	*env_to_str(t_env **env)
 {
