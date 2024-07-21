@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:56:33 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/21 18:43:31 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/21 19:23:34 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ static int	file_status(char *str)
 	}
 	if (S_ISDIR(buf.st_mode))
 		str_error_message(str, "Is a directory");
-	// else if ((__S_IREAD | __S_IEXEC) & buf.st_mode)
 	else if ((buf.st_mode & (S_IRUSR | S_IXUSR)) != (S_IRUSR | S_IXUSR))
 		str_error_message(str, "Permission denied");
 	return (126);
