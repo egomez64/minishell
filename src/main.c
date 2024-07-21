@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 14:19:02 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/21 20:50:54 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/21 20:53:47 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,13 @@ static int	check_errors(t_minishell *minishell, char *line)
 	}
 	if (!check_quotes(line))
 	{
+		free(line);
+		(*minishell).n_line++;
+		return (0);
+	}
+	if (ft_strlen(line) == 2 && ft_strcmp(line, "\"\"") == 0)
+	{
+		free(line);
 		(*minishell).n_line++;
 		return (0);
 	}
@@ -75,7 +82,7 @@ static void	init(t_minishell *minishell, int ac, char **av, char **ep)
 	(*minishell).n_line = 1;
 }
 
-static void	handle_minishell(t_minishell *minishell, \
+static int	handle_minishell(t_minishell *minishell, \
 	t_token **tokens, char **line)
 {
 	(*minishell).commands = cmd(*tokens);
@@ -84,12 +91,13 @@ static void	handle_minishell(t_minishell *minishell, \
 	if (!minishell->commands->arguments)
 	{
 		cmd_clear(&minishell->commands);
-		return ;
+		return (0);
 	}
 	(*minishell).exit_status = execution(&(*minishell));
 	cmd_clear(&(*minishell).commands);
 	free(*line);
 	(*minishell).n_line++;
+	return (minishell->exit_status);
 }
 
 int	main(int ac, char **av, char **ep)
@@ -115,7 +123,7 @@ int	main(int ac, char **av, char **ep)
 			minishell.exit_status = 2;
 			continue ;
 		}
-		handle_minishell(&minishell, &tokens, &line);
+		minishell.exit_status = handle_minishell(&minishell, &tokens, &line);
 	}
 	free_minishell(&minishell);
 	return (0);
