@@ -47,6 +47,7 @@ t_list	*split_on_whitespace(char *s);
 t_list	*split_in_lst(char *s);
 int		expand_red(t_token *red, t_env *env, int exit_status);
 void	expand_var(t_minishell *minishell, int ex_status);
+char	*supp_dollars(char *s);
 
 void	handle_heredoc(char *s, int *fd, int *exit_s, int n_line);
 void	red_treatment(t_minishell *minishell);

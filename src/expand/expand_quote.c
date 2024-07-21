@@ -101,3 +101,26 @@ char	*supp_quotes(char *join)
 	free(join);
 	return (result);
 }
+
+char	*supp_dollars(char *s)
+{
+	int		i;
+	int		y;
+	char	*result;
+	int		len_join;
+
+	len_join = ft_strlen(s);
+	result = ft_calloc((len_join + 1), sizeof(char));
+	i = 0;
+	y = 0;
+	while(i < len_join)
+	{
+		if (s[i] == '$' && (s[i + 1] == '\'' || s[i + 1] == '"'))
+			i++;
+		result[y] = s[i];
+		i++;
+		y++;
+	}
+	free (s);
+	return (result);
+}
