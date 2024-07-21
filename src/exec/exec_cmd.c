@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/21 19:30:32 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/21 20:34:59 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,21 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 
 int	child(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 {
+	int	ret_builtin;
+
 	if (cmd->next)
 		close_and_set(&cmd->next->input_fd);
 	if (cmd->exit_s)
-	{
 		return (1);
-	}
 	make_redirections(cmd);
 	if (is_builtin(cmd->arguments->content))
-		return (handle_builtin(cmd, minish, stdfd));
-	else
 	{
-		close(stdfd[0]);
-		close(stdfd[1]);
-		return (exec_cmd(cmd, minish));
+		ret_builtin = handle_builtin(cmd, minish, stdfd);
+		free_minishell(minish);
+		return (ret_builtin);
 	}
+	else
+		return (exec_cmd(cmd, minish));
 }
 
 void	fork_cmd(t_cmd *cmd, t_minishell *minish, int stdfd[2])
@@ -66,6 +66,8 @@ void	fork_cmd(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
+		close(stdfd[0]);
+		close(stdfd[1]);
 		err = child(cmd, minish, stdfd);
 		exit(err);
 	}
