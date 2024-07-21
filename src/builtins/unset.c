@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maamine <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 09:36:18 by maamine           #+#    #+#             */
-/*   Updated: 2024/06/24 17:39:08 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/21 19:42:33 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static	void	check_first(t_env **envi)
 	address = (*envi)->next;
 	free((*envi)->name);
 	free((*envi)->val);
+	free(*envi);
 	*envi = address;
 }
 
@@ -43,6 +44,7 @@ static void	unset_one(t_env **envi, char *name)
 				address = NULL;
 			free((*envi)->next->name);
 			free((*envi)->next->val);
+			free((*envi)->next);
 			(*envi)->next = address;
 		}
 	}
