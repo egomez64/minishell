@@ -40,6 +40,8 @@ static long	ft_atol(const char *nptr, int *err)
 {
 	int		sign;
 
+	while (is_whitespace(*nptr))
+		nptr++;
 	if (*nptr == '-')
 		sign = -1;
 	else

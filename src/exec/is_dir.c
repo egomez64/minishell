@@ -80,19 +80,36 @@ int	is_dir(char *str, int print_error)
 	return (dir);
 }
 
+static int	file_status(char *str)
+{
+	struct stat	buf;
+
+	if (stat(str, &buf) != 0)
+	{
+		str_error_message(str, strerror(errno));
+		return (127);
+	}
+	if (S_ISDIR(buf.st_mode))
+		str_error_message(str, "Is a directory");
+	else if ((__S_IREAD | __S_IEXEC) & buf.st_mode)
+		str_error_message(str, "Permission denied");
+	return (126);
+}
+
 int	check_name(char **str, char *envp_path)
 {
 	if (!is_path(*str))
 		return (locate_and_replace(str, envp_path));
-	else if (is_dir(*str, 1))
-	{
-		return (126);
-	}
+	return (file_status(*str));
+	// else if (is_dir(*str, 1))
+	// {
+	// 	return (127);
+	// }
 	// else if (access(*str, X_OK) != 0)
 	// {
 	// 	str_error_message(*str, "Permission denied");
 	// 	str_error_message(*str, "No such file or directory");
 	// 	return (126);
 	// }
-	return (0);
+	// return (0);
 }

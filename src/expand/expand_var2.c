@@ -68,7 +68,7 @@ static	int	split_on_whitespace_aux(t_list **tmp, char *s)
 
 	i = 0;
 	while (s[i] && !is_whitespace(s[i])
-		&& !(s[i] == '\'' || s[i] == '"') && (i <= 0 || s[i - 1] != '\\'))
+		&& (!(s[i] == '\'' || s[i] == '"') || (i != 0 && s[i - 1] == '\\')))
 	{
 		(*tmp)->content = ft_strjoin_char((*tmp)->content, s[i], true);
 		i++;

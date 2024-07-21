@@ -119,7 +119,7 @@ int	export_add(t_env **envi, t_list *args)
 			exit_s = 1;
 			continue ;
 		}
-		exit_s = handle_args(args->content, envi);
+		exit_s = (handle_args(args->content, envi) || exit_s);
 		args = args->next;
 	}
 	return (exit_s);
