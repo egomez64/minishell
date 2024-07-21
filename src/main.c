@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 14:19:02 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/20 16:14:28 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/21 20:50:54 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,11 @@ static void	handle_minishell(t_minishell *minishell, \
 	(*minishell).commands = cmd(*tokens);
 	expand_var(&(*minishell), (*minishell).exit_status);
 	red_treatment(&(*minishell));
-	if (!minishell->commands->arguments && !minishell->commands->redirections)
+	if (!minishell->commands->arguments)
+	{
+		cmd_clear(&minishell->commands);
 		return ;
+	}
 	(*minishell).exit_status = execution(&(*minishell));
 	cmd_clear(&(*minishell).commands);
 	free(*line);
