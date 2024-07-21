@@ -45,7 +45,8 @@ static void	changes(t_list *lst, t_env *envi, int exit_status)
 	while (lst)
 	{
 		i = 1;
-		if (lst->content[0] == '$' && lst->content[1])
+		if ((lst->content[0] == '$' && lst->content[1])
+			&& (lst->content[1] != '\'' && lst->content[1] != '"'))
 		{
 			if (lst->content[1] != '?')
 			{
@@ -111,6 +112,7 @@ void	handle_word(char *s, t_env *envi, t_list **new, int exit_status)
 	}
 	result = join_lst(splitted);
 	lstclear(&splitted);
+	result = supp_dollars(result);
 	splitted = split_on_whitespace(result);
 	free(result);
 	node = splitted;
