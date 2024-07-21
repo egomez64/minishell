@@ -59,7 +59,8 @@ static	int	prompt(t_minishell	*minishell, char **line)
 		free_minishell(minishell);
 		return (0);
 	}
-	add_history(*line);
+	if (**line)
+		add_history(*line);
 	return (1);
 }
 
@@ -80,6 +81,8 @@ static void	handle_minishell(t_minishell *minishell, \
 	(*minishell).commands = cmd(*tokens);
 	expand_var(&(*minishell), (*minishell).exit_status);
 	red_treatment(&(*minishell));
+	if (!minishell->commands->arguments && !minishell->commands->redirections)
+		return ;
 	(*minishell).exit_status = execution(&(*minishell));
 	cmd_clear(&(*minishell).commands);
 	free(*line);
