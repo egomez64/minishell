@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:56:33 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/20 17:14:18 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/21 18:43:31 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,19 @@ int	is_dir(char *str, int print_error)
 static int	file_status(char *str)
 {
 	struct stat	buf;
+	int			err;
 
 	if (stat(str, &buf) != 0)
 	{
-		str_error_message(str, strerror(errno));
-		return (127);
+		err = errno;
+		str_error_message(str, strerror(err));
+		// return (127);
+		return (err);
 	}
 	if (S_ISDIR(buf.st_mode))
 		str_error_message(str, "Is a directory");
-	else if ((__S_IREAD | __S_IEXEC) & buf.st_mode)
+	// else if ((__S_IREAD | __S_IEXEC) & buf.st_mode)
+	else if ((buf.st_mode & (S_IRUSR | S_IXUSR)) != (S_IRUSR | S_IXUSR))
 		str_error_message(str, "Permission denied");
 	return (126);
 }
