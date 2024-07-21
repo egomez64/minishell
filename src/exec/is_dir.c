@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:56:33 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/21 19:23:34 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/21 19:36:05 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static int	file_status(char *str)
 		err = errno;
 		str_error_message(str, strerror(err));
 		// return (127);
-		return (err);
+		return (125 + err);
 	}
 	if (S_ISDIR(buf.st_mode))
 		str_error_message(str, "Is a directory");
