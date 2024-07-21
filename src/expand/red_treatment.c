@@ -86,11 +86,10 @@ static void	error_message(char *path, int err)
 	free(str);
 }
 
-void	red_treatment(t_minishell *minishell)
+static void	heredoc_treatment(t_minishell *minishell)
 {
 	t_token	*redir;
 	t_cmd	*cmd;
-	int		err;
 
 	cmd = minishell->commands;
 	while (cmd)
@@ -101,7 +100,26 @@ void	red_treatment(t_minishell *minishell)
 			if (redir->type == HEREDOC && g_sig != SIGINT)
 				handle_heredoc(redir->val, &cmd->input_fd, &cmd->exit_s,
 					minishell->n_line);
-			else if (redir->type == INPUT)
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
+}
+
+void	red_treatment(t_minishell *minishell)
+{
+	t_token	*redir;
+	t_cmd	*cmd;
+	int		err;
+
+	heredoc_treatment(minishell);
+	cmd = minishell->commands;
+	while (cmd)
+	{
+		redir = cmd->redirections;
+		while (redir && !cmd->exit_s)
+		{
+			if (redir->type == INPUT)
 				err = handle_input(redir->val, &cmd->input_fd, &cmd->exit_s);
 			else if (redir->type == APPEND)
 				err = handle_append(redir->val, &cmd->output_fd, &cmd->exit_s);

@@ -118,7 +118,10 @@ static int	look_through_envp(char **name, char *envp_path)
 		envp_path += jump;
 	}
 	if (!*envp_path)
+	{
+		free(pathname.ptr);
 		return (1);
+	}
 	free(*name);
 	*name = pathname.ptr;
 	return (0);

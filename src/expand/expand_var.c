@@ -46,7 +46,7 @@ static void	changes(t_list *lst, t_env *envi, int exit_status)
 	{
 		i = 1;
 		if ((lst->content[0] == '$' && lst->content[1])
-			&& (lst->content[1] != '\'' && lst->content[1] != '"'))
+			&& (!is_delimiter(lst->content[1]) || lst->content[1] == '?'))
 		{
 			if (lst->content[1] != '?')
 			{
@@ -54,6 +54,7 @@ static void	changes(t_list *lst, t_env *envi, int exit_status)
 					i++;
 				env_to_find = ft_substr(lst->content, 1, i - 1);
 				expand_one_var(lst, envi, env_to_find);
+				free (env_to_find);
 			}
 			else
 			{

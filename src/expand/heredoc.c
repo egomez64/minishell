@@ -75,6 +75,7 @@ static int	fill_file(int fd, char *delim, int n_line)
 		}
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
+		free (line);
 		line = readline("heredoc> ");
 	}
 	if (!line)
@@ -82,6 +83,7 @@ static int	fill_file(int fd, char *delim, int n_line)
 		heredoc_warning(n_line, delim);
 		return (0);
 	}
+	free (line);
 	return (0);
 }
 
@@ -103,7 +105,10 @@ void	handle_heredoc(char *s, int *fd, int *exit_s, int n_line)
 		return ;
 	*exit_s = fill_file(*fd, s, n_line);
 	if (*exit_s)
+	{
+		free (path);
 		return ;
+	}
 	close(*fd);
 	*fd = open(path, O_RDONLY, 0666);
 	if (*fd < 0)
