@@ -51,8 +51,7 @@ static int	check_errors(t_minishell *minishell, char *line)
 static	int	prompt(t_minishell	*minishell, char **line)
 {
 	*line = NULL;
-	*line = readline("minishell> ");
-	// *line = readline("SupraVala: ");
+	*line = readline("minishell: ");
 	signal(SIGINT, SIG_IGN);
 	if (*line == NULL)
 	{
@@ -67,8 +66,6 @@ static	int	prompt(t_minishell	*minishell, char **line)
 static void	init(t_minishell *minishell, int ac, char **av, char **ep)
 {
 	g_sig = 0;
-	signal(SIGINT, &normal_c);
-	signal(SIGQUIT, SIG_IGN);
 	(void) ac;
 	(void) av;
 	init_minishell(&(*minishell));
@@ -98,6 +95,8 @@ int	main(int ac, char **av, char **ep)
 	init(&minishell, ac, av, ep);
 	while (1)
 	{
+		signal(SIGINT, &normal_c);
+		signal(SIGQUIT, SIG_IGN);
 		if (!prompt(&minishell, &line))
 			return (minishell.exit_status);
 		if (!check_errors(&minishell, line))

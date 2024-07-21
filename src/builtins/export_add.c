@@ -73,7 +73,17 @@ static	int	handle_args(char *content, t_env **envi)
 	while (content[i] && content[i] != '=')
 		i++;
 	if (content[i] != '=')
+	{
+		i = 0;
+		while (content[i] && !is_delimiter(content[i]))
+			i++;
+		if (content[i] && is_delimiter(content[i]))
+		{
+			error_message(content);
+			return (1);
+		}
 		set_null(envi, content);
+	}
 	else if (content[i - 1] == '+')
 		return (export_join(envi, content));
 	else
