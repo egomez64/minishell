@@ -69,7 +69,6 @@ static int	file_status(char *str)
 	{
 		err = errno;
 		str_error_message(str, strerror(err));
-		// return (127);
 		return (125 + err);
 	}
 	if (S_ISDIR(buf.st_mode))
@@ -84,15 +83,4 @@ int	check_name(char **str, char *envp_path)
 	if (!is_path(*str))
 		return (locate_and_replace(str, envp_path));
 	return (file_status(*str));
-	// else if (is_dir(*str, 1))
-	// {
-	// 	return (127);
-	// }
-	// else if (access(*str, X_OK) != 0)
-	// {
-	// 	str_error_message(*str, "Permission denied");
-	// 	str_error_message(*str, "No such file or directory");
-	// 	return (126);
-	// }
-	// return (0);
 }

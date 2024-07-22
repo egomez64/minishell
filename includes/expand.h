@@ -51,6 +51,7 @@ char	*supp_dollars(char *s);
 
 void	handle_heredoc(char *s, int *fd, int *exit_s, int n_line);
 void	red_treatment(t_minishell *minishell);
+void	heredoc_treatment(t_minishell *minishell);
 // void	handle_output(char *path, int *fd, int *exit_s);
 // void	handle_append(char *path, int *fd, int *exit_s);
 // void	handle_input(char *path, int *fd, int *exit_s);

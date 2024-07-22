@@ -24,18 +24,9 @@ static	int	check_before_split(char quote, bool is_var, int i, char *s)
 {
 	if ((quote != '\''
 			&& ((!is_var && s[i] == '$' && s[i + 1]
-						&& (!is_delimiter(s[i + 1])))
+					&& (!is_delimiter(s[i + 1])))
 				|| (is_var && is_delimiter(s[i]))))
 		|| (is_var && (s[i] == '\'' || s[i] == '"')))
-	// if ((i != 0 && quote != '\''
-	// 		&& (((!is_var && s[i] == '$' && s[i + 1]
-	// 					&& (!is_delimiter(s[i + 1]) || (s[i + 1] == '?')))
-	// 				|| (s[i - 1] == '?' && s[i - 2] == '$'))
-	// 			|| (is_var
-	// 				&& (is_delimiter(s[i])
-	// 					&& !(s[i - 1] == '$' && s[i] == '?')))))
-	// 	|| (is_var && (s[i] == '\'' || s[i] == '"'))
-	// 	|| (i != 0 && is_delimiter(s[i]) && s[i - 1] == '$'))
 		return (1);
 	return (0);
 }

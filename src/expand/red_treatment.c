@@ -86,26 +86,6 @@ static void	error_message(char *path, int err)
 	free(str);
 }
 
-static void	heredoc_treatment(t_minishell *minishell)
-{
-	t_token	*redir;
-	t_cmd	*cmd;
-
-	cmd = minishell->commands;
-	while (cmd)
-	{
-		redir = cmd->redirections;
-		while (redir && !cmd->exit_s)
-		{
-			if (redir->type == HEREDOC && g_sig != SIGINT)
-				handle_heredoc(redir->val, &cmd->input_fd, &cmd->exit_s,
-					minishell->n_line);
-			redir = redir->next;
-		}
-		cmd = cmd->next;
-	}
-}
-
 void	red_treatment(t_minishell *minishell)
 {
 	t_token	*redir;

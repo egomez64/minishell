@@ -36,6 +36,7 @@ SRC	= main.c \
 		expand/expand_quote.c \
 		expand/heredoc.c \
 		expand/red_treatment.c \
+		expand/supp_dollars.c \
 		exec/attributes.c \
 		exec/close_and_free.c \
 		exec/exec_cmd.c \

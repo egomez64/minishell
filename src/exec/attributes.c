@@ -56,20 +56,14 @@ int	fill_attributes(t_attributes *attributes, t_list *args, t_env **envi)
 
 	attributes->envp = envlst_to_envp(envi);
 	if (!attributes->envp)
-	{
-		attributes->argv = NULL;
-		attributes->pathname = NULL;
 		return (1);
-	}
 	attributes->argv = arglst_to_argv(args);
 	if (!attributes->argv)
 	{
 		free_achar(attributes->envp);
-		attributes->pathname = NULL;
 		return (1);
 	}
 	env_path = env_find(*envi, "PATH");
-	// attributes->pathname = find_pathname(attributes->argv[0], env_path);
 	attributes->pathname = ft_strdup(attributes->argv[0]);
 	ret = check_name(&attributes->pathname, env_path);
 	if (!attributes->pathname)

@@ -87,16 +87,32 @@ static int	fill_file(int fd, char *delim, int n_line)
 	return (0);
 }
 
+void	heredoc_treatment(t_minishell *minishell)
+{
+	t_token	*redir;
+	t_cmd	*cmd;
+
+	cmd = minishell->commands;
+	while (cmd)
+	{
+		redir = cmd->redirections;
+		while (redir && !cmd->exit_s)
+		{
+			if (redir->type == HEREDOC && g_sig != SIGINT)
+				handle_heredoc(redir->val, &cmd->input_fd, &cmd->exit_s,
+					minishell->n_line);
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
+}
+
 void	handle_heredoc(char *s, int *fd, int *exit_s, int n_line)
 {
 	char	name[13];
 	char	*path;
 
-	if (*fd != -1)
-	{
-		close(*fd);
-		*fd = -1;
-	}
+	close_and_set(fd);
 	randomizer(name);
 	name [12] = 0;
 	path = ft_strjoin("/tmp/", name);
