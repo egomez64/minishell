@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:56:33 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/22 14:34:12 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/22 15:56:44 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,13 @@ int	is_dir(char *str, int print_error)
 	return (dir);
 }
 
+static int	stat_exit_code(int err)
+{
+	if (err == 13)
+		return (126);
+	return (125 + err);
+}
+
 static int	file_status(char *str)
 {
 	struct stat	buf;
@@ -69,7 +76,7 @@ static int	file_status(char *str)
 	{
 		err = errno;
 		str_error_message(str, strerror(err));
-		return (125 + err);
+		return (stat_exit_code(err));
 	}
 	if (S_ISDIR(buf.st_mode))
 	{
@@ -88,6 +95,8 @@ int	check_name(char **str, char *envp_path)
 {
 	if (**str == '\0')
 		return (0);
+	if (ft_strcmp(*str, ".") == 0)
+		return (2);
 	if (!is_path(*str))
 		return (locate_and_replace(str, envp_path));
 	return (file_status(*str));
