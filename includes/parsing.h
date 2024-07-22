@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:43:07 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/18 16:49:13 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/22 12:35:22 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,5 @@ void	lstadd_back(t_list **lst, t_list *new);
 void	lstdelone(t_list *lst);
 void	lstclear(t_list **lst);
 t_cmd	*cmd(t_token *token);
-void	free_minishell(t_minishell *minishell);
-void	init_minishell(t_minishell *minishell);
 
 #endif

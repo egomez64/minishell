@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 14:19:02 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/21 20:53:47 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/22 12:43:08 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,27 +71,6 @@ static	int	prompt(t_minishell	*minishell, char **line)
 	return (1);
 }
 
-static void	init(t_minishell *minishell, int ac, char **av, char **ep)
-{
-	g_sig = 0;
-	(void) ac;
-	(void) av;
-	init_minishell(&(*minishell));
-	(*minishell).envi = envp_to_lst(ep);
-	(*minishell).exit_status = 0;
-	(*minishell).n_line = 1;
-}
-
-static void	close_mini_fds(t_cmd *cmd)
-{
-	while (cmd)
-	{
-		close_and_set(&cmd->input_fd);
-		close_and_set(&cmd->output_fd);
-		cmd = cmd->next;
-	}
-}
-
 static int	handle_minishell(t_minishell *minishell, t_token **tokens)
 {
 	(*minishell).commands = cmd(*tokens);
@@ -109,13 +88,21 @@ static int	handle_minishell(t_minishell *minishell, t_token **tokens)
 	return (minishell->exit_status);
 }
 
+static void	parsing_error(t_token *tokens, char *line, int *exit_status)
+{
+	write(2, "syntax error !\n", 16);
+	token_clear(tokens);
+	*exit_status = 2;
+	free (line);
+}
+
 int	main(int ac, char **av, char **ep)
 {
 	t_token		*tokens;
 	char		*line;
 	t_minishell	minishell;
 
-	init(&minishell, ac, av, ep);
+	init_minishell(&minishell, ac, av, ep);
 	while (1)
 	{
 		signal(SIGINT, &normal_c);
@@ -127,10 +114,7 @@ int	main(int ac, char **av, char **ep)
 		tokens = lexer(line);
 		if (tokens && !parsing(&tokens))
 		{
-			write(2, "syntax error !\n", 16);
-			token_clear(tokens);
-			minishell.exit_status = 2;
-			free (line);
+			parsing_error(tokens, line, &minishell.exit_status);
 			continue ;
 		}
 		minishell.exit_status = handle_minishell(&minishell, &tokens);

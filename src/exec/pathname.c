@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:11:19 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/20 16:39:19 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/22 12:28:51 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,7 @@ static int	look_through_envp(char **name, char *envp_path)
 		return (1);
 	while (*envp_path)
 	{
-		while (*envp_path && *envp_path == ':')
-			envp_path++;
+		envp_path += str_skip_to_char(envp_path, ':');
 		jump = create_pathname(&pathname, &exec_name, envp_path);
 		if (jump == -1)
 			return (1);
@@ -108,54 +107,6 @@ static int	look_through_envp(char **name, char *envp_path)
 	*name = pathname.ptr;
 	return (0);
 }
-
-// /// @brief Looks through `envp_path` to find a valid `pathname`
-// // 		that can be executed.
-// /// @param exec Name of the executable to find.
-// /// @return `1` if found, `0` if not, `-1` if an error occured.
-// static int	look_through_envp(t_string *pathname, t_string *exec,
-// 	char *envp_path)
-// {
-// 	int			jump;
-// 
-// 	while (*envp_path)
-// 	{
-// 		if (access(pathname->ptr, X_OK) == 0)
-// 			return (1);
-// 		while (*envp_path && *envp_path == ':')
-// 			envp_path++;
-// 		jump = create_pathname(pathname, exec, envp_path);
-// 		if (jump == -1)
-// 			return (-1);
-// 		envp_path += jump;
-// 	}
-// 	return (0);
-// }
-
-// char	*find_pathname(char *exec_name, char *envp_path)
-// {
-// 	t_string	pathname;
-// 	t_string	exec;
-// 	int			init;
-// 	int			found;
-// 
-// 	init = init_pathname(&pathname, &exec, exec_name);
-// 	if (init == -1)
-// 		return (NULL);
-// 	if (pathname.ptr[0] == '\0' || access(pathname.ptr, X_OK) == 0)
-// 		return (pathname.ptr);
-// 	if (!envp_path)
-// 	{
-// 		pathname.ptr[0] = '\0';
-// 		return (pathname.ptr);
-// 	}
-// 	found = look_through_envp(&pathname, &exec, envp_path);
-// 	if (found == -1)
-// 		return (NULL);
-// 	else if (found == 0)
-// 		pathname.ptr[0] = '\0';
-// 	return (pathname.ptr);
-// }
 
 int	locate_and_replace(char **name, char *envp_path)
 {
