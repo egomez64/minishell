@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:40:26 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/04 17:55:46 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/22 12:24:12 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,10 @@ typedef struct s_minishell
 }			t_minishell;
 
 void	free_achar(char **achar);
+
+void	str_error_message(char *name, char *err);
+
+int		str_skip_to_char(char *str, char c);
+int		str_skip_to_any_char(char *str, char *targets);
 
 #endif
