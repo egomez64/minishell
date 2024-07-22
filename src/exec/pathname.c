@@ -75,24 +75,6 @@ static int	init_pathname(t_string *pathname, t_string *exec, char *exec_name)
 	return (0);
 }
 
-// /// @brief Creates two `t_string`'s for `find_pathname()`.
-// /// @param pathname A duplicate of `exec_name`,
-// // 		an empty `string` if `exec_name` is `NULL`.
-// /// @param exec A `t_string` pointing to `exec_name` and storing its size.
-// /// @return `0` if success, `-1` if an error occured.
-// static int	init_pathname(t_string *pathname, t_string *exec, char *exec_name)
-// {
-// 	*exec = setup_t_string(exec_name);
-// 	if (exec->size == -1)
-// 		pathname->ptr = ft_strdup("");
-// 	else
-// 		pathname->ptr = ft_strdup(exec_name);
-// 	if (!pathname->ptr)
-// 		return (-1);
-// 	*pathname = setup_t_string(pathname->ptr);
-// 	return (0);
-// }
-
 /// @brief Looks through `envp_path` to find a valid `pathname`
 // 		that can be executed.
 /// @param exec Name of the executable to find.
