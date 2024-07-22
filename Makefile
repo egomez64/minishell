@@ -26,7 +26,6 @@ SRC	= main.c \
 		parsing/create_cmd.c \
 		parsing/lst.c \
 		parsing/check_quotes.c \
-		parsing/free_minishell.c \
 		expand/expand_start.c \
 		expand/env_lst.c \
 		expand/get_env.c \
@@ -56,7 +55,10 @@ SRC	= main.c \
 		builtins/unset.c \
 		builtins/env.c \
 		builtins/exit.c \
-		utils/free_achar.c
+		utils/free_achar.c \
+		utils/error_messages.c \
+		utils/skip.c \
+		utils/manage_minishell.c
 		
 SRC		:= $(SRC:%=$(SRC_DIR)/%)
 OBJ 	:= $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

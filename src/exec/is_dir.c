@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:56:33 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/21 19:36:05 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/22 12:07:08 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,6 @@
  * 		is not dir:
  * 			try to execute.
  */
-
-void	str_error_message(char *name, char *err)
-{
-	char	*str;
-	int		name_len;
-	int		err_len;
-
-	name_len = ft_strlen(name);
-	err_len = ft_strlen(err);
-	str = malloc((name_len + err_len + 15) * sizeof (char));
-	if (!str)
-		return ;
-	ft_strlcpy(str, "minishell: ", 12);
-	ft_strlcpy(str + 11, name, name_len + 1);
-	ft_strlcpy(str + name_len + 11, ": ", 3);
-	ft_strlcpy(str + name_len + 13, err, err_len + 1);
-	ft_strlcpy(str + name_len + err_len + 13, "\n", 2);
-	write(2, str, name_len + err_len + 15);
-	free(str);
-}
 
 static int	is_path(char *str)
 {

@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:38:45 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/19 11:54:55 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/22 12:25:42 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,7 @@ static	int	handle_args(char *content, t_env **envi)
 {
 	int	i;
 
-	i = 0;
-	while (content[i] && content[i] != '=')
-		i++;
+	i = str_skip_to_char(content, '=');
 	if (content[i] != '=')
 	{
 		i = 0;
