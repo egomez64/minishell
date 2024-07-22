@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:56:33 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/22 12:07:08 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/22 14:34:12 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,16 @@ static int	file_status(char *str)
 		return (125 + err);
 	}
 	if (S_ISDIR(buf.st_mode))
+	{
 		str_error_message(str, "Is a directory");
+		return (126);
+	}
 	else if ((buf.st_mode & (S_IRUSR | S_IXUSR)) != (S_IRUSR | S_IXUSR))
+	{
 		str_error_message(str, "Permission denied");
-	return (126);
+		return (126);
+	}
+	return (0);
 }
 
 int	check_name(char **str, char *envp_path)
