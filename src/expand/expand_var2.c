@@ -20,15 +20,23 @@ static	void	check_for_expand(char *quote, char c)
 		*quote = 0;
 }
 
-static	int	check_before_split(char quote, bool is_var, int i, char *s)
+static	bool	split_here(char quote, bool is_var, int i, char *s)
 {
-	if ((quote != '\''
+	/*if ((quote != '\''
 			&& ((!is_var && s[i] == '$' && s[i + 1]
-					&& (!is_delimiter(s[i + 1])))
-				|| (is_var && is_delimiter(s[i]))))
-		|| (is_var && (s[i] == '\'' || s[i] == '"')))
-		return (1);
-	return (0);
+					&& (!is_delimiter(s[i + 1]) || s[i + 1] == '?'))
+				|| (is_var
+					&& (s[i - 1] == '?'
+						|| (is_delimiter(s[i]) && s[i] != '?')))))
+		|| (is_var && ((s[i] == '\'' || s[i] == '"')
+			|| (s[i - 1] == '?' && s[i - 2] == '$'))))*/
+	if ((i != 0 && quote != '\''
+			&& (((!is_var && s[i] == '$' && s[i + 1] && (!is_delimiter(s[i + 1]) || (s[i + 1] == '?'))) || (s[i - 1] == '?' && s[i - 2] == '$'))
+				|| (is_var
+					&& (is_delimiter(s[i])
+					&& !(s[i - 1] == '$' && s[i] == '?'))))) || (is_var && (s[i] == '\'' || s[i] == '"')))
+		return (true);
+	return (false);
 }
 
 t_list	*split_in_lst(char *s)
@@ -39,17 +47,17 @@ t_list	*split_in_lst(char *s)
 	char	quote;
 	bool	is_var;
 
-	i = 0;
 	quote = 0;
-	is_var = (s[0] == '$' && s[1] && !is_delimiter(s[1]));
+	is_var = (s[0] == '$' && (s[1] == '?' || !is_delimiter(s[1])));
 	first = ft_lstnew_empty();
 	tmp = first;
+	i = 0;
 	while (s[i])
 	{
 		check_for_expand(&quote, s[i]);
-		if (check_before_split(quote, is_var, i, s))
+		if (split_here(quote, is_var, i, s))
 		{
-			is_var = !is_var;
+			 is_var = !is_var;
 			ft_lstadd_back(&tmp, ft_lstnew_empty());
 			tmp = tmp->next;
 		}

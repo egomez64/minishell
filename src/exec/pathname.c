@@ -89,7 +89,7 @@ static int	look_through_envp(char **name, char *envp_path)
 		return (1);
 	while (*envp_path)
 	{
-		envp_path += str_skip_to_char(envp_path, ':');
+		envp_path += str_skip_char(envp_path, ':');
 		jump = create_pathname(&pathname, &exec_name, envp_path);
 		if (jump == -1)
 			return (1);

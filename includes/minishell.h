@@ -42,5 +42,6 @@ void	str_error_message(char *name, char *err);
 
 int		str_skip_to_char(char *str, char c);
 int		str_skip_to_any_char(char *str, char *targets);
+int		str_skip_char(char *str, char c);
 
 #endif

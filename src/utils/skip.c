@@ -12,6 +12,16 @@
 
 #include <minishell.h>
 
+int	str_skip_char(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] == c)
+		i++;
+	return (i);
+}
+
 int	str_skip_to_char(char *str, char c)
 {
 	int	i;
