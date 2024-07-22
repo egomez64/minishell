@@ -101,35 +101,3 @@ char	*supp_quotes(char *join)
 	free(join);
 	return (result);
 }
-
-char	*supp_dollars(char *s)
-{
-	int		i;
-	int		y;
-	char	*result;
-	int		len_join;
-	char	quote;
-
-	quote = 0;
-	len_join = ft_strlen(s);
-	result = ft_calloc((len_join + 1), sizeof(char));
-	i = 0;
-	y = 0;
-	while(i < len_join)
-	{
-		if (quote == 0 && (s[i] == '\'' || s[i] == '"'))
-			quote = s[i];
-		else if (quote == s[i])
-			quote = 0;
-		if (s[i] == '$' && quote == 0 && (s[i + 1] == '\'' || s[i + 1] == '"'))
-		{
-			quote = s[i + 1];
-			i++;
-		}
-		result[y] = s[i];
-		i++;
-		y++;
-	}
-	free (s);
-	return (result);
-}
