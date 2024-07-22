@@ -51,7 +51,7 @@ static long	ft_atol(const char *nptr, int *err)
 	return (nptr_to_number(sign, nptr, err));
 }
 
-static char	*error_message(int err, char *num)
+static char	*error_exit(int err, char *num)
 {
 	char	*join1;
 	char	*join2;
@@ -89,12 +89,12 @@ int	__exit(t_minishell *minish, t_list *args, int stdfd[2])
 	arg_status = ft_atol((char *) args->next->content, &err);
 	if (err)
 	{
-		error_message(2, (char *) args->next->content);
+		error_exit(2, (char *) args->next->content);
 		free_close_exit(2, minish, stdfd);
 	}
 	if (args->next->next)
 	{
-		error_message(1, NULL);
+		error_exit(1, NULL);
 		return (1);
 	}
 	minish->exit_status = arg_status & 0xff;

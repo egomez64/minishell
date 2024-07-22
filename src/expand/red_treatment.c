@@ -62,30 +62,6 @@ static int	handle_output(char *path, int *fd, int *exit_s)
 	return (0);
 }
 
-static void	error_message(char *path, int err)
-{
-	char	*str;
-	char	*message;
-	int		path_len;
-	int		message_len;
-
-	message = strerror(err);
-	if (!message)
-		return ;
-	path_len = ft_strlen(path);
-	message_len = ft_strlen(message);
-	str = malloc((15 + path_len + message_len) * sizeof (char));
-	if (!str)
-		return ;
-	ft_strlcpy(str, "minishell: ", 12);
-	ft_strlcpy(str + 11, path, path_len + 1);
-	ft_strlcpy(str + 11 + path_len, ": ", 3);
-	ft_strlcpy(str + 13 + path_len, message, message_len + 1);
-	ft_strlcpy(str + 13 + path_len + message_len, "\n", 2);
-	write(2, str, ft_strlen(str));
-	free(str);
-}
-
 void	red_treatment(t_minishell *minishell)
 {
 	t_token	*redir;
@@ -93,6 +69,8 @@ void	red_treatment(t_minishell *minishell)
 	int		err;
 
 	heredoc_treatment(minishell);
+	if (minishell->exit_status != 0)
+		return ;
 	cmd = minishell->commands;
 	while (cmd)
 	{
@@ -105,7 +83,7 @@ void	red_treatment(t_minishell *minishell)
 				err = handle_append(redir->val, &cmd->output_fd, &cmd->exit_s);
 			else if (redir->type == OUTPUT)
 				err = handle_output(redir->val, &cmd->output_fd, &cmd->exit_s);
-			if (cmd->exit_s && cmd->exit_s != 130)
+			if (cmd->exit_s)
 				error_message(redir->val, err);
 			redir = redir->next;
 		}

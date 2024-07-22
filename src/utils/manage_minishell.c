@@ -12,11 +12,8 @@
 
 #include <minishell.h>
 
-extern int	g_sig;
-
 void	init_minishell(t_minishell *minishell, int ac, char **av, char **ep)
 {
-	g_sig = 0;
 	(void) ac;
 	(void) av;
 	(*minishell).commands = NULL;

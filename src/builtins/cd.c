@@ -29,7 +29,7 @@ static int	cd_home(t_env *envi)
 	return (ret);
 }
 
-static void	error_message(char *arg, int err)
+static void	error_cd(char *arg, int err)
 {
 	char	*str;
 	char	*message;
@@ -53,24 +53,46 @@ static void	error_message(char *arg, int err)
 	free(str);
 }
 
-static void	update_pwd(t_env **envi)
+static void	update_oldpwd(t_env **envi, t_env *new_pwd)
 {
-	t_env	*new_env;
+	t_env	*old_pwd;
 	char	*name;
 	char	*val;
 
-	new_env = find_in_env(*envi, "PWD");
-	val = getcwd(NULL, 0);
-	if (new_env)
+	if (!new_pwd)
+		val = NULL;
+	else
+		val = new_pwd->val;
+	old_pwd = find_in_env(*envi, "OLDPWD");
+	if (!old_pwd)
 	{
-		free(new_env->val);
-		new_env->val = val;
+		name = ft_strdup("OLDPWD");
+		old_pwd = env_new(name, val);
+		env_add_back(envi, old_pwd);
 	}
 	else
 	{
+		free(old_pwd->val);
+		old_pwd->val = val;
+	}
+}
+
+static void	update_pwd(t_env **envi)
+{
+	t_env	*new_pwd;
+	char	*name;
+	char	*val;
+
+	new_pwd = find_in_env(*envi, "PWD");
+	update_oldpwd(envi, new_pwd);
+	val = getcwd(NULL, 0);
+	if (new_pwd)
+		new_pwd->val = val;
+	else
+	{
 		name = ft_strdup("PWD");
-		new_env = env_new(name, val);
-		env_add_back(envi, new_env);
+		new_pwd = env_new(name, val);
+		env_add_back(envi, new_pwd);
 	}
 }
 
@@ -91,7 +113,7 @@ int	cd(t_cmd *cmd, t_env **envi)
 		ret = chdir((char *) cmd->arguments->next->content);
 	if (ret == -1)
 	{
-		error_message(cmd->arguments->next->content, errno);
+		error_cd(cmd->arguments->next->content, errno);
 		return (1);
 	}
 	update_pwd(envi);

@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-static void	error_message(char *arg)
+static void	error_add(char *arg)
 {
 	char	*str;
 	int		arg_len;
@@ -77,7 +77,7 @@ static	int	handle_args(char *content, t_env **envi)
 			i++;
 		if (content[i] && is_delimiter(content[i]))
 		{
-			error_message(content);
+			error_add(content);
 			return (1);
 		}
 		set_null(envi, content);
@@ -112,7 +112,7 @@ int	export_add(t_env **envi, t_list *args)
 		}
 		if (error(args->content))
 		{
-			error_message(args->content);
+			error_add(args->content);
 			args = args->next;
 			exit_s = 1;
 			continue ;

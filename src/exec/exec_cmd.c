@@ -17,6 +17,11 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 	int				err;
 	t_attributes	attributes;
 
+	if (!cmd->arguments)
+	{
+		free_minishell(minish);
+		return (0);
+	}
 	err = fill_attributes(&attributes, cmd->arguments, &minish->envi);
 	free_minishell(minish);
 	if (err || attributes.pathname[0] == 0)
@@ -40,12 +45,10 @@ int	child(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 {
 	int	ret_builtin;
 
-	if (cmd->next)
-		close_and_set(&cmd->next->input_fd);
 	if (cmd->exit_s)
 		return (1);
 	make_redirections(cmd);
-	if (is_builtin(cmd->arguments->content))
+	if (cmd->arguments && is_builtin(cmd->arguments->content))
 	{
 		ret_builtin = handle_builtin(cmd, minish, stdfd);
 		free_minishell(minish);
@@ -53,6 +56,16 @@ int	child(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 	}
 	else
 		return (exec_cmd(cmd, minish));
+}
+
+static void	close_unused_fds(t_cmd *cmd)
+{
+	while (cmd)
+	{
+		close_and_set(&cmd->input_fd);
+		close_and_set(&cmd->output_fd);
+		cmd = cmd->next;
+	}
 }
 
 void	fork_cmd(t_cmd *cmd, t_minishell *minish, int stdfd[2])
@@ -68,6 +81,7 @@ void	fork_cmd(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 		signal(SIGQUIT, SIG_DFL);
 		close(stdfd[0]);
 		close(stdfd[1]);
+		close_unused_fds(cmd->next);
 		err = child(cmd, minish, stdfd);
 		exit(err);
 	}

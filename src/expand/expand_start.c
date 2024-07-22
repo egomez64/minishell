@@ -32,7 +32,7 @@ int	expand_red(t_token *red, t_env *env, int exit_status)
 	return (0);
 }
 
-void	expand_var(t_minishell *minishell, int ex_status)
+void	expand_var(t_minishell *minishell, int exit_s)
 {
 	t_list	*tmp_arg;
 	t_token	*tmp_red;
@@ -47,14 +47,14 @@ void	expand_var(t_minishell *minishell, int ex_status)
 		tmp_red = cmd->redirections;
 		while (tmp_arg)
 		{
-			handle_word(tmp_arg->content, minishell->envi, &new_arg, ex_status);
+			handle_word(tmp_arg->content, minishell->envi, &new_arg, exit_s);
 			tmp_arg = tmp_arg->next;
 		}
 		lstclear(&cmd->arguments);
 		cmd->arguments = new_arg;
 		while (tmp_red)
 		{
-			cmd->exit_s = expand_red(tmp_red, minishell->envi, ex_status);
+			cmd->exit_s = expand_red(tmp_red, minishell->envi, exit_s);
 			tmp_red = tmp_red->next;
 		}
 		cmd = cmd->next;

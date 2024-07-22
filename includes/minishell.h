@@ -38,6 +38,7 @@ void	free_minishell(t_minishell *minishell);
 
 void	free_achar(char **achar);
 
+void	error_message(char *path, int err);
 void	str_error_message(char *name, char *err);
 
 int		str_skip_to_char(char *str, char c);

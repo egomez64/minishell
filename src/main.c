@@ -12,41 +12,27 @@
 
 #include <minishell.h>
 
-// static int	open_debug(int newfd)
-// {
-// 	int	fd;
-//
-// 	fd = open("debug", O_RDWR | O_CREAT | O_TRUNC,
-// 		S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-// 	if (fd == -1)
-// 		return (-1);
-// 	if (fd == newfd)
-// 		return (0);
-// 	if (dup2(fd, newfd) != newfd)
-// 	{
-// 		close(fd);
-// 		return (-1);
-// 	}
-// 	close(fd);
-// 	return (0);
-// }
 int	g_sig;
 
-static int	check_errors(t_minishell *minishell, char *line)
+static int	check_invalid(t_minishell *minishell, char *line)
 {
-	if (line[0] == '\0')
+	int	i;
+
+	if (line[0] == '\0' || !check_quotes(line)
+		|| (ft_strlen(line) == 2 && ft_strcmp(line, "\"\"") == 0))
 	{
 		free(line);
 		(*minishell).n_line++;
 		return (0);
 	}
-	if (!check_quotes(line))
+	i = 0;
+	while (line[i])
 	{
-		free(line);
-		(*minishell).n_line++;
-		return (0);
+		if (!is_whitespace(line[i]))
+			return (1);
+		i++;
 	}
-	if (ft_strlen(line) == 2 && ft_strcmp(line, "\"\"") == 0)
+	if (line[i] == 0)
 	{
 		free(line);
 		(*minishell).n_line++;
@@ -74,13 +60,14 @@ static	int	prompt(t_minishell	*minishell, char **line)
 static int	handle_minishell(t_minishell *minishell, t_token **tokens)
 {
 	(*minishell).commands = cmd(*tokens);
-	expand_var(&(*minishell), (*minishell).exit_status);
-	red_treatment(&(*minishell));
-	if (!minishell->commands->arguments)
+	expand_var(minishell, minishell->exit_status);
+	red_treatment(minishell);
+	if (!minishell->commands->arguments || minishell->commands->exit_s)
 	{
+		minishell->exit_status = minishell->commands->exit_s;
 		close_mini_fds(minishell->commands);
 		cmd_clear(&minishell->commands);
-		return (0);
+		return (minishell->exit_status);
 	}
 	(*minishell).exit_status = execution(&(*minishell));
 	cmd_clear(&(*minishell).commands);
@@ -105,11 +92,12 @@ int	main(int ac, char **av, char **ep)
 	init_minishell(&minishell, ac, av, ep);
 	while (1)
 	{
+		g_sig = 0;
 		signal(SIGINT, &normal_c);
 		signal(SIGQUIT, SIG_IGN);
 		if (!prompt(&minishell, &line))
 			return (minishell.exit_status);
-		if (!check_errors(&minishell, line))
+		if (!check_invalid(&minishell, line))
 			continue ;
 		tokens = lexer(line);
 		if (tokens && !parsing(&tokens))
@@ -120,6 +108,4 @@ int	main(int ac, char **av, char **ep)
 		minishell.exit_status = handle_minishell(&minishell, &tokens);
 		free (line);
 	}
-	free_minishell(&minishell);
-	return (0);
 }

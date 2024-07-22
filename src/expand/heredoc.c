@@ -91,16 +91,20 @@ void	heredoc_treatment(t_minishell *minishell)
 {
 	t_token	*redir;
 	t_cmd	*cmd;
+	int		*first_exit_s;
 
 	cmd = minishell->commands;
-	while (cmd)
+	first_exit_s = &cmd->exit_s;
+	while (cmd && *first_exit_s == 0)
 	{
 		redir = cmd->redirections;
-		while (redir && !cmd->exit_s)
+		while (redir && *first_exit_s == 0)
 		{
 			if (redir->type == HEREDOC && g_sig != SIGINT)
-				handle_heredoc(redir->val, &cmd->input_fd, &cmd->exit_s,
-					minishell->n_line);
+				handle_heredoc(redir->val, &cmd->input_fd,
+					first_exit_s, minishell->n_line);
+			if (*first_exit_s != 0)
+				return ;
 			redir = redir->next;
 		}
 		cmd = cmd->next;
