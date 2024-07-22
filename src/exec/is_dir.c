@@ -100,6 +100,8 @@ static int	file_status(char *str)
 
 int	check_name(char **str, char *envp_path)
 {
+	if (**str == '\0')
+		return (0);
 	if (!is_path(*str))
 		return (locate_and_replace(str, envp_path));
 	return (file_status(*str));

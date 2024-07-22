@@ -19,7 +19,7 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 
 	err = fill_attributes(&attributes, cmd->arguments, &minish->envi);
 	free_minishell(minish);
-	if (err)
+	if (err || attributes.pathname[0] == 0)
 	{
 		free(attributes.pathname);
 		free_achar(attributes.argv);
