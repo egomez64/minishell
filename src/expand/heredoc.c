@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include <minishell.h>
 
 extern int	g_sig;
@@ -60,9 +61,10 @@ static void	heredoc_warning(int n, char *delim)
 	free(nptr);
 }
 
-static int	fill_file(int fd, char *delim, int n_line)
+static int	fill_file(int fd, char *delim, int n_line/*, bool exp_heredoc*/)
 {
 	char	*line;
+	//(void)exp_heredoc;
 
 	signal(SIGINT, &heredoc_c);
 	line = readline("heredoc> ");
@@ -73,6 +75,8 @@ static int	fill_file(int fd, char *delim, int n_line)
 			free(line);
 			return (130);
 		}
+		/*if (exp_heredoc == true)
+			handle_word()*/
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free (line);
@@ -87,7 +91,7 @@ static int	fill_file(int fd, char *delim, int n_line)
 	return (0);
 }
 
-void	heredoc_treatment(t_minishell *minishell)
+void	heredoc_treatment(t_minishell *minishell/*, bool exp_heredoc*/)
 {
 	t_token	*redir;
 	t_cmd	*cmd;
@@ -102,7 +106,7 @@ void	heredoc_treatment(t_minishell *minishell)
 		{
 			if (redir->type == HEREDOC && g_sig != SIGINT)
 				handle_heredoc(redir->val, &cmd->input_fd,
-					first_exit_s, minishell->n_line);
+					first_exit_s, minishell->n_line/*, exp_heredoc*/);
 			if (*first_exit_s != 0)
 				return ;
 			redir = redir->next;
@@ -111,7 +115,7 @@ void	heredoc_treatment(t_minishell *minishell)
 	}
 }
 
-void	handle_heredoc(char *s, int *fd, int *exit_s, int n_line)
+void	handle_heredoc(char *s, int *fd, int *exit_s, int n_line/*, bool exp_heredoc*/)
 {
 	char	name[13];
 	char	*path;
@@ -123,7 +127,7 @@ void	handle_heredoc(char *s, int *fd, int *exit_s, int n_line)
 	*fd = open(path, O_RDWR | O_CREAT | O_TRUNC, 0666);
 	if (*fd < 0)
 		return ;
-	*exit_s = fill_file(*fd, s, n_line);
+	*exit_s = fill_file(*fd, s, n_line/*, exp_heredoc*/);
 	if (*exit_s)
 	{
 		free (path);

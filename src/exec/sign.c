@@ -16,8 +16,8 @@ extern int	g_sig;
 
 void	normal_c(int signal)
 {
-	(void)signal;
-	printf("\n");
+	g_sig = signal;
+	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
@@ -34,34 +34,34 @@ void	heredoc_c(int signal)
 	rl_replace_line("", 0);
 }
 
-int	sig_exec(int wstatus)
+void	sig_exec(int wstatus)
 {
 	int	signal;
 
 	signal = WTERMSIG(wstatus);
 	if (signal == SIGINT)
 	{
-		normal_c(signal);
-		write(2, "\n", 2);
-		return (WEXITSTATUS(wstatus));
+		// normal_c(signal);
+		printf("\n");
 	}
-	else if (signal == SIGQUIT)
-	{
-		write(2, "Quit\n", 6);
-		return (WEXITSTATUS(wstatus));
-	}
-	return (WEXITSTATUS(wstatus));
 }
 
-// int	handle_signals(int signal)
+// int	sig_exec(int wstatus/*, bool is_last*/)
 // {
+// 	int	signal;
+//
+// 	signal = WTERMSIG(wstatus);
 // 	if (signal == SIGINT)
 // 	{
-// 		write(stderr, "^C\n", 3);
-// 		return (130);
+// 		normal_c(signal);
+// 		write(2, "\n", 2);
+// 		return (128 + signal);
 // 	}
 // 	else if (signal == SIGQUIT)
 // 	{
-// 		write(stderr, "")
+// 		// if (is_last)
+// 		// 	write(2, "Quit\n", 6);
+// 		return (128 + signal);
 // 	}
+// 	return (WEXITSTATUS(wstatus));
 // }

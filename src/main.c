@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include <minishell.h>
 
 int	g_sig;
@@ -44,7 +45,9 @@ static int	check_invalid(t_minishell *minishell, char *line)
 static	int	prompt(t_minishell	*minishell, char **line)
 {
 	*line = NULL;
-	*line = readline("minishell: ");
+	*line = readline("minishell: \002");
+	if (g_sig == SIGINT)
+		minishell->exit_status = 130;
 	signal(SIGINT, SIG_IGN);
 	if (*line == NULL)
 	{
@@ -59,9 +62,11 @@ static	int	prompt(t_minishell	*minishell, char **line)
 
 static int	handle_minishell(t_minishell *minishell, t_token **tokens)
 {
+	//bool	exp_herdoc;
 	(*minishell).commands = cmd(*tokens);
+	//exp_herdoc = check_heredoc_quote(minishell->commands);
 	expand_var(minishell, minishell->exit_status);
-	red_treatment(minishell);
+	red_treatment(minishell/*, exp_herdoc*/);
 	if (!minishell->commands->arguments || minishell->commands->exit_s)
 	{
 		minishell->exit_status = minishell->commands->exit_s;
@@ -88,6 +93,8 @@ int	main(int ac, char **av, char **ep)
 	t_token		*tokens;
 	char		*line;
 	t_minishell	minishell;
+	g_sig = 0;
+	line = NULL;
 
 	init_minishell(&minishell, ac, av, ep);
 	while (1)

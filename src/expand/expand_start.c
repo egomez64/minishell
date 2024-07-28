@@ -45,6 +45,11 @@ void	expand_var(t_minishell *minishell, int exit_s)
 		new_arg = NULL;
 		tmp_arg = cmd->arguments;
 		tmp_red = cmd->redirections;
+		while (tmp_red)
+		{
+			cmd->exit_s = expand_red(tmp_red, minishell->envi, exit_s);
+			tmp_red = tmp_red->next;
+		}
 		while (tmp_arg)
 		{
 			handle_word(tmp_arg->content, minishell->envi, &new_arg, exit_s);
@@ -52,11 +57,6 @@ void	expand_var(t_minishell *minishell, int exit_s)
 		}
 		lstclear(&cmd->arguments);
 		cmd->arguments = new_arg;
-		while (tmp_red)
-		{
-			cmd->exit_s = expand_red(tmp_red, minishell->envi, exit_s);
-			tmp_red = tmp_red->next;
-		}
 		cmd = cmd->next;
 	}
 }

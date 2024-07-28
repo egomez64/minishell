@@ -62,13 +62,13 @@ static int	handle_output(char *path, int *fd, int *exit_s)
 	return (0);
 }
 
-void	red_treatment(t_minishell *minishell)
+void	red_treatment(t_minishell *minishell/*, bool exp_heredoc*/)
 {
 	t_token	*redir;
 	t_cmd	*cmd;
 	int		err;
 
-	heredoc_treatment(minishell);
+	heredoc_treatment(minishell/*, exp_heredoc*/);
 	if (minishell->exit_status != 0)
 		return ;
 	cmd = minishell->commands;
@@ -89,4 +89,28 @@ void	red_treatment(t_minishell *minishell)
 		}
 		cmd = cmd->next;
 	}
+}
+
+bool	check_heredoc_quote(t_cmd *cmd)
+{
+	t_token	*tmp;
+	int		i;
+
+	i = 0;
+	while (cmd)
+	{
+		while (cmd->redirections)
+		{
+			if (cmd->redirections->type == HEREDOC)
+				tmp = cmd->redirections;
+			cmd->redirections = cmd->redirections->next;
+		}
+		cmd = cmd->next;
+	}
+		while (tmp->val && tmp->val[i]
+			&& (tmp->val[i] != '\'' && tmp->val[i] != '"'))
+			i++;
+	if (tmp->val[i] == 0)
+		return (true);
+	return (false);
 }

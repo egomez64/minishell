@@ -22,26 +22,27 @@ static int	wait_for_everyone(t_cmd **cmd)
 	int		wstatus;
 	pid_t	pid;
 	pid_t	last_pid;
-	int		sig_handler;
+	int		sig;
 
 	exit_status = -1;
 	pid = 0;
 	last_pid = cmd_last(*cmd)->pid;
-	sig_handler = 0;
+	sig = 0;
 	while (pid != -1)
 	{
 		pid = wait(&wstatus);
-		if (pid == last_pid && WIFEXITED(wstatus))
+		sig = WIFSIGNALED(wstatus);
+		if (!sig && pid == last_pid)
 			exit_status = WEXITSTATUS(wstatus);
-		else if (WIFSIGNALED(wstatus) && !sig_handler)
+		else if (pid == last_pid)
 		{
-			if (pid == last_pid)
-				exit_status = sig_exec(wstatus);
-			else
-				sig_exec(wstatus);
-			sig_handler = 1;
+			exit_status = 128 + WTERMSIG(wstatus);
+			if (WTERMSIG(wstatus) == SIGQUIT)
+				write(2, "Quit\n", 6);
 		}
 	}
+	if (sig)
+		sig_exec(sig);
 	return (exit_status);
 }
 
@@ -51,13 +52,12 @@ static int	wait_for_everyone(t_cmd **cmd)
 // {
 // 	int		exit_status;
 // 	int		wstatus;
-// 	pid_t	last_pid;
 // 	pid_t	pid;
+// 	pid_t	last_pid;
 // 	int		sig_handler;
-// 
+//
+// 	exit_status = -1;
 // 	pid = 0;
-// 	wstatus = 0;
-// 	exit_status = 0;
 // 	last_pid = cmd_last(*cmd)->pid;
 // 	sig_handler = 0;
 // 	while (pid != -1)
@@ -68,9 +68,9 @@ static int	wait_for_everyone(t_cmd **cmd)
 // 		else if (WIFSIGNALED(wstatus) && !sig_handler)
 // 		{
 // 			if (pid == last_pid)
-// 				exit_status = sig_exec(wstatus);
+// 				exit_status = sig_exec(wstatus/*, true*/);
 // 			else
-// 				sig_exec(wstatus);
+// 				sig_exec(wstatus/*, false*/);
 // 			sig_handler = 1;
 // 		}
 // 	}
@@ -139,5 +139,9 @@ int	execution(t_minishell *minish)
 		exit_status = simple_exec(minish);
 	else
 		exit_status = pipes_exec(minish);
+	if (exit_status == -1)
+	{
+
+	}
 	return (exit_status);
 }
