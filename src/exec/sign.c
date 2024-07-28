@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 03:59:15 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/04 17:34:01 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/28 21:31:31 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,17 @@ void	heredoc_c(int signal)
 	rl_replace_line("", 0);
 }
 
-void	sig_exec(int wstatus)
-{
-	int	signal;
-
-	signal = WTERMSIG(wstatus);
-	if (signal == SIGINT)
-	{
-		// normal_c(signal);
-		printf("\n");
-	}
-}
+// void	sig_exec(int wstatus)
+// {
+// 	int	signal;
+// 
+// 	signal = WTERMSIG(wstatus);
+// 	if (signal == SIGINT)
+// 	{
+// 		normal_c(signal);
+// 		printf("\n");
+// 	}
+// }
 
 // int	sig_exec(int wstatus/*, bool is_last*/)
 // {
