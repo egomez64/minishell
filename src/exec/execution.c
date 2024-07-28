@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/18 16:33:21 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/28 22:03:47 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,19 @@ static int	wait_for_everyone(t_cmd **cmd)
 	while (pid != -1)
 	{
 		pid = wait(&wstatus);
-		sig = WIFSIGNALED(wstatus);
+		if (!sig && WIFSIGNALED(wstatus))
+			sig = WTERMSIG(wstatus);
 		if (!sig && pid == last_pid)
 			exit_status = WEXITSTATUS(wstatus);
 		else if (pid == last_pid)
 		{
-			exit_status = 128 + WTERMSIG(wstatus);
-			if (WTERMSIG(wstatus) == SIGQUIT)
+			exit_status = 128 + sig;
+			if (sig == SIGQUIT)
 				write(2, "Quit\n", 6);
 		}
 	}
-	if (sig)
-		sig_exec(sig);
+	if (sig == SIGINT)
+		write(2, "\n", 2);
 	return (exit_status);
 }
 
@@ -139,9 +140,9 @@ int	execution(t_minishell *minish)
 		exit_status = simple_exec(minish);
 	else
 		exit_status = pipes_exec(minish);
-	if (exit_status == -1)
-	{
-
-	}
+	// if (exit_status == -1)
+	// {
+	// 	
+	// }
 	return (exit_status);
 }
