@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 12:33:14 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/04 17:48:40 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/28 20:04:52 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,13 @@ int	echo(t_cmd *cmd)
 		return (0);
 	}
 	no_newline = option_no_newline(arg->content);
-	while (option_no_newline(arg->content))
+	while (arg && option_no_newline(arg->content))
 		arg = arg->next;
+	if (!arg)
+		return (0);
 	str = lst_to_str(arg, no_newline);
 	if (!str)
-	{
 		return (1);
-	}
 	printf("%s", str);
 	free(str);
 	return (0);
