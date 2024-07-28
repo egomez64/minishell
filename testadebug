@@ -28,3 +28,5 @@ expand variables heredoc
 cat |<Marouane -> open fd
 cat | cat <noperm | wc
 
+readline corrompu par \002
+
