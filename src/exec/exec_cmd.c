@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 13:40:39 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/21 20:34:59 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/28 20:24:42 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	child(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 	if (cmd->arguments && is_builtin(cmd->arguments->content))
 	{
 		ret_builtin = handle_builtin(cmd, minish, stdfd);
-		free_minishell(minish);
+		// free_minishell(minish);
 		return (ret_builtin);
 	}
 	else
@@ -83,6 +83,9 @@ void	fork_cmd(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 		close(stdfd[1]);
 		close_unused_fds(cmd->next);
 		err = child(cmd, minish, stdfd);
+		close_and_set(&cmd->input_fd);
+		close_and_set(&cmd->output_fd);
+		free_minishell(minish);
 		exit(err);
 	}
 	close_and_set(&cmd->input_fd);
