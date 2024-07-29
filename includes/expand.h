@@ -48,11 +48,8 @@ void	expand_var(t_minishell *minishell, int exit_s);
 char	*supp_dollars(char *s);
 bool	check_heredoc_quote(t_cmd *cmd);
 
-void	handle_heredoc(char *s, int *fd, int *exit_s, int n_line/*, bool exp_heredoc*/);
-void	red_treatment(t_minishell *minishell/*, bool exp_heredoc*/);
-void	heredoc_treatment(t_minishell *minishell/*, bool exp_heredoc*/);
-// void	handle_output(char *path, int *fd, int *exit_s);
-// void	handle_append(char *path, int *fd, int *exit_s);
-// void	handle_input(char *path, int *fd, int *exit_s);
+void	handle_heredoc(char *s, int *fd, int *exit_s, int n_line);
+void	red_treatment(t_minishell *minishell);
+void	heredoc_treatment(t_minishell *minishell);
 
 #endif

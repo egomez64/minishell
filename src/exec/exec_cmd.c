@@ -18,12 +18,8 @@ int	exec_cmd(t_cmd *cmd, t_minishell *minish)
 	t_attributes	attributes;
 
 	if (!cmd->arguments)
-	{
-		free_minishell(minish);
 		return (0);
-	}
 	err = fill_attributes(&attributes, cmd->arguments, &minish->envi);
-	free_minishell(minish);
 	if (err || attributes.pathname[0] == 0)
 	{
 		free(attributes.pathname);
@@ -45,13 +41,12 @@ int	child(t_cmd *cmd, t_minishell *minish, int stdfd[2])
 {
 	int	ret_builtin;
 
+	make_redirections(cmd);
 	if (cmd->exit_s)
 		return (1);
-	make_redirections(cmd);
 	if (cmd->arguments && is_builtin(cmd->arguments->content))
 	{
 		ret_builtin = handle_builtin(cmd, minish, stdfd);
-		// free_minishell(minish);
 		return (ret_builtin);
 	}
 	else

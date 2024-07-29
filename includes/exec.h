@@ -52,7 +52,6 @@ void	close_and_set(int *fd);
 
 void	normal_c(int signal);
 void	heredoc_c(int signal);
-void	sig_exec(int wstatus/*, bool is_last*/);
 
 int		is_dir(char *str, int print_error);
 int		locate_and_replace(char **name, char *envp_path);

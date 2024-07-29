@@ -12,11 +12,6 @@
 
 #include <minishell.h>
 
-/// @brief Creates a `struct` to manage `string` allocations.
-// 		Does not duplicate a `string`.
-/// @param str The `string` to manage.
-/// @return A `t_string`, with the `string`
-// 		and its allocated size (`-1` if nothing allocated).
 static t_string	setup_t_string(char *str)
 {
 	t_string	string;
@@ -29,9 +24,6 @@ static t_string	setup_t_string(char *str)
 	return (string);
 }
 
-/// @brief Generates a `pathname` from a path and an executable.
-/// @return Number of characters to jump to get to the next path
-// 		in `envp_path`.
 static int	create_pathname(t_string *pathname, t_string *exec, char *envp_path)
 {
 	int	path_len;
@@ -60,11 +52,6 @@ static int	create_pathname(t_string *pathname, t_string *exec, char *envp_path)
 	return (path_len);
 }
 
-/// @brief Creates two `t_string`'s for `find_pathname()`.
-/// @param pathname A duplicate of `exec_name`,
-// 		an empty `string` if `exec_name` is `NULL`.
-/// @param exec A `t_string` pointing to `exec_name` and storing its size.
-/// @return `0` if success, `-1` if an error occured.
 static int	init_pathname(t_string *pathname, t_string *exec, char *exec_name)
 {
 	*exec = setup_t_string(exec_name);
@@ -75,10 +62,6 @@ static int	init_pathname(t_string *pathname, t_string *exec, char *exec_name)
 	return (0);
 }
 
-/// @brief Looks through `envp_path` to find a valid `pathname`
-// 		that can be executed.
-/// @param exec Name of the executable to find.
-/// @return `1` if found, `0` if not, `-1` if an error occured.
 static int	look_through_envp(char **name, char *envp_path)
 {
 	t_string	pathname;

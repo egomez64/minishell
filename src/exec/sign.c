@@ -33,35 +33,3 @@ void	heredoc_c(int signal)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 }
-
-// void	sig_exec(int wstatus)
-// {
-// 	int	signal;
-// 
-// 	signal = WTERMSIG(wstatus);
-// 	if (signal == SIGINT)
-// 	{
-// 		normal_c(signal);
-// 		printf("\n");
-// 	}
-// }
-
-// int	sig_exec(int wstatus/*, bool is_last*/)
-// {
-// 	int	signal;
-//
-// 	signal = WTERMSIG(wstatus);
-// 	if (signal == SIGINT)
-// 	{
-// 		normal_c(signal);
-// 		write(2, "\n", 2);
-// 		return (128 + signal);
-// 	}
-// 	else if (signal == SIGQUIT)
-// 	{
-// 		// if (is_last)
-// 		// 	write(2, "Quit\n", 6);
-// 		return (128 + signal);
-// 	}
-// 	return (WEXITSTATUS(wstatus));
-// }

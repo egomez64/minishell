@@ -62,12 +62,10 @@ static int	prompt(t_minishell	*minishell, char **line)
 
 static int	handle_minishell(t_minishell *minishell, t_token **tokens)
 {
-	//bool	exp_herdoc;
 	(*minishell).commands = cmd(*tokens);
-	//exp_herdoc = check_heredoc_quote(minishell->commands);
 	expand_var(minishell, minishell->exit_status);
-	red_treatment(minishell/*, exp_herdoc*/);
-	if (!minishell->commands->arguments || minishell->commands->exit_s)
+	red_treatment(minishell);
+	if (!minishell->commands->arguments)
 	{
 		minishell->exit_status = minishell->commands->exit_s;
 		close_mini_fds(minishell->commands);
@@ -93,15 +91,15 @@ int	main(int ac, char **av, char **ep)
 	t_token		*tokens;
 	char		*line;
 	t_minishell	minishell;
-	g_sig = 0;
-	line = NULL;
 
+	line = NULL;
 	init_minishell(&minishell, ac, av, ep);
 	while (1)
 	{
 		g_sig = 0;
 		signal(SIGINT, &normal_c);
 		signal(SIGQUIT, SIG_IGN);
+		signal(SIGPIPE, SIG_IGN);
 		if (!prompt(&minishell, &line))
 			return (minishell.exit_status);
 		if (!check_invalid(&minishell, line))

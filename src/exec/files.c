@@ -12,13 +12,6 @@
 
 #include <minishell.h>
 
-/// @brief Redirects an `oldfd` to a `newfd`,
-// 		closing and reopenning it if necessary.
-/// @param oldfd To be closed. The `int` will be set to `-1` once closed.
-/// @param newfd Will point to the same file as `oldfd`.
-// 		If open, will be closed and reopenned.
-/// @return On success, these system calls return the new file descriptor.
-// 		On error, -1 is returned
 static int	redirect(int *oldfd, int newfd)
 {
 	int	fd;

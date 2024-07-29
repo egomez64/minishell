@@ -23,15 +23,6 @@ typedef enum arg_type
 	APPEND,
 }	t_arg;
 
-// const static char * arg_to_string[] = { // 
-// 	[WORD] = "Word",
-// 	[PIPE] = "Pipe",
-// 	[INPUT] = "INPUT",
-// 	[OUTPUT] = "OUTPUT",
-// 	[HEREDOC] = "HEREDOC",
-// 	[APPEND] = "APPEND",
-// };
-
 typedef struct s_token
 {
 	t_arg			type;

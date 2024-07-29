@@ -90,40 +90,6 @@ static void	print_export(char **new_env)
 	}
 }
 
-// static void	print_export(t_env *envi, char **new_env)
-// {
-// 	int		i;
-// 	int		y;
-// 	char	**to_print;
-// 	t_env	*current;
-// 
-// 	i = 0;
-// 	current = envi;
-// 	while (new_env[i])
-// 	{
-// 		y = 0;
-// 		current = envi;
-// 		while (new_env[i][y] != 0 && new_env[i][y] != '=')
-// 			y++;
-// 		if (new_env[i][y] != '=')
-// 		{
-// 			while (current && ft_strcmp(current->name, new_env[i]))
-// 				current = current->next;
-// 			if (current->init == false)
-// 				printf("declare -x %s\n", new_env[i]);
-// 			else
-// 				printf("declare -x %s=\"\"\n", new_env[i]);
-// 		}
-// 		else
-// 		{
-// 			to_print = sep_on_equal(new_env[i]);
-// 			printf("declare -x %s=\"%s\"\n", to_print[0], to_print[1]);
-// 			free_split(to_print);
-// 		}
-// 		i++;
-// 	}
-// }
-
 int	export(t_env *envi)
 {
 	char	**new_env;

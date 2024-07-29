@@ -12,21 +12,6 @@
 
 #include <minishell.h>
 
-/**
- * No '/':
- * 		is a command, look through PATH
- * Has '/':
-//  * 		Has "./":
-//  * 			is a relative path
-//  * 		Else
-//  * 			is an absolute path
- * 		is a path.
- * 		is dir:
- * 			Error.
- * 		is not dir:
- * 			try to execute.
- */
-
 static int	is_path(char *str)
 {
 	int	i;
