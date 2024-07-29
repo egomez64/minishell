@@ -27,15 +27,14 @@ static int	wait_last_pid(int wstatus)
 /// @return Exit status of the last command.
 static int	wait_for_everyone(t_cmd **cmd)
 {
-	int		exit_status;
-	int		wstatus;
-	pid_t	pid;
-	pid_t	last_pid;
-	int		sig;
+	int			exit_status;
+	int			wstatus;
+	pid_t		pid;
+	const pid_t	last_pid = cmd_last(*cmd)->pid;
+	int			sig;
 
 	exit_status = -1;
 	pid = 0;
-	last_pid = cmd_last(*cmd)->pid;
 	sig = 0;
 	while (pid != -1)
 	{
@@ -49,6 +48,41 @@ static int	wait_for_everyone(t_cmd **cmd)
 		write(2, "\n", 2);
 	return (exit_status);
 }
+
+// static int	wait_last_pid(int wstatus, int sig)
+// {
+// 	if (!sig)
+// 		return (WEXITSTATUS(wstatus));
+// 	if (sig == SIGQUIT)
+// 		write(2, "Quit\n", 6);
+// 	return (128 + sig);
+// }
+// 
+// /// @brief Waits for every command to end.
+// /// @return Exit status of the last command.
+// static int	wait_for_everyone(t_cmd **cmd)
+// {
+// 	int			exit_status;
+// 	int			wstatus;
+// 	pid_t		pid;
+// 	const pid_t	last_pid = cmd_last(*cmd)->pid;
+// 	int			sig;
+// 
+// 	exit_status = -1;
+// 	pid = 0;
+// 	sig = 0;
+// 	while (pid != -1)
+// 	{
+// 		pid = wait(&wstatus);
+// 		if (!sig && WIFSIGNALED(wstatus))
+// 			sig = WTERMSIG(wstatus);
+// 		if (pid == last_pid)
+// 			exit_status = wait_last_pid(wstatus, sig);
+// 	}
+// 	if (sig == SIGINT)
+// 		write(2, "\n", 2);
+// 	return (exit_status);
+// }
 
 // /// @brief Waits for every command to end.
 // /// @return Exit status of the last command.
@@ -134,18 +168,16 @@ static int	pipes_exec(t_minishell *minish)
 
 int	execution(t_minishell *minish)
 {
-	int		exit_status;
-	t_cmd	*cmd;
+	int	exit_status;
+	int	*output_fd;
 
 	if (minish->commands == NULL)
 		return (0);
-	cmd = minish->commands;
-	if (cmd->input_fd == -1)
-		cmd->input_fd = 0;
-	while (cmd->next)
-		cmd = cmd->next;
-	if (cmd->output_fd == -1)
-		cmd->output_fd = 1;
+	if (minish->commands->input_fd == -1)
+		minish->commands->input_fd = 0;
+	output_fd = &cmd_last(minish->commands)->output_fd;
+	if (*output_fd == -1)
+		*output_fd = 1;
 	if (!minish->commands->next)
 		exit_status = simple_exec(minish);
 	else
