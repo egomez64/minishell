@@ -6,13 +6,21 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/28 22:03:47 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/29 11:05:38 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
 extern int	g_sig;
+
+static void	sig_write(int sig)
+{
+	if (sig == SIGQUIT)
+		write(2, "Quit\n", 6);
+	if (sig == SIGINT)
+		write(2, "\n", 2);
+}
 
 /// @brief Waits for every command to end.
 /// @return Exit status of the last command.
@@ -38,12 +46,10 @@ static int	wait_for_everyone(t_cmd **cmd)
 		else if (pid == last_pid)
 		{
 			exit_status = 128 + sig;
-			if (sig == SIGQUIT)
-				write(2, "Quit\n", 6);
+			sig_write(sig);
 		}
 	}
-	if (sig == SIGINT)
-		write(2, "\n", 2);
+	sig_write(sig);
 	return (exit_status);
 }
 
@@ -119,23 +125,30 @@ static int	pipes_exec(t_minishell *minish)
 	return (exit_status);
 }
 
-static void	set_input_output(t_cmd *cmd)
+// static void	set_input_output(t_cmd *cmd)
+// {
+// 	if (cmd->input_fd == -1)
+// 		cmd->input_fd = 0;
+// 	while (cmd->next)
+// 		cmd = cmd->next;
+// 	if (cmd->output_fd == -1)
+// 		cmd->output_fd = 1;
+// }
+
+int	execution(t_minishell *minish)
 {
+	int		exit_status;
+	t_cmd	*cmd;
+
+	if (minish->commands == NULL)
+		return (0);
+	cmd = minish->commands;
 	if (cmd->input_fd == -1)
 		cmd->input_fd = 0;
 	while (cmd->next)
 		cmd = cmd->next;
 	if (cmd->output_fd == -1)
 		cmd->output_fd = 1;
-}
-
-int	execution(t_minishell *minish)
-{
-	int		exit_status;
-
-	if (minish->commands == NULL)
-		return (0);
-	set_input_output(minish->commands);
 	if (!minish->commands->next)
 		exit_status = simple_exec(minish);
 	else
@@ -146,3 +159,21 @@ int	execution(t_minishell *minish)
 	// }
 	return (exit_status);
 }
+
+// int	execution(t_minishell *minish)
+// {
+// 	int		exit_status;
+// 
+// 	if (minish->commands == NULL)
+// 		return (0);
+// 	// set_input_output(minish->commands);
+// 	if (!minish->commands->next)
+// 		exit_status = simple_exec(minish);
+// 	else
+// 		exit_status = pipes_exec(minish);
+// 	// if (exit_status == -1)
+// 	// {
+// 	// 	
+// 	// }
+// 	return (exit_status);
+// }
