@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:50:53 by maamine           #+#    #+#             */
-/*   Updated: 2024/07/29 11:05:38 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/29 14:14:44 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 extern int	g_sig;
 
-static void	sig_write(int sig)
+static int	wait_last_pid(int wstatus)
 {
-	if (sig == SIGQUIT)
+	if (!WIFSIGNALED(wstatus))
+		return (WEXITSTATUS(wstatus));
+	if (WTERMSIG(wstatus) == SIGQUIT)
 		write(2, "Quit\n", 6);
-	if (sig == SIGINT)
-		write(2, "\n", 2);
+	return (128 + WTERMSIG(wstatus));
 }
 
 /// @brief Waits for every command to end.
@@ -41,15 +42,11 @@ static int	wait_for_everyone(t_cmd **cmd)
 		pid = wait(&wstatus);
 		if (!sig && WIFSIGNALED(wstatus))
 			sig = WTERMSIG(wstatus);
-		if (!sig && pid == last_pid)
-			exit_status = WEXITSTATUS(wstatus);
-		else if (pid == last_pid)
-		{
-			exit_status = 128 + sig;
-			sig_write(sig);
-		}
+		if (pid == last_pid)
+			exit_status = wait_last_pid(wstatus);
 	}
-	sig_write(sig);
+	if (sig == SIGINT)
+		write(2, "\n", 2);
 	return (exit_status);
 }
 
