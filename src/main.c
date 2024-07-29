@@ -6,7 +6,7 @@
 /*   By: maamine <maamine@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 14:19:02 by egomez            #+#    #+#             */
-/*   Updated: 2024/07/22 12:43:08 by maamine          ###   ########.fr       */
+/*   Updated: 2024/07/29 13:54:40 by maamine          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ static int	check_invalid(t_minishell *minishell, char *line)
 	return (1);
 }
 
-static	int	prompt(t_minishell	*minishell, char **line)
+static int	prompt(t_minishell	*minishell, char **line)
 {
 	*line = NULL;
-	*line = readline("minishell: \002");
+	*line = readline("minishell: ");
 	if (g_sig == SIGINT)
 		minishell->exit_status = 130;
 	signal(SIGINT, SIG_IGN);
